@@ -1,0 +1,395 @@
+swagger: "2.0"
+info:
+  description: "Site de gestion de séries, permettant aux utilisateurs d'avoir un suivi des épisodes \"à voir\" et \"vu\" des séries qu'ils ont sélectionées"
+  version: "1.0.0"
+  title: "Swagger OmegaSeries"
+  
+host: "omega-series"
+basePath: "/"
+
+tags:
+- name: "user account"
+  description: "Operations about user account"
+- name: "series"
+  description: "Operations about series"
+- name: "serie"
+  description: "Operations about a serie"
+- name: "episode"
+  description: "Operations about a episode"
+
+  
+schemes:
+- "https"
+- "http"
+
+paths:
+  /user:
+    post:
+      tags:
+      - "user account"
+      summary: "Create a user account"
+      description: "Permit to a new user to create a account"
+      operationId: "createUserAccount"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user account object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "user account successfully created"
+  /user/login:
+    get:
+      tags:
+      - "user account"
+      summary: "Logs user to his/her account on the system"
+      description: "Permit to a registres user to connect to his/her account"
+      operationId: "loginUserAccount"
+      parameters:
+      - name: "username/email"
+        in: "query"
+        description: "The username/email for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "User login successfully"
+        400:
+          description: "Invalid username/password supplied"
+  /user/logout:
+    get:
+      tags:
+      - "user account"
+      summary: "Logs out current logged in user account session"
+      description: "Function to log out current logged in user account session"
+      operationId: "logoutUserAccount"
+      parameters: []
+      responses:
+        default:
+          description: "User logout successfully"
+  /user/{userId}:
+    put:
+      tags:
+      - "user account"
+      summary: "Update user account"
+      description: "Permit to the logged in user to modify his/her account"
+      operationId: "updateUserAccount"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "userId of account to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        400:
+          description: "Invalid user id supplied"
+        404:
+          description: "User not found"
+    delete:
+      tags:
+      - "user account"
+      summary: "Delete user account"
+      description: "Permit to the logged in user to delete his/her account"
+      operationId: "deleteUserAccount"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "userId of account to delete"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid user id supplied"
+        404:
+          description: "User not found"
+  /series:
+    get:
+      tags:
+      - "series"
+      summary: "Return the available series"
+      description: "Return the available series to permit users to select series they want to follow (X series displayed per page)"
+      operationId: "displaySeries"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pageNumber"
+        in: "query"
+        description: "The number of the page we want to return"
+        required: true
+        type: "integer"
+      - name: "search"
+        in: "query"
+        description: "The name (or part of the name) of a serie searched by a user"
+        required: false
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Created series object"
+        required: true
+        schema:
+          $ref: "#/definitions/Series"
+      responses:
+        404:
+          description: "Page not found bro, try again"
+          
+  /series/followedSeries:
+    get:
+      tags:
+      - "series"
+      summary: "Return the followed series"
+      description: "Return the series followed by a user"
+      operationId: "displayFollowedSeries"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "query"
+        description: "Id of the user who want to see th series that he/she follow"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "Created series object"
+        required: true
+        schema:
+          $ref: "#/definitions/Series"
+      responses:
+        400:
+          description: "Invalid user id supplied"
+  
+  /serie/episodes:
+    get:
+      tags:
+      - "serie"
+      summary: "Return the available episodes of a serie"
+      description: "Return the available episodes of a serie"
+      operationId: "displaySerieEpisode"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "serieId"
+        in: "query"
+        description: "Id of the serie we want to return a list of episode"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "Created serie object"
+        required: true
+        schema:
+          $ref: "#/definitions/Serie"
+      responses:
+        400: 
+          description: "Invalid serie Id supplied"
+  
+  /serie/unfollow:
+    delete:
+      tags:
+      - "serie"
+      summary: "Remove from followed series"
+      description: "Remove a serie of the series followed by a user"
+      operationId: "unfollowSerie"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "serieId"
+        in: "query"
+        description: "Id of the serie the user want to unfollow"
+        required: true
+        type: "integer"
+      - name: "userId"
+        in: "query"
+        description: "Id of the user who want to unfollow a serie"
+        required: true
+        type: "integer"
+      responses:
+        400: 
+          description: "Invalid serie/user Id supplied"
+          
+  /serie/follow:
+    post:
+      tags:
+      - "serie"
+      summary: "Add a followed serie"
+      description: "Add a serie to the series followed by a user"
+      operationId: "followSerie"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "serieId"
+        in: "query"
+        description: "Id of the serie the user want to follow"
+        required: true
+        type: "integer"
+      - name: "userId"
+        in: "query"
+        description: "Id of the user who want to follow a serie"
+        required: true
+        type: "integer"
+      responses:
+        default:
+          description: "Serie followed successfully"
+    
+  /episode/mark:
+    put:
+      tags:
+      - "episode"
+      summary: "Mark an episode"
+      description: "Mark an episode of a serie followed by a user as seen"
+      operationId: "markEpisode"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "episodeId"
+        in: "query"
+        description: "Id of the episode the user want to mark"
+        required: true
+        type: "integer"
+      - name: "userId"
+        in: "query"
+        description: "Id of the user who want to mark an episode"
+        required: true
+        type: "integer"
+      responses:
+        default:
+          description: "Episode marked successfully"
+        400:
+          description: "Invalid user/episode id supplied"
+          
+  /episode/unmark:
+    put:
+      tags:
+      - "episode"
+      summary: "Unmark an episode"
+      description: "Unmark an episode of a serie followed by a user"
+      operationId: "unmarkEpisode"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "episodeId"
+        in: "query"
+        description: "Id of the episode the user want to unmark"
+        required: true
+        type: "integer"
+      - name: "userId"
+        in: "query"
+        description: "Id of the user who want to unmark an episode"
+        required: true
+        type: "integer"
+      responses:
+        default:
+          description: "Episode unmarked successfully"
+        400:
+          description: "Invalid user/episode id supplied"
+    
+definitions:
+    
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        username:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        
+      xml:
+        name: "User"
+        
+    Episode:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        seasonId:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        number:
+          type: "integer"
+          format: "int64"
+      
+      xml:
+        name: "Episode"
+          
+        
+    Season:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        serieId:
+          type: "integer"
+          format: "int64"
+        number:
+          type: "integer"
+          format: "int64"
+        episodes:
+          type: "array"
+          items:
+            $ref: "#/definitions/Episode"
+            
+      xml:
+        name: "Season"
+        
+    Serie:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        seasons:
+          type: "array"
+          items:
+            $ref: "#/definitions/Season"
+        
+      xml:
+        name: "Serie"
+        
+    Series:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        series:
+          type: "array"
+          items:
+            $ref: "#/definitions/Serie"
+        
+      xml:
+        name: "Series"
