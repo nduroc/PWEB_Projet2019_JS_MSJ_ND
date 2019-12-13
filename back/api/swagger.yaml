@@ -1,12 +1,12 @@
+---
 swagger: "2.0"
 info:
-  description: "Site de gestion de séries, permettant aux utilisateurs d'avoir un suivi des épisodes \"à voir\" et \"vu\" des séries qu'ils ont sélectionées"
+  description: "Site de gestion de séries, permettant aux utilisateurs d'avoir un\
+    \ suivi des épisodes \"à voir\" et \"vu\" des séries qu'ils ont sélectionées"
   version: "1.0.0"
   title: "Swagger OmegaSeries"
-  
 host: "omega-series"
 basePath: "/"
-
 tags:
 - name: "user account"
   description: "Operations about user account"
@@ -16,12 +16,9 @@ tags:
   description: "Operations about a serie"
 - name: "episode"
   description: "Operations about a episode"
-
-  
 schemes:
 - "https"
 - "http"
-
 paths:
   /user:
     post:
@@ -42,6 +39,7 @@ paths:
       responses:
         default:
           description: "user account successfully created"
+      x-swagger-router-controller: "UserAccount"
   /user/login:
     get:
       tags:
@@ -61,10 +59,11 @@ paths:
         required: true
         type: "string"
       responses:
-        200:
+        "200":
           description: "User login successfully"
-        400:
+        "400":
           description: "Invalid username/password supplied"
+      x-swagger-router-controller: "UserAccount"
   /user/logout:
     get:
       tags:
@@ -76,6 +75,7 @@ paths:
       responses:
         default:
           description: "User logout successfully"
+      x-swagger-router-controller: "UserAccount"
   /user/{userId}:
     put:
       tags:
@@ -98,10 +98,11 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
-        400:
+        "400":
           description: "Invalid user id supplied"
-        404:
+        "404":
           description: "User not found"
+      x-swagger-router-controller: "UserAccount"
     delete:
       tags:
       - "user account"
@@ -115,16 +116,18 @@ paths:
         required: true
         type: "string"
       responses:
-        400:
+        "400":
           description: "Invalid user id supplied"
-        404:
+        "404":
           description: "User not found"
+      x-swagger-router-controller: "UserAccount"
   /series:
     get:
       tags:
       - "series"
       summary: "Return the available series"
-      description: "Return the available series to permit users to select series they want to follow (X series displayed per page)"
+      description: "Return the available series to permit users to select series they\
+        \ want to follow (X series displayed per page)"
       operationId: "displaySeries"
       consumes:
       - "application/json"
@@ -148,9 +151,9 @@ paths:
         schema:
           $ref: "#/definitions/Series"
       responses:
-        404:
+        "404":
           description: "Page not found bro, try again"
-          
+      x-swagger-router-controller: "Series"
   /series/followedSeries:
     get:
       tags:
@@ -175,9 +178,9 @@ paths:
         schema:
           $ref: "#/definitions/Series"
       responses:
-        400:
+        "400":
           description: "Invalid user id supplied"
-  
+      x-swagger-router-controller: "Series"
   /serie/episodes:
     get:
       tags:
@@ -202,9 +205,9 @@ paths:
         schema:
           $ref: "#/definitions/Serie"
       responses:
-        400: 
+        "400":
           description: "Invalid serie Id supplied"
-  
+      x-swagger-router-controller: "Serie"
   /serie/unfollow:
     delete:
       tags:
@@ -226,9 +229,9 @@ paths:
         required: true
         type: "integer"
       responses:
-        400: 
+        "400":
           description: "Invalid serie/user Id supplied"
-          
+      x-swagger-router-controller: "Serie"
   /serie/follow:
     post:
       tags:
@@ -254,7 +257,7 @@ paths:
       responses:
         default:
           description: "Serie followed successfully"
-    
+      x-swagger-router-controller: "Serie"
   /episode/mark:
     put:
       tags:
@@ -265,9 +268,9 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "serieId"
+      - name: "episodeId"
         in: "query"
-        description: "Id of the serie the user want to mark an episode of"
+        description: "Id of the episode the user want to mark"
         required: true
         type: "integer"
       - name: "userId"
@@ -275,22 +278,12 @@ paths:
         description: "Id of the user who want to mark an episode"
         required: true
         type: "integer"
-      - name: "seasonNumber"
-        in: "query"
-        description: "Number of the season containing the episode the user want to mark"
-        required: true
-        type: "integer"
-      - name: "episodeNumber"
-        in: "query"
-        description: "Number of the episode the user want to mark"
-        required: true
-        type: "integer"
       responses:
+        "400":
+          description: "Invalid user/episode id supplied"
         default:
           description: "Episode marked successfully"
-        400:
-          description: "Invalid user/episode id supplied"
-          
+      x-swagger-router-controller: "Episode"
   /episode/unmark:
     put:
       tags:
@@ -301,9 +294,9 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "serieId"
+      - name: "episodeId"
         in: "query"
-        description: "Id of the serie the user want to unmark an episode of"
+        description: "Id of the episode the user want to unmark"
         required: true
         type: "integer"
       - name: "userId"
@@ -311,105 +304,187 @@ paths:
         description: "Id of the user who want to unmark an episode"
         required: true
         type: "integer"
-      - name: "seasonNumber"
-        in: "query"
-        description: "Number of the season containing the episode the user want to unmark"
-        required: true
-        type: "integer"
-      - name: "episodeNumber"
-        in: "query"
-        description: "Number of the episode the user want to unmark"
-        required: true
-        type: "integer"
       responses:
+        "400":
+          description: "Invalid user/episode id supplied"
         default:
           description: "Episode unmarked successfully"
-        400:
-          description: "Invalid user/episode id supplied"
-    
+      x-swagger-router-controller: "Episode"
 definitions:
-    
-    User:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-        username:
-          type: "string"
-        email:
-          type: "string"
-        password:
-          type: "string"
-        
-      xml:
-        name: "User"
-        
-    Episode:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-        seasonId:
-          type: "integer"
-          format: "int64"
-        name:
-          type: "string"
-        number:
-          type: "integer"
-          format: "int64"
-      
-      xml:
-        name: "Episode"
-          
-        
-    Season:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-        serieId:
-          type: "integer"
-          format: "int64"
-        number:
-          type: "integer"
-          format: "int64"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+    xml:
+      name: "User"
+  Episode:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      seasonId:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      number:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "Episode"
+    example:
+      number: 9
+      seasonId: 7
+      name: "name"
+      id: 2
+  Season:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      serieId:
+        type: "integer"
+        format: "int64"
+      number:
+        type: "integer"
+        format: "int64"
+      episodes:
+        type: "array"
+        items:
+          $ref: "#/definitions/Episode"
+    xml:
+      name: "Season"
+    example:
+      number: 5
+      serieId: 5
+      id: 1
+      episodes:
+      - number: 9
+        seasonId: 7
+        name: "name"
+        id: 2
+      - number: 9
+        seasonId: 7
+        name: "name"
+        id: 2
+  Serie:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      seasons:
+        type: "array"
+        items:
+          $ref: "#/definitions/Season"
+    xml:
+      name: "Serie"
+    example:
+      seasons:
+      - number: 5
+        serieId: 5
+        id: 1
         episodes:
-          type: "array"
-          items:
-            $ref: "#/definitions/Episode"
-            
-      xml:
-        name: "Season"
-        
-    Serie:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-        name:
-          type: "string"
-        seasons:
-          type: "array"
-          items:
-            $ref: "#/definitions/Season"
-        
-      xml:
-        name: "Serie"
-        
-    Series:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-        series:
-          type: "array"
-          items:
-            $ref: "#/definitions/Serie"
-        
-      xml:
-        name: "Series"
+        - number: 9
+          seasonId: 7
+          name: "name"
+          id: 2
+        - number: 9
+          seasonId: 7
+          name: "name"
+          id: 2
+      - number: 5
+        serieId: 5
+        id: 1
+        episodes:
+        - number: 9
+          seasonId: 7
+          name: "name"
+          id: 2
+        - number: 9
+          seasonId: 7
+          name: "name"
+          id: 2
+      name: "name"
+      id: 6
+  Series:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      series:
+        type: "array"
+        items:
+          $ref: "#/definitions/Serie"
+    xml:
+      name: "Series"
+    example:
+      series:
+      - seasons:
+        - number: 5
+          serieId: 5
+          id: 1
+          episodes:
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+        - number: 5
+          serieId: 5
+          id: 1
+          episodes:
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+        name: "name"
+        id: 6
+      - seasons:
+        - number: 5
+          serieId: 5
+          id: 1
+          episodes:
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+        - number: 5
+          serieId: 5
+          id: 1
+          episodes:
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+          - number: 9
+            seasonId: 7
+            name: "name"
+            id: 2
+        name: "name"
+        id: 6
+      id: 0
