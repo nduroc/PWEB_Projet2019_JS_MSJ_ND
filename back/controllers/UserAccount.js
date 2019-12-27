@@ -1,12 +1,12 @@
 'use strict';
 
-var utils = require('../utils/writer.js');
-var UserAccount = require('../service/UserAccountService');
+const utils = require('../utils/writer.js');
+const UserAccount = require('../service/UserAccountService');
 
 module.exports.createUserAccount = function createUserAccount (req, res) {
-  var username = req.body.username;
-  var email = req.body.email;
-  var password = req.body.password;
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
   UserAccount.createUserAccount(username, email, password)
     .then(() => {
       console.log('New user account')
@@ -16,8 +16,7 @@ module.exports.createUserAccount = function createUserAccount (req, res) {
     });
 };
 
-module.exports.deleteUserAccount = function deleteUserAccount (req, res) {
-  var userId = req.params.userId;
+module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId) {
   UserAccount.deleteUserAccount(userId)
     .then(() => {
       console.log('Deleted User')
@@ -28,8 +27,8 @@ module.exports.deleteUserAccount = function deleteUserAccount (req, res) {
 };
 
 module.exports.loginUserAccount = function loginUserAccount (req, res) {
-  var usernameOrEmail = req.params.usernameOrEmail;
-  var password = req.params.password;
+  const usernameOrEmail = req.params.usernameOrEmail;
+  const password = req.params.password;
   UserAccount.loginUserAccount(usernameOrEmail,password)
     .then(() => {
       console.log('Login user')
@@ -49,11 +48,10 @@ module.exports.logoutUserAccount = function logoutUserAccount (req, res) {
     });
 };
 
-module.exports.updateUserAccount = function updateUserAccount (req, res) {
-  var userId = req.params.userId;
-  var username = req.body.username;
-  var email = req.body.email;
-  var password = req.body.password;
+module.exports.updateUserAccount = function updateUserAccount (req, res, userId) {
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
   UserAccount.updateUserAccount(userId,username,email,password)
     .then(() => {
       console.log('Update user')

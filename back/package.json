@@ -4,8 +4,8 @@
   "description": "Site de gestion de séries, permettant aux utilisateurs d'avoir un suivi des épisodes \"à voir\" et \"vu\" des séries qu'ils ont sélectionées",
   "main": "index.js",
   "scripts": {
-	"prestart": "npm install",
-	"start": "node index.js"
+    "prestart": "npm install",
+    "start": "node index.js"
   },
   "keywords": [
     "swagger"
@@ -14,7 +14,9 @@
   "private": true,
   "dependencies": {
     "connect": "^3.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
     "js-yaml": "^3.3.0",
-    "swagger-tools": "0.10.1"
+    "swagger-tools": "^0.10.4"
   }
 }

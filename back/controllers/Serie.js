@@ -1,6 +1,17 @@
 const Serie = require('../service/SerieService');
 
-module.exports.followSerie = function followSerie (req, res,) {
+module.exports.displaySerieEpisode = function displaySerieEpisode (req, res) {
+  const serieId = req.params.serieId;
+  Serie.displaySerieEpisode(serieId, req.body)
+    .then(() => {
+      console.log('Episodes displayed')
+    })
+    .catch(err => {
+      throw err
+    });
+};
+
+module.exports.followSerie = function followSerie (req, res) {
   const serieId = req.params.serieId;
   const userId = req.params.userId;
   Serie.followSerie(serieId,userId)
