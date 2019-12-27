@@ -1,0 +1,43 @@
+div.imagetiles div.col-lg-3.col-md-3.col-sm-3.col-xs-6 {
+  padding: 0px;
+}
+.containerEpisode {
+  background-color: #03030370;
+}
+.sort {
+  background-color: #686565d7;
+}
+.oneShow {
+  width: 18%;
+  margin-left: 0.2%;
+  margin-top: 0.2%;
+}
+
+.pagination > li > a
+{
+    background-color: rgb(92, 91, 91);
+    color: rgb(240, 237, 243);
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: #5a5a5a;
+    background-color: rgb(189, 189, 189);
+    border-color: #ddd;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: rgb(122, 62, 219) !Important;
+    border: solid 1px #5A4181 !Important;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: #5A4181 !Important;
+    border: solid 1px #5A4181;
+}

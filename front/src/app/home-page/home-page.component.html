@@ -1,0 +1,55 @@
+<div class="container containerEpisode">
+    <div class="row">
+        <div class="col-md-2 border sort">
+            <div class="btn-group btn-group-vertical btn-group-lg " role="group">
+                <h4 class="text-white">Genre</h4>
+                <button class="btn btn-secondary mt-1" type="button">
+                    action
+                </button>
+                <button class="btn btn-secondary mt-1" type="button">
+                    comedy
+                </button>
+                <button class="btn btn-secondary mt-1" type="button">
+                    animation
+                </button>
+                <button class="btn btn-secondary mt-1" type="button">
+                    war
+                </button>
+                
+            </div>
+            
+            
+        </div>
+
+        <div class="col-md-10">
+            <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0 text-white">All séries</h1>
+
+            <hr class="mt-1 mb-5">
+
+            <div class="row text-center text-lg-left" >
+                    
+                <div *ngFor="let oneShow of toDisplay, index as i"  class="oneShow" >
+                    <a class="d-block">
+                        <img class="img-fluid img-thumbnail" src={{oneShow.urlMediumImage}}
+                            alt="">
+                            
+                    </a>
+                </div>
+                <nav aria-label="Page navigation navigationPage">
+                    <ul class="pagination mt-1">
+                    <li class="page-item"><a class="page-link" routerLink="../1">first</a></li>
+                      <li class="page-item" ><a class="page-link" href="#">Previous</a></li>
+                      <li class="page-item" ><a class="page-link" [routerLink]="['/homePage',  actualPage*1-2*1]" *ngIf="actualPage-2 > 0">{{actualPage*1 - 1*2 }}</a></li>
+                      <li class="page-item"><a class="page-link" [routerLink]="['/homePage',  actualPage*1-1*1]" *ngIf="actualPage-1 > 0">{{actualPage*1 - 1*1 }}</a></li>
+                      <li class="page-item active"><a class="page-link">{{actualPage}}</a></li>
+                      <li class="page-item"><a class="page-link"[routerLink]="['/homePage',  actualPage*1+1*1]" >{{actualPage*1 + 1*1}}</a></li>
+                      <li class="page-item"><a class="page-link" [routerLink]="['/homePage',  actualPage*1+1*2]">{{actualPage*1 + 1*2}}</a></li>
+                      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                  </nav>
+            </div>
+         
+        </div>
+    
+    </div>
+</div>
