@@ -10,6 +10,20 @@
  **/
 exports.createUserAccount = function(username, email, password) {
   return new Promise(function(resolve, reject) {
+    try {
+      db.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        // Add check for same username ?
+        SQLquery = "INSERT INTO user (username, email, password) VALUES ('" + username + "' , '" + email + "', '" + password + "')";
+        db.query(SQLquery, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted, ID: " + result.insertId);
+        });
+      });
+    } catch (err) {
+        reject();
+    }
     resolve();
   });
 }
@@ -24,6 +38,19 @@ exports.createUserAccount = function(username, email, password) {
  **/
 exports.deleteUserAccount = function(userId) {
   return new Promise(function(resolve, reject) {
+    try {
+      db.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        SQLquery = "DELETE FROM user WHERE (id='" + userId + "')";
+        db.query(SQLquery, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted, ID: " + result.insertId);
+        });
+      });
+    } catch (err) {
+        reject();
+    }
     resolve();
   });
 }
@@ -39,6 +66,21 @@ exports.deleteUserAccount = function(userId) {
  **/
 exports.loginUserAccount = function(usernameOrEmail,password) {
   return new Promise(function(resolve, reject) {
+    try {
+      db.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+        SQLquery = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')";
+        SQLquery = "SELECT * FROM user WHERE (email='" + usernameOrEmail + "' and password='" + password + "')"
+        db.query(SQLquery, function (err, result) {
+          if (err) throw err;
+          console.log("1 record inserted, ID: " + result.insertId);
+        });
+      });
+    } catch (err) {
+        reject();
+    }
+  
     resolve();
   });
 }

@@ -10,6 +10,7 @@ module.exports.createUserAccount = function createUserAccount (req, res) {
   UserAccount.createUserAccount(username, email, password)
     .then(() => {
       console.log('New user account')
+      
     })
     .catch(err => {
       throw err
@@ -32,6 +33,7 @@ module.exports.loginUserAccount = function loginUserAccount (req, res) {
   UserAccount.loginUserAccount(usernameOrEmail,password)
     .then(() => {
       console.log('Login user')
+      res.send("Oui")
     })
     .catch(err => {
       throw err
@@ -42,6 +44,7 @@ module.exports.logoutUserAccount = function logoutUserAccount (req, res) {
   UserAccount.logoutUserAccount()
     .then(() => {
       console.log('Logout user')
+      res.send("Oui")
     })
     .catch(err => {
       throw err
