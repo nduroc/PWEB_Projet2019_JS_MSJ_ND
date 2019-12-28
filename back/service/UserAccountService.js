@@ -1,5 +1,25 @@
-'use strict';
+//const db = require('../utils/db_connect')
+const mysql = require('mysql');
 
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "pweb"
+});
+
+function querySql(sqlQuery) {
+  return new Promise(function(resolve, reject) {
+    db.connect(function(err) {
+      if (err) throw err;
+      db.query(sqlQuery, function(err, result) {
+        if (err) throw err;
+        console.log(result)
+        resolve(result);
+      });
+    });
+  });
+}
 
 /**
  * Create a user account
@@ -10,6 +30,7 @@
  **/
 exports.createUserAccount = function(username, email, password) {
   return new Promise(function(resolve, reject) {
+    let lastId = -1;
     try {
       db.connect(function(err) {
         if (err) throw err;
@@ -18,13 +39,15 @@ exports.createUserAccount = function(username, email, password) {
         SQLquery = "INSERT INTO user (username, email, password) VALUES ('" + username + "' , '" + email + "', '" + password + "')";
         db.query(SQLquery, function (err, result) {
           if (err) throw err;
-          console.log("1 record inserted, ID: " + result.insertId);
+          //console.log("1 record inserted, ID: " + result.insertId);
+          lastId = result.insertId;
+          resolve(lastId);
         });
       });
     } catch (err) {
-        reject();
+      reject(lastId);
     }
-    resolve();
+    reject(-2)//err
   });
 }
 
@@ -38,6 +61,7 @@ exports.createUserAccount = function(username, email, password) {
  **/
 exports.deleteUserAccount = function(userId) {
   return new Promise(function(resolve, reject) {
+    deleted = false
     try {
       db.connect(function(err) {
         if (err) throw err;
@@ -45,13 +69,14 @@ exports.deleteUserAccount = function(userId) {
         SQLquery = "DELETE FROM user WHERE (id='" + userId + "')";
         db.query(SQLquery, function (err, result) {
           if (err) throw err;
-          console.log("1 record inserted, ID: " + result.insertId);
+          deleted = true
+          resolve(deleted);
         });
       });
     } catch (err) {
-        reject();
+      reject(deleted);
     }
-    resolve();
+    //reject(-2)//err
   });
 }
 
@@ -66,22 +91,49 @@ exports.deleteUserAccount = function(userId) {
  **/
 exports.loginUserAccount = function(usernameOrEmail,password) {
   return new Promise(function(resolve, reject) {
-    try {
-      db.connect(function(err) {
+    let SQLqueryName = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')"
+    querySql(SQLqueryName).then((res) => {
+      if (Array.isArray(res)) {
+        resolve(1);
+      } else {
+        resolve(0);
+      }
+    }).catch(err => reject(err));
+      
+    
+    /*
+    if (Array.isArray(res)) {
+      resolve(1);
+    }
+    reject(0);*/
+
+    //try {
+      /*db.connect(function(err) {
         if (err) throw err;
         console.log("Connected!");
-        SQLquery = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')";
-        SQLquery = "SELECT * FROM user WHERE (email='" + usernameOrEmail + "' and password='" + password + "')"
-        db.query(SQLquery, function (err, result) {
+        SQLqueryName = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')"
+        db.query(SQLqueryName, function (err, result) {
+          if (err)
+            throw err;
+          if (Array.isArray(result)) {
+            isUser = true;
+            resolve(isUser);
+          }
+        });*/
+        /*
+        SQLqueryEmail = "SELECT * FROM user WHERE (email='" + usernameOrEmail + "' and password='" + password + "')"
+        db.query(SQLqueryEmail, function (err, result) {
           if (err) throw err;
-          console.log("1 record inserted, ID: " + result.insertId);
-        });
-      });
-    } catch (err) {
-        reject();
+          if (Array.isArray(result)) {
+            isUser = true;
+            resolve(isUser);
+          }
+        }).then(() => resolve());*/
+      //});
+    /*} catch (err) {
+      reject(isUser);
     }
-  
-    resolve();
+    reject(isUser);*/
   });
 }
 

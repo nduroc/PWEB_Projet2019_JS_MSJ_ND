@@ -4,11 +4,11 @@ const UserController = require('../controllers/UserAccount')
 
 const basePath = '/user'
 
-router.post(basePath, function (req, res) {
+router.get(basePath, function (req, res) {
     UserController.createUserAccount(req, res)
 })
 
-router.post(basePath + '/login', function (req, res) {
+router.get(basePath + '/login', function (req, res) {
     UserController.loginUserAccount(req, res)
 })
 
