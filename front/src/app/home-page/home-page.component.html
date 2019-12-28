@@ -3,22 +3,31 @@
         <div class="col-md-2 border sort">
             <div class="btn-group btn-group-vertical btn-group-lg " role="group">
                 <h4 class="text-white">Genre</h4>
-                <button class="btn btn-secondary mt-1" type="button">
-                    action
-                </button>
-                <button class="btn btn-secondary mt-1" type="button">
-                    comedy
-                </button>
-                <button class="btn btn-secondary mt-1" type="button">
-                    animation
-                </button>
-                <button class="btn btn-secondary mt-1" type="button">
-                    war
-                </button>
-                
+                <select class="selectpicker" id="Genre" [(ngModel)]="genre">
+                    <option value=""></option>
+                    <option *ngFor="let genre of genres" value={{genre}}>{{genre}}</option>
+
+                </select>
+                <h4 class="text-white">types</h4>
+                <select class="selectpicker" id="Type" [(ngModel)]="type">
+                    <option value=""></option>
+                    <option *ngFor="let type of types" value={{type}}>{{type}}</option>
+
+                </select>
+                <h4 class="text-white">status</h4>
+                <select class="selectpicker" id="Status" [(ngModel)]="status">
+                    <option value=""></option>
+                    <option *ngFor="let status of statusTab" value={{status}}>{{status}}</option>
+
+                </select>
+                <div class="row">
+                <button (click)="onFilterClick()">filter</button>
+                <button (click)="clearFilter()">clear filter</button>
             </div>
-            
-            
+            </div>
+            <option value=""></option>
+
+
         </div>
 
         <div class="col-md-10">
@@ -26,30 +35,61 @@
 
             <hr class="mt-1 mb-5">
 
-            <div class="row text-center text-lg-left" >
-                    
-                <div *ngFor="let oneShow of toDisplay, index as i"  class="oneShow" >
-                    <a class="d-block">
-                        <img class="img-fluid img-thumbnail" src={{oneShow.urlMediumImage}}
-                            alt="">
-                            
-                    </a>
+            <div class="row text-center text-lg-left">
+
+                <div *ngFor="let oneShow of toDisplay, index as i" class="oneShow">
+                    <div class="card">
+                        <div class="image">
+                            <a href="#"><img class="img-fluid img-thumbnail" src={{oneShow.urlMediumImage}} alt=""></a>
+                        </div>
+                        <div class="card-inner text-white row ">
+                            <div class="header col-lg-10">
+                                <p stle="text-size-adjust: unset;"><strong>{{oneShow.name}}</strong></p>
+                            </div>
+                            <div class="notation zoom">
+                                <fa-layers [fixedWidth]="true">
+                                    <fa-icon [icon]="faStar" [styles]="{ 'color': 'rgba(251, 255, 0, 0.849)'}"
+                                        data-toggle="tooltip" data-placement="top" title={{oneShow.rate}} size="lg">
+                                    </fa-icon>
+                                    <fa-layers-text content={{oneShow.rate}} style="color: rgba(0, 0, 0, 0.849);"
+                                        transform="shrink-4 right-2">
+                                    </fa-layers-text>
+                                </fa-layers>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
                 <nav aria-label="Page navigation navigationPage">
                     <ul class="pagination mt-1">
-                    <li class="page-item"><a class="page-link" routerLink="../1">first</a></li>
-                      <li class="page-item" ><a class="page-link" href="#">Previous</a></li>
-                      <li class="page-item" ><a class="page-link" [routerLink]="['/homePage',  actualPage*1-2*1]" *ngIf="actualPage-2 > 0">{{actualPage*1 - 1*2 }}</a></li>
-                      <li class="page-item"><a class="page-link" [routerLink]="['/homePage',  actualPage*1-1*1]" *ngIf="actualPage-1 > 0">{{actualPage*1 - 1*1 }}</a></li>
-                      <li class="page-item active"><a class="page-link">{{actualPage}}</a></li>
-                      <li class="page-item"><a class="page-link"[routerLink]="['/homePage',  actualPage*1+1*1]" >{{actualPage*1 + 1*1}}</a></li>
-                      <li class="page-item"><a class="page-link" [routerLink]="['/homePage',  actualPage*1+1*2]">{{actualPage*1 + 1*2}}</a></li>
-                      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <li class="page-item"><a class="page-link" routerLink="../1" (click)="onPageClick(1)">First</a>
+                        </li>
+
+                        <li class="page-item"><a class="page-link" *ngIf="actualPage-1 > 0" (click)="onPageClick(actualPage*1-1*1)">Previous</a>
+                        </li>
+
+                        <li class="page-item"><a class="page-link" *ngIf="actualPage-2 > 0"
+                                (click)="onPageClick(actualPage*1-2*1)">{{actualPage*1 - 1*2 }}</a></li>
+
+                        <li class="page-item"><a class="page-link" *ngIf="actualPage-1 > 0"
+                                (click)="onPageClick(actualPage*1-1*1)">{{actualPage*1 - 1*1 }}</a></li>
+
+                        <li class="page-item active"><a class="page-link"
+                                (click)="onPageClick(actualPage*1)">{{actualPage}}</a></li>
+
+                        <li class="page-item"><a class="page-link"
+                                (click)="onPageClick(actualPage*1+1*1)">{{actualPage*1 + 1*1}}</a></li>
+
+                        <li class="page-item"><a class="page-link"
+                                (click)="onPageClick(actualPage*1+2*1)">{{actualPage*1 + 1*2}}</a></li>
+
+                        <li class="page-item"><a class="page-link" (click)="onPageClick(actualPage*1+1*1)">Next</a></li>
                     </ul>
-                  </nav>
+                </nav>
             </div>
-         
+
         </div>
-    
+
     </div>
 </div>

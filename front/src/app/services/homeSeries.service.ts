@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { error, promise } from 'protractor';
 
 
 @Injectable()
@@ -8,6 +7,7 @@ export class TvShow {
 
    id: number;
    name: string;
+   type: string;
    genre: string[];
    status: string;
    start: string;
@@ -20,6 +20,7 @@ export class TvShow {
    constructor(private show: any[]) {
       this.id = show["id"];
       this.name = show["name"];
+      this.type = show["type"];
       this.genre = show["genres"];
       this.status = show["status"];
       this.start = show["premiered"];
@@ -39,7 +40,50 @@ export class TvShow {
 
 @Injectable()
 export class HomeSeries {
+   types = [
+      "Scripted",
+      "Animation",
+      "Reality",
+      "Talk Show",
+      "Documentary",
+      "Game Show",
+      "News",
+      "Sports",
+      "Variety",
+      "Award Show",
+      "Panel Show",];
 
+   status = ["Running", "Ended", "To Be Determined", "In Development"];
+
+
+   genres = ["Action",
+      "Adult",
+      "Adventure",
+      "Anime",
+      "Children",
+      "Comedy",
+      "Crime",
+      "DIY",
+      "Drama",
+      "Espionage",
+      "Family",
+      "Fantasy",
+      "Food",
+      "History",
+      "Horror",
+      "Legal",
+      "Medical",
+      "Music",
+      "Mystery",
+      "Nature",
+      "Romance",
+      "Science-Fiction",
+      "Sports",
+      "Supernatural",
+      "Thriller",
+      "Travel",
+      "War",
+      "Western"]
 
    shows = new Array<TvShow>();
 
@@ -64,9 +108,6 @@ export class HomeSeries {
                   (msg) => {
                      reject();
                   }
-
-
-
                )
          });
       }
@@ -76,28 +117,5 @@ export class HomeSeries {
          })
       }
       return promise;
-      /* let errorGet;
- 
-         if(this.showsMap.has(page))
-         {
-            return this.showsMap;
-         }
-         this.httpClient
-         .get<any[]>('http://api.tvmaze.com/shows?page='+page).to(
-            (response)=>{
-                this.shows = response.map(response=>new TvShow(response));
-                this.showsMap.set(page,this.shows);
- 
-            },
-            (error) => {errorGet=console.error();
-            }
- 
- 
- 
-         );
-         if(!errorGet)
-         return this.showsMap;
- 
-         return errorGet;*/
    }
 }

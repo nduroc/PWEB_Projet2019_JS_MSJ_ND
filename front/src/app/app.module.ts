@@ -10,7 +10,7 @@ import { AuthService } from './services/auth.service';
 import { HomeSeries } from './services/homeSeries.service';
 import { HttpClientModule} from '@angular/common/http';
 import { TvShow } from './services/homeSeries.service';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +23,8 @@ import { TvShow } from './services/homeSeries.service';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,    
+    HttpClientModule,
+    FontAwesomeModule,
   ],
   providers: [AuthService,HomeSeries,TvShow],
   bootstrap: [AppComponent],

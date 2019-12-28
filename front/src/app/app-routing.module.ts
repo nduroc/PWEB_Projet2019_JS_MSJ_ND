@@ -10,6 +10,7 @@ const routes: Routes = [
 { path: 'login', component: LogInComponent },
 { path: 'register', component: RegisterComponent },
 { path: 'homePage/:page', component: HomePageComponent },
+{ path: 'homePage/:page/filter', component: HomePageComponent },
 { path: '**', redirectTo: "/homePage/1" },
 ];
 
