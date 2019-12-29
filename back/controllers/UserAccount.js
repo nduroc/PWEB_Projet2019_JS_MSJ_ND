@@ -17,7 +17,7 @@ module.exports.createUserAccount = function createUserAccount (req, res) {
 };
 
 module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId) {
-  UserAccount.deleteUserAccount(userId)
+  UserAccount.deleteUserAccount("6"/*userId*/)
     .then((deleted) => {
       return deleted
     })
@@ -52,10 +52,10 @@ module.exports.logoutUserAccount = function logoutUserAccount (req, res) {
 };
 
 module.exports.updateUserAccount = function updateUserAccount (req, res, userId) {
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
-  UserAccount.updateUserAccount(userId,username,email,password)
+  //const username = req.body.username;
+  //const email = req.body.email;
+  //const password = req.body.password;
+  UserAccount.updateUserAccount("7"/*userId*/,"Robi"/*username*/,"mail"/*email*/,"azerty"/*password*/)
     .then(() => {
       console.log('Update user')
     })
