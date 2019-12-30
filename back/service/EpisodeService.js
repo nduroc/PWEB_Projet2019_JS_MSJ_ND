@@ -1,11 +1,4 @@
-var mysql = require('mysql');
-
-var db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "pweb"
-});
+const db = require('../utils/db_connect')
 
 /**
  * Mark an episode
@@ -17,24 +10,14 @@ var db = mysql.createConnection({
  **/
 exports.markEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
   return new Promise(function(resolve, reject) {
-    try {
-      db.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-        SQLquery = "IF EXISTS(SELECT * FROM user_serie WHERE user_id = "
-                    + userId + " AND serie_id = "
-                    + serieId + ") BEGIN UPDATE user_serie SET current_saison = "
-                    + seasonNumber + ", current_episode = " + episodeNumber + " WHERE user_id = "
-                    + userId + " AND serie_id = " + serieId + " END ELSE BEGIN INSERT into user_serie(user_id, serie_id, current_saison, current_episode) VALUES("
-                    + userId + ", " + serieId + ", " + seasonNumber + ", " + episodeNumber + ") END"
-        db.query(SQLquery, function (err, result) {
-          if (err) throw err;
-          resolve(true)
-        });
-      });
-    } catch (err) {
-        reject(false);
-    }
+    SQLquery = "UPDATE user_serie SET current_saison = "+ seasonNumber + ", current_episode = "
+                      + episodeNumber + " WHERE user_id = " + userId + " AND serie_id = " + serieId
+    db.querySqlUpdate(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
   });
 }
 
@@ -49,26 +32,20 @@ exports.markEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
  **/
 exports.unmarkEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
   return new Promise(function(resolve, reject) {
-    try {
-      let newEpisodeToMark
-      if(episodeNumber<=1){
-        newEpisodeToMark = -1
-      } else {
-        newEpisodeToMark = episodeNumber - 1
-      }
-      db.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-        SQLquery = "UPDATE user_serie SET current_saison = " + seasonNumber + ", current_episode = "
-                    + newEpisodeToMark + " WHERE user_id = " + userId + " AND serie_id = " + serieId
-        db.query(SQLquery, function (err, result) {
-          if (err) throw err;
-          resolve(true)
-        });
-      });
-    } catch (err) {
-        reject(false);
+    let newEpisodeToMark
+    if(episodeNumber<=1){
+      newEpisodeToMark = -1
+    } else {
+      newEpisodeToMark = episodeNumber - 1
     }
+    SQLquery = "UPDATE user_serie SET current_saison = " + seasonNumber + ", current_episode = "
+                + newEpisodeToMark + " WHERE user_id = " + userId + " AND serie_id = " + serieId
+    db.querySqlUpdate(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
   });
 }
 

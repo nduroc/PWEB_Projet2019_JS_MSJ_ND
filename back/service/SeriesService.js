@@ -1,4 +1,4 @@
-'use strict';
+const db = require('../utils/db_connect')
 
 
 /**
@@ -11,7 +11,13 @@
  **/
 exports.displayFollowedSeries = function(userId,body) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    SQLquery = "SELECT * FROM serie WHERE id IN (SELECT serie_id FROM user_serie WHERE user_id = " + userId + ") "
+    db.querySqlSelect(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
   });
 }
 
@@ -25,9 +31,9 @@ exports.displayFollowedSeries = function(userId,body) {
  * search String The name (or part of the name) of a serie searched by a user (optional)
  * no response value expected for this operation
  **/
-exports.displaySeries = function(pageNumber,body,search) {
+/* exports.displaySeries = function(pageNumber,body,search) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
-}
+} */
 

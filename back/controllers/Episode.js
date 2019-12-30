@@ -7,11 +7,12 @@ module.exports.markEpisode = function markEpisode (req, res) {
   const episodeNumber = req.params.episodeNumber
 
   Episode.markEpisode(serieId, userId, seasonNumber, episodeNumber)
-    .then(() => {
+    .then(result => {
+      console.log(result + 'records updated')
       console.log('Episode marked')
     })
     .catch(err => {
-      throw err
+      console.log(err)
     });
 };
 
@@ -22,10 +23,11 @@ module.exports.unmarkEpisode = function unmarkEpisode (req, res) {
   const episodeNumber = req.params.episodeNumber
   
   Episode.unmarkEpisode(serieId, userId, seasonNumber, episodeNumber)
-    .then(() => {
+    .then(result => {
+      console.log(result + 'records updated')
       console.log('Episode unmarked')
     })
     .catch(err => {
-      throw err
+      console.log(err)
     });
 };
