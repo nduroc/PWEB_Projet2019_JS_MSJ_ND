@@ -1,0 +1,108 @@
+<div class="container showContainer">
+    <div class="container showPresentation ">
+        <div class="row">
+            <h1 class="text-white ml-2" [innerHTML]="actualShow.information.name"></h1>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-3">
+                <img alt="Bootstrap Image Preview" [src]="actualShow.information.urlMediumImage" />
+            </div>
+            <div class="col-lg-5 text-white summary" [innerHTML]="actualShow.information.summary">
+
+            </div>
+            <div class="col-lg-4">
+                <div class="card bg-defaul showInfo text-white">
+
+                    <div class="card-body">
+                        <h5 class="card-header ">
+                            Show Info
+                        </h5>
+                        <p class="card-text">
+                            Network : {{actualShow.information.network}}
+                        </p>
+                        <p class="card-text">
+                            Status : {{actualShow.information.status}}
+                        </p>
+                        <p class="card-text">
+                            Start : {{actualShow.information.start | date }}
+                        </p>
+                        <p class="card-text">
+                            Country : {{actualShow.information.countryName }} <img
+                                src="https://static.tvmaze.com/intvendor/flags/{{actualShow.information.countryCode |lowercase }}.png">
+                        </p>
+                        <p class="card-text">
+                            Genre : <ng-container *ngFor="let genre of actualShow.information.genre; let last = last">
+                                {{genre}} <ng-container *ngIf="!last">|</ng-container>
+                            </ng-container>
+                        </p>
+                        <p class="card-text">
+                            Official Site : <a
+                                href="{{actualShow.information.officialSite }} ">{{actualShow.information.officialSite }}</a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-1 mb-5">
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <!-- Carousel items -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row justify-content-center ">
+                        <div class="card cardImage text-center text-lg-left mx-4" *ngFor="let oneSeason of seasonSlice , let index = index" >
+                            <div class="card-header"><p class="text-white">
+                                Season {{oneSeason.numberSeasonInshow}} - {{oneSeason.nbEpisode}} episodes </p></div>
+                            <div class=" image" >
+                                <a class="thumbnail"
+                                    [style.cursor]="'pointer'"><img src={{oneSeason.urlMediumImage}}
+                                    style="max-width: 100%;" (click)="seasonClick(oneSeason.id, index)">
+                                </a>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--.row-->
+                </div>
+                <!--.item-->
+            </div>
+            <!--.carousel-inner-->
+        </div>
+        <!--.Carousel-->
+    </div>
+    <div class="row justify-content-center mt-2">
+        <div class="row justify-content-center">
+            <fa-icon [icon]="chevronLeft" [styles]="{ 'color': 'rgba(251, 255, 0, 0.849)'}" [style.cursor]="'pointer'"
+                size="lg" class="mr-2" (click)="onChevronClick(-1)">
+            </fa-icon>
+            <fa-icon [icon]="chevronRight" [styles]="{ 'color': 'rgba(251, 255, 0, 0.849)'}" [style.cursor]="'pointer'"
+                size="lg" class="ml-2" (click)="onChevronClick(1)">
+            </fa-icon>
+        </div>
+    </div>
+    <div *ngIf="seasonClicked!=null"><app-season-view [seasonToShow]="seasonClicked"></app-season-view></div>
+    <div class="row justify-content-center mt-3"><h1 class="text-white">Casting</h1></div>
+    <div class="row actorRow mt-2 mx-2">
+        
+		<div class="col-md-6 mt-3" *ngFor="let actorChar of actualShow.cast">
+			<div class="row text-white">
+				<div class="col-md-4" *ngIf="actorChar.characterUrlMediumImage!=null">
+					<img alt="Bootstrap Image Preview" [src]="actorChar.actorUrlMediumImage"   style="max-width: 110%;"/>
+				</div>
+				<div class="col-md-4" *ngIf="actorChar.characterUrlMediumImage!=null">
+					<img alt="Bootstrap Image Preview" [src]="actorChar.characterUrlMediumImage"  style="max-width: 110%;"/>
+				</div>
+				<div class="col-md-4">
+					<p>
+                    <strong>{{actorChar.actorName}} </strong> <img *ngIf ='actorChar.actorCountryCode!=null'
+                    src="https://static.tvmaze.com/intvendor/flags/{{actorChar.actorCountryCode |lowercase }}.png" ><br> {{actorChar.actorSexe}}<br>    
+                    in the role of  <strong>{{actorChar.characterName}}</strong>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th>
+                        Episode Number
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Out Date
+                    </th>
+                    <th>
+                        Summary
+                    </th>
+                    <th>
+                        Runtime (min)
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr class="table-active justify-content-center" *ngFor="let episode of seasonToShow.episodes">
+                    <td>
+                        {{episode.episodeNumber}}
+                    </td>
+                    <td>
+                        {{episode.name}}
+                    </td>
+                    <td>
+                        {{episode.outDate}}
+                    </td>
+                    <td>
+                        <ng-template #popContent>
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p class="text-black">
+                                        <b>{{episode.name}}</b>
+                                    </p>
+                                    <p [innerHTML]="episode.summary"></p>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <img src={{episode.urlMediumImage}} alt="">
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #popTitle>
+                            <p class="text-black">{{episode.name}}</p>
+                        </ng-template>
+                        <button type="button" class="btn btn-outline-secondary" [ngbPopover]="popContent"
+                            [popoverTitle]="popTitle" triggers="mouseenter:mouseleave">
+                            summary
+                        </button>
+                        <!--{{episode.summary}} -->
+                    </td>
+                    <td>
+                        {{episode.runtime}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
