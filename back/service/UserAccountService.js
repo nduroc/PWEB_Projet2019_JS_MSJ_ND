@@ -1,5 +1,47 @@
-'use strict';
+//const db = require('../utils/db_connect')
+const mysql = require('mysql');
 
+const db = mysql.createConnection({
+  connectionLimit : 10,
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "pweb"
+});
+
+/**
+ * Query a Select
+ * Return the selected line(s)
+ */
+function querySqlSelect(sqlQuery) {
+  return new Promise(function(resolve, reject) {
+    db.connect(function(err) {
+      if (err) throw err;
+      db.query(sqlQuery, function(err, result) {
+        if (err) throw err;
+        console.log(result)
+        resolve(result);
+      });
+    });
+  });
+}
+
+/**
+ * Query an Insert sql
+ * return the ID of the new line
+ */
+function querySqlInsert(sqlQuery) {
+  return new Promise(function(resolve, reject) {
+    db.connect(function(err) {
+      if (err) throw err;
+      db.query(sqlQuery, function(err, result) {
+        if (err) throw err;
+        console.log(result)
+        resolve(result.insertId);
+      });
+    });
+  });
+}
 
 /**
  * Create a user account
@@ -10,21 +52,11 @@
  **/
 exports.createUserAccount = function(username, email, password) {
   return new Promise(function(resolve, reject) {
-    try {
-      db.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
         // Add check for same username ?
         SQLquery = "INSERT INTO user (username, email, password) VALUES ('" + username + "' , '" + email + "', '" + password + "')";
-        db.query(SQLquery, function (err, result) {
-          if (err) throw err;
-          console.log("1 record inserted, ID: " + result.insertId);
-        });
-      });
-    } catch (err) {
-        reject();
-    }
-    resolve();
+        querySqlInsert(SQLquery).then((res) => {
+          resolve(res)
+        }).catch(err => reject(err));
   });
 }
 
@@ -38,20 +70,10 @@ exports.createUserAccount = function(username, email, password) {
  **/
 exports.deleteUserAccount = function(userId) {
   return new Promise(function(resolve, reject) {
-    try {
-      db.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-        SQLquery = "DELETE FROM user WHERE (id='" + userId + "')";
-        db.query(SQLquery, function (err, result) {
-          if (err) throw err;
-          console.log("1 record inserted, ID: " + result.insertId);
-        });
-      });
-    } catch (err) {
-        reject();
-    }
-    resolve();
+    SQLquery = "DELETE FROM user WHERE (id='" + userId + "')";
+    querySqlSelect(SQLquery).then(() => {
+      resolve(true)
+    }).catch(err => reject(err));
   });
 }
 
@@ -66,22 +88,14 @@ exports.deleteUserAccount = function(userId) {
  **/
 exports.loginUserAccount = function(usernameOrEmail,password) {
   return new Promise(function(resolve, reject) {
-    try {
-      db.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected!");
-        SQLquery = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')";
-        SQLquery = "SELECT * FROM user WHERE (email='" + usernameOrEmail + "' and password='" + password + "')"
-        db.query(SQLquery, function (err, result) {
-          if (err) throw err;
-          console.log("1 record inserted, ID: " + result.insertId);
-        });
-      });
-    } catch (err) {
-        reject();
-    }
-  
-    resolve();
+    let SQLqueryName = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')"
+    querySqlSelect(SQLqueryName).then((res) => {
+      if (Array.isArray(res)) {
+        resolve(1);
+      } else {
+        resolve(0);
+      }
+    }).catch(err => reject(err));
   });
 }
 
@@ -109,7 +123,13 @@ exports.logoutUserAccount = function() {
  **/
 exports.updateUserAccount = function(userId,username,email,password) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    // Add check for same username ?
+    let SQLquery = "UPDATE user SET username='" + username + "', email='" + email + "', password='" + password +"' WHERE id ='" + userId + "'"
+    querySqlSelect(SQLquery).then((res) => {
+      console.log("update")
+      console.log(res)
+      resolve(res)
+    }).catch(err => reject(err));
   });
 }
 

@@ -1,5 +1,16 @@
-'use strict';
+const db = require('../utils/db_connect')
 
+exports.addSerie = function(serieId, body) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
+exports.updateSerie = function(serieId, body) {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
 
 /**
  * Return the available episodes of a serie
@@ -11,7 +22,37 @@
  **/
 exports.displaySerieEpisode = function(serieId,body) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    SQLquery = "SELECT episodes FROM serie WHERE id = " + serieId
+    db.querySqlSelect(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+exports.isFollowedSerie = function(serieId,userId) {
+  return new Promise(function(resolve, reject) {
+    SQLquery = "SELECT IF (EXISTS(SELECT * FROM user_serie WHERE user_id = " + userId + " AND serie_id = " + serieId + "), true, false)"
+    db.querySqlSelect(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+exports.countFollowersSerie = function(serieId) {
+  return new Promise(function(resolve, reject) {
+    SQLquery = "SELECT COUNT(*) FROM user_serie WHERE serie_id = " + serieId
+    db.querySqlSelect(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
   });
 }
 
@@ -26,7 +67,16 @@ exports.displaySerieEpisode = function(serieId,body) {
  **/
 exports.followSerie = function(serieId,userId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    SQLquery = "INSERT into user_serie(user_id, serie_id, current_saison, current_episode) VALUES("
+                      + userId + ", " + serieId + ", 1, -1)"
+    db.querySqlInsert(SQLquery)
+    .then(result => {
+      resolve(result);
+    }).catch(err => {
+      if (err.number !== 1062){
+        reject(err)
+      }
+    })
   });
 }
 
@@ -41,7 +91,13 @@ exports.followSerie = function(serieId,userId) {
  **/
 exports.unfollowSerie = function(serieId,userId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    SQLquery = "DELETE FROM user_serie WHERE user_id = " + userId + " AND serie_id = " + serieId
+    db.querySqlSelect(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
   });
 }
 

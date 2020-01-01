@@ -7,16 +7,17 @@ module.exports.displayFollowedSeries = function displayFollowedSeries (req, res)
       return followedSeriesList
     })
     .catch(err => {
-      throw err
+      console.log(err)
     });
 };
 
-module.exports.displaySeries = function displaySeries (req, res) {
+/* module.exports.displaySeries = function displaySeries (req, res) {
   return Series.displaySeries(req.params.pageNumber, req.body, req.params.search)
     .then(seriesList => {
       return seriesList
     })
     .catch(err => {
-      throw err
+      console.log(err)
     });
 };
+ */

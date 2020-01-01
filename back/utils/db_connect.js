@@ -1,25 +1,64 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
 
-var db = mysql.createConnection({
+const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
   database: "pweb"
 });
 
-db.connect(function(err, SQLquery) {
-  if (err) throw err;
-  console.log("Connected!");
-
-  //var sql = "INSERT INTO user (username, email, password) VALUES ('Robert', 'email@example.com', '123456789')";
-  db.query(SQLquery, function (err, result) {
-    if (err) throw err;
-    console.log("1 record inserted, ID: " + result.insertId);
+/**
+ * Query a Select
+ * Return the selected line(s)
+ */
+function querySqlSelect(sqlQuery) {
+  return new Promise(function(resolve, reject) {
+    db.connect(function(err) {
+      if (err) throw err;
+      db.query(sqlQuery, function(err, result) {
+        if (err) throw err;
+        console.log(result)
+        resolve(result);
+      });
+    });
   });
+}
 
-});
+/**
+ * Query an Insert sql
+ * return the ID of the new line
+ */
+function querySqlInsert(sqlQuery) {
+  return new Promise(function(resolve, reject) {
+    db.connect(function(err) {
+      if (err) throw err;
+      db.query(sqlQuery, function(err, result) {
+        if (err) throw err;
+        console.log(result)
+        resolve(result.insertId);
+      });
+    });
+  });
+}
+
+function querySqlUpdate(sqlQuery) {
+  return new Promise(function(resolve, reject) {
+    db.connect(function(err) {
+      if (err) throw err;
+      db.query(sqlQuery, function(err, result) {
+        if (err) throw err;
+        console.log(result)
+        resolve(result.affectedRows);
+      });
+    });
+  });
+}
+
+
 
 module.exports = {
-    db
+  querySqlSelect,
+  querySqlInsert,
+  querySqlUpdate
   }
   

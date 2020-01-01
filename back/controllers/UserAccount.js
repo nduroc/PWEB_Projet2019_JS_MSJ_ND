@@ -4,13 +4,12 @@ const utils = require('../utils/writer.js');
 const UserAccount = require('../service/UserAccountService');
 
 module.exports.createUserAccount = function createUserAccount (req, res) {
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
-  UserAccount.createUserAccount(username, email, password)
-    .then(() => {
-      console.log('New user account')
-      
+  //const username = req.body.username;
+  //const email = req.body.email;
+  //const password = req.body.password;
+  UserAccount.createUserAccount(/*username*/"Robert", "Du-lac"/*email*/, "123456789"/*password*/)
+    .then((userID) => {
+      return userID
     })
     .catch(err => {
       throw err
@@ -18,9 +17,9 @@ module.exports.createUserAccount = function createUserAccount (req, res) {
 };
 
 module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId) {
-  UserAccount.deleteUserAccount(userId)
-    .then(() => {
-      console.log('Deleted User')
+  UserAccount.deleteUserAccount("6"/*userId*/)
+    .then((deleted) => {
+      return deleted
     })
     .catch(err => {
       throw err
@@ -28,15 +27,17 @@ module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId)
 };
 
 module.exports.loginUserAccount = function loginUserAccount (req, res) {
-  const usernameOrEmail = req.params.usernameOrEmail;
-  const password = req.params.password;
-  UserAccount.loginUserAccount(usernameOrEmail,password)
-    .then(() => {
-      console.log('Login user')
-      res.send("Oui")
+  //const usernameOrEmail = req.params.usernameOrEmail;
+  //const password = req.params.password;
+  UserAccount.loginUserAccount("Robert"/*usernameOrEmail*/, "123456789"/*password*/)
+    .then((res) => {
+      if (res == 1)
+        return true
+      else
+        return false
     })
     .catch(err => {
-      throw err
+      return err
     });
 };
 
@@ -44,7 +45,6 @@ module.exports.logoutUserAccount = function logoutUserAccount (req, res) {
   UserAccount.logoutUserAccount()
     .then(() => {
       console.log('Logout user')
-      res.send("Oui")
     })
     .catch(err => {
       throw err
@@ -52,10 +52,10 @@ module.exports.logoutUserAccount = function logoutUserAccount (req, res) {
 };
 
 module.exports.updateUserAccount = function updateUserAccount (req, res, userId) {
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
-  UserAccount.updateUserAccount(userId,username,email,password)
+  //const username = req.body.username;
+  //const email = req.body.email;
+  //const password = req.body.password;
+  UserAccount.updateUserAccount("7"/*userId*/,"Robi"/*username*/,"mail"/*email*/,"azerty"/*password*/)
     .then(() => {
       console.log('Update user')
     })
