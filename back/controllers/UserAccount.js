@@ -27,9 +27,9 @@ module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId)
 };
 
 module.exports.loginUserAccount = function loginUserAccount (req, res) {
-  //const usernameOrEmail = req.params.usernameOrEmail;
-  //const password = req.params.password;
-  UserAccount.loginUserAccount("Robert"/*usernameOrEmail*/, "123456789"/*password*/)
+  const usernameOrEmail = req.params.usernameOrEmail;
+  const password = req.params.password;
+  UserAccount.loginUserAccount(usernameOrEmail, password)
     .then((res) => {
       if (res == 1)
         return true
