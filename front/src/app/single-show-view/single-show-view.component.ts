@@ -28,6 +28,7 @@ export class SingleShowViewComponent implements OnInit {
         (oneShow) => {
           this.actualShow = <OneShow>oneShow;
           this.seasonSlice = this.actualShow.seasons.slice(this.minSlice, this.maxSlice);
+          console.log(JSON.stringify(this.actualShow));
         })
 
 

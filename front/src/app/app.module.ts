@@ -16,7 +16,10 @@ import { SingleShowViewComponent } from './single-show-view/single-show-view.com
 import { SingleShow } from './services/singleShow.service';
 import { SeasonViewComponent } from './season-view/season-view.component'
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
+import { FollowedShowsComponent } from './followed-shows/followed-shows.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatFormFieldModule} from '@angular/material/form-field';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +28,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HomePageComponent,
     SingleShowViewComponent,
     SeasonViewComponent,
+    FollowedShowsComponent,
 
   ],
   imports: [
@@ -34,7 +38,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     FontAwesomeModule,
     StorageServiceModule,
-    NgbModule
+    NgbModule,
+    BrowserAnimationsModule,
+    MatExpansionModule,
+    MatFormFieldModule
   ],
   providers: [AuthService, HomeSeries, TvShowInformation,Season,OneShow,ActorCharacter,Episode,SingleShow],
   bootstrap: [AppComponent],

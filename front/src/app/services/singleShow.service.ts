@@ -35,7 +35,7 @@ export class SingleShow {
                 this.actualShow.loadInformation(<TvShowInformation>(data[0]));
                 this.actualShow.addAllSeason(<Season[]>(data[1]));
                 this.actualShow.addCast(<ActorCharacter[]>(data[2]));
-                console.log(this.actualShow)
+                //console.log(this.actualShow)
                 resolve(this.actualShow)
             },
             (error) => {console.log(error)

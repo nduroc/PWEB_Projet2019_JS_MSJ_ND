@@ -22,8 +22,10 @@
   <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
     <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-             <h4> <a class="nav-link" href="#">OmegaSéries</a> </h4>
+             <h4> <a class="nav-link" routerLink="homePage">OmegaSéries</a> </h4>
+             
           </li>
+          <li><h5><a class="nav-link" routerLink="myShow" *ngIf="checkAuth()===true">My shows</a></h5></li>
           <!--
           <li class="nav-item">
               <a class="nav-link" href="//codeply.com">Codeply</a>
