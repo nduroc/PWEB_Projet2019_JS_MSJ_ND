@@ -27,18 +27,18 @@ module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId)
 };
 
 module.exports.loginUserAccount = function loginUserAccount (req, res) {
-  const usernameOrEmail = req.params.usernameOrEmail;
-  const password = req.params.password;
+  const usernameOrEmail = req.query.usernameOrEmail;
+  const password = req.query.password;
+  let tmp = "";
   UserAccount.loginUserAccount(usernameOrEmail, password)
-    .then((res) => {
-      if (res == 1)
-        return true
-      else
-        return false
+    .then((response) => {
+      tmp += response;
     })
     .catch(err => {
       return err
-    });
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.logoutUserAccount = function logoutUserAccount (req, res) {
