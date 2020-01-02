@@ -92,8 +92,11 @@ exports.loginUserAccount = function(usernameOrEmail,password) {
   return new Promise(function(resolve, reject) {
     let SQLqueryName = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')"
     querySqlSelect(SQLqueryName).then((res) => {
-      if (Array.isArray(res)) {
-        resolve(1);
+      console.log(Array.isArray(res))
+      console.log(res.length)
+      console.log(res[0]['id'])
+      if (Array.isArray(res) && res.length != 0) {
+        resolve(res[0]['id']);
       } else {
         resolve(0);
       }
