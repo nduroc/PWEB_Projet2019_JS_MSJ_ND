@@ -1,6 +1,7 @@
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const UserAccount = require('./routes/UserAccountRoutes')
 const Episode = require('./routes/EpisodeRoutes')
@@ -15,6 +16,7 @@ const fs = require('fs'),
 
 const app = express()
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(session({
