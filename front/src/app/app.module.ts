@@ -20,6 +20,7 @@ import { FollowedShowsComponent } from './followed-shows/followed-shows.componen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { LoadingScreenComponent } from './loading-screen/loading-screen.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +30,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     SingleShowViewComponent,
     SeasonViewComponent,
     FollowedShowsComponent,
+    LoadingScreenComponent,
 
   ],
   imports: [

@@ -5,6 +5,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { SingleShowViewComponent } from './single-show-view/single-show-view.component';
 import { FollowedShowsComponent } from './followed-shows/followed-shows.component';
+import { LoadingScreenComponent } from './loading-screen/loading-screen.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'homePage/:page', component: HomePageComponent },
   { path: 'oneShow/:showId', component: SingleShowViewComponent },
   { path: 'myShow', component: FollowedShowsComponent},
+  { path: 'load', component: LoadingScreenComponent},
   { path: '**', redirectTo: "/homePage/1" },
 ];
 

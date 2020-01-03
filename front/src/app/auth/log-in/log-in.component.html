@@ -1,6 +1,6 @@
 
     <p *ngIf="notValide">
-        <ngb-alert  (close)="close()">error</ngb-alert>
+        <ngb-alert  (close)="close()">an error occurred please try again later </ngb-alert>
       </p>
 
 <div class="login-form">
@@ -19,3 +19,4 @@
     </form>
     <p class="text-center"><a routerLink="../register">Create an Account</a></p>
 </div>
+<app-loading-screen *ngIf="load"></app-loading-screen>

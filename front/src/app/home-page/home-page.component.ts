@@ -25,9 +25,11 @@ export class HomePageComponent implements OnInit {
   public genre: string;
   public status: string;
   public type: string;
+  public load:boolean=false;
 
 
   constructor(private homeSeries: HomeSeries, private router: Router, private activeRoute: ActivatedRoute) {
+    this.load=true;
     activeRoute.params.subscribe((val) => {
       this.actualPage = this.activeRoute.snapshot.params["page"];
       this.getAnotherWebApiPage("constructor").then(() => {
@@ -54,21 +56,20 @@ export class HomePageComponent implements OnInit {
 
   preparePageToDisplay(page: number) {
 
-
+    this.load=true;
     let maxToDisplay = page * 25;
     let temp = this.allGetShows.filter(show => this.filterPrepare(show)).slice(maxToDisplay - 25, maxToDisplay)
     //console.log(maxToDisplay);
     if ((25 > temp.length || this.allGetShows.length < maxToDisplay) && this.homeSeries.lastPage!=true) {
       this.getAnotherWebApiPage("if de preparePageToDisplay").then(() => this.preparePageToDisplay(page));
     } else {
-
+      this.load=false;
       this.toDisplay = temp
     }
   }
 
   getAnotherWebApiPage(where: string) {
-
-    console.log(where)
+    this.load=true;
     let promise = new Promise((resolve, reject) => {
       this.homeSeries.getNextPage().then(
         res => {
