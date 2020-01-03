@@ -74,7 +74,9 @@ export class HomeSeries {
                .toPromise()
                .then((res) => {
                   let oldSize = this.shows.length;
-                  this.shows = this.shows.concat(res.map(response => { return new TvShowInformation(response); }));
+                  this.shows = this.shows.concat(res.map(response => { let tvShowInf= new TvShowInformation()
+                     tvShowInf.setValue(response);
+                  return tvShowInf }));
                   let size = this.shows.length - oldSize;
                   this.showsMap.set(page, size);
                   // console.log(this.showsMap);

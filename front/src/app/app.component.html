@@ -53,7 +53,7 @@
             <a class="nav-link" routerLink="login" *ngIf="checkAuth()===false" routerLinkActive="active">Log in</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" *ngIf="checkAuth()===true" (click)="onLogOut()">Log out</a>
+            <a class="nav-link" *ngIf="checkAuth()===true" (click)="onLogOut()" style="cursor: pointer;">Log out</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="register" *ngIf="checkAuth()===false" routerLinkActive="active">Register</a>

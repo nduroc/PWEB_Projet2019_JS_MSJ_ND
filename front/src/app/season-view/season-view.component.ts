@@ -13,7 +13,7 @@ export class SeasonViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.seasonToShow)
+    //console.log(this.seasonToShow)
   }
 
 

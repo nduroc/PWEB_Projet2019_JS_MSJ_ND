@@ -1,6 +1,12 @@
+
+    <p *ngIf="notValide">
+        <ngb-alert  (close)="close()">error</ngb-alert>
+      </p>
+
 <div class="login-form">
     <form (ngSubmit)="onSubmitLogIn(f)" #f="ngForm">
-        <h2 class="text-center">Log in</h2>       
+        <h2 class="text-center">Log in</h2>    
+     
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Username"  ngModel required="required" name="username">
         </div>

@@ -18,7 +18,11 @@ export class TvShowInformation {
     network: string;
     countryName: string;
     countryCode: string;
-    constructor(private show?: any[]) {
+
+    constructor(){
+
+    }
+    setValue( show?: any[]) {
         if (show) {
             this.id = show["id"];
             this.name = show["name"];
@@ -57,7 +61,11 @@ export class Episode {
     urlOriginalImage: string;
     summary: string;
     runtime:number
-    constructor(private episode: any[]) {
+
+    constructor(){
+
+    }
+    setValue( episode: any[]) {
         this.id = episode["id"]
         this.name = episode["name"]
         this.outDate = episode["airdate"]
@@ -86,8 +94,11 @@ export class Season {
     urlMediumImage: string;
     urlOriginalImage: string;
     summary: string;
+    constructor()
+    {
 
-    constructor(private season: any[]) {
+    }
+    setValue( season: any[]) {
         this.id = season["id"];
         this.numberSeasonInshow = season["number"];
         this.name = season["name"];
@@ -126,7 +137,12 @@ export class ActorCharacter {
     characterUrlMediumImage: string;
     characterUrlOriginalImage: string;
 
-    constructor(private actorCharacter: any[]) {
+
+    constructor()
+    {
+        
+    }
+    setValue( actorCharacter: any[]) {
         //actor
         this.actorId = actorCharacter["person"]["id"]
         this.actorName = actorCharacter["person"]["name"]
