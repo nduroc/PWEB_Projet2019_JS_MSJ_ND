@@ -11,7 +11,7 @@ const db = require('../utils/db_connect')
 exports.markEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
   return new Promise(function(resolve, reject) {
     SQLquery = "UPDATE user_serie SET current_saison = "+ seasonNumber + ", current_episode = "
-                      + episodeNumber + " WHERE user_id = " + userId + " AND serie_id = " + serieId
+                      + episodeNumber + " WHERE userId = " + userId + " AND serieId = " + serieId
     db.querySqlUpdate(SQLquery)
     .then(result => {
       resolve(result)
@@ -39,7 +39,7 @@ exports.unmarkEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
       newEpisodeToMark = episodeNumber - 1
     }
     SQLquery = "UPDATE user_serie SET current_saison = " + seasonNumber + ", current_episode = "
-                + newEpisodeToMark + " WHERE user_id = " + userId + " AND serie_id = " + serieId
+                + newEpisodeToMark + " WHERE userId = " + userId + " AND serieId = " + serieId
     db.querySqlUpdate(SQLquery)
     .then(result => {
       resolve(result)
