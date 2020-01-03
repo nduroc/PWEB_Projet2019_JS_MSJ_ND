@@ -8,12 +8,14 @@ module.exports.createUserAccount = function createUserAccount (req, res) {
   const email = req.body.email;
   const password = req.body.password;
   let tmp = "";
+  console.log(username + "/" + email + "/" + password)
   UserAccount.createUserAccount(username, email, password)
     .then((userID) => {
       tmp += userID;
     })
     .catch(err => {
-      tmp += err;
+      console.log(err)
+      tmp += "-1";
     })
     .then(() => res.write(tmp))
     .then(() => res.send());

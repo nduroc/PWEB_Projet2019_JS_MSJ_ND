@@ -58,8 +58,8 @@ exports.createUserAccount = function(username, email, password) {
     SQLquery = "INSERT INTO user (username, email, password) VALUES ('" + username + "' , '" + email + "', '" + password + "')";
     querySqlSelect(SQLcheck).then((res) => {
       if (Array.isArray(res) && res.length != 0) {
-        resolve(resolve(0));
-      } 
+        resolve(0);
+      }
       else {
         querySqlInsert(SQLquery).then((res) => {
           resolve(res)
