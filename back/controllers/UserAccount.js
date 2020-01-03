@@ -4,16 +4,19 @@ const utils = require('../utils/writer.js');
 const UserAccount = require('../service/UserAccountService');
 
 module.exports.createUserAccount = function createUserAccount (req, res) {
-  //const username = req.body.username;
-  //const email = req.body.email;
-  //const password = req.body.password;
-  UserAccount.createUserAccount(/*username*/"Robert", "Du-lac"/*email*/, "123456789"/*password*/)
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+  let tmp = "";
+  UserAccount.createUserAccount(username, email, password)
     .then((userID) => {
-      return userID
+      tmp += userID;
     })
     .catch(err => {
-      throw err
-    });
+      tmp += err;
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId) {
@@ -33,10 +36,10 @@ module.exports.loginUserAccount = function loginUserAccount (req, res) {
   UserAccount.loginUserAccount(usernameOrEmail, password)
     .then((response) => {
       console.log(response)
-        tmp += response;
+      tmp += response;
     })
     .catch(err => {
-      return err
+      tmp += err;
     })
     .then(() => res.write(tmp))
     .then(() => res.send());

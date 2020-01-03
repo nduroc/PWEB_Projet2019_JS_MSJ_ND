@@ -4,7 +4,7 @@ const UserController = require('../controllers/UserAccount')
 
 const basePath = '/user'
 
-router.get(basePath, function (req, res) {
+router.post(basePath, function (req, res) {
     UserController.createUserAccount(req, res)
 })
 
