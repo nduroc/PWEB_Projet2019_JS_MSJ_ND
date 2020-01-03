@@ -32,7 +32,8 @@ module.exports.loginUserAccount = function loginUserAccount (req, res) {
   let tmp = "";
   UserAccount.loginUserAccount(usernameOrEmail, password)
     .then((response) => {
-      tmp += response;
+      console.log(response)
+        tmp += response;
     })
     .catch(err => {
       return err
