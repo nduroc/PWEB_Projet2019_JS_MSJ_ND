@@ -2,7 +2,7 @@
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
-  connectionLimit : 10,
+  //connectionLimit : 10,
   host: "localhost",
   user: "root",
   password: "",
@@ -33,15 +33,15 @@ function querySqlSelect(sqlQuery) {
  */
 function querySqlInsert(sqlQuery) {
   return new Promise(function(resolve, reject) {
-    db.connect(function(err) {
-      if (err) throw err;
+    //db.connect(function(err) {
+      //if (err) throw err;
       db.query(sqlQuery, function(err, result) {
         if (err) throw err;
         console.log("Insert")
         console.log(result)
         resolve(result.insertId);
       });
-    });
+    //});
   });
 }
 
