@@ -20,13 +20,16 @@ module.exports.createUserAccount = function createUserAccount (req, res) {
 };
 
 module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId) {
-  UserAccount.deleteUserAccount("6"/*userId*/)
+  let tmp = "";
+  UserAccount.deleteUserAccount(userId)
     .then((deleted) => {
       return deleted
     })
     .catch(err => {
-      throw err
-    });
+      tmp += err;
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.loginUserAccount = function loginUserAccount (req, res) {
