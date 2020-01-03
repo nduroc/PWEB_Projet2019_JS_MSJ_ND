@@ -1,7 +1,7 @@
 const Series = require('../service/SeriesService');
 
 module.exports.displayFollowedSeries = function displayFollowedSeries (req, res) {
-  const userId = req.params.userId;
+  const userId = req.query.userId;
   return Series.displayFollowedSeries(userId, req.body)
     .then(followedSeriesList => {
       return followedSeriesList
@@ -12,7 +12,7 @@ module.exports.displayFollowedSeries = function displayFollowedSeries (req, res)
 };
 
 /* module.exports.displaySeries = function displaySeries (req, res) {
-  return Series.displaySeries(req.params.pageNumber, req.body, req.params.search)
+  return Series.displaySeries(req.query.pageNumber, req.body, req.query.search)
     .then(seriesList => {
       return seriesList
     })

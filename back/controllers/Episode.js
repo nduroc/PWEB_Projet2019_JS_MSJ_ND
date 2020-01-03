@@ -1,10 +1,10 @@
 const Episode = require('../service/EpisodeService');
 
 module.exports.markEpisode = function markEpisode (req, res) {
-  const serieId = req.params.serieId;
-  const userId = req.params.userId;
-  const seasonNumber = req.params.seasonNumber
-  const episodeNumber = req.params.episodeNumber
+  const serieId = req.query.serieId;
+  const userId = req.query.userId;
+  const seasonNumber = req.query.seasonNumber
+  const episodeNumber = req.query.episodeNumber
 
   Episode.markEpisode(serieId, userId, seasonNumber, episodeNumber)
     .then(result => {
@@ -17,10 +17,10 @@ module.exports.markEpisode = function markEpisode (req, res) {
 };
 
 module.exports.unmarkEpisode = function unmarkEpisode (req, res) {
-  const serieId = req.params.serieId;
-  const userId = req.params.userId;
-  const seasonNumber = req.params.seasonNumber
-  const episodeNumber = req.params.episodeNumber
+  const serieId = req.query.serieId;
+  const userId = req.query.userId;
+  const seasonNumber = req.query.seasonNumber
+  const episodeNumber = req.query.episodeNumber
   
   Episode.unmarkEpisode(serieId, userId, seasonNumber, episodeNumber)
     .then(result => {

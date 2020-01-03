@@ -1,17 +1,93 @@
-const db = require('../utils/db_connect')
+const db = require('../utils/db_connect');
+const test = require('../../test.json')
 
-exports.addSerie = function(serieId, body) {
+updateSerie = function(serieId, body) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
 }
 
-exports.updateSerie = function(serieId, body) {
+addEpisode = function(episode, seasonId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    SQLqueryINSERTepisode = "INSERT into episode(id, name, outDate, seasonNumber, episodeNumber, urlMediumImage, urlOriginalImage, summary, runtime, seasonId) VALUES("
+                             + episode.id + ", " + episode.name + ", " + episode.outDate + ", " + episode.seasonNumber + ", " + episode.episodeNumber + ", "
+                             + episode.urlMediumImage + ", " + episode.urlOriginalImage + ", " + episode.summary + ", " + episode.runtime + ", " + season.id + ")"
+    db.querySqlInsert(SQLqueryINSERTepisode)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
   });
 }
 
+addSeason = function(season, serieId) {
+  return new Promise(function(resolve, reject) {
+    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlMediumImage, summary, serieId) VALUES("
+                            + season.id + ", " + season.numberSeasonInshow + ", " + season.name + ", " + season.nbEpisode + ", " + season.urlMediumImage + ", "
+                            + season.urlOriginalImage + ", " + season.summary + ", " + serieId + ")"
+    db.querySqlInsert(SQLqueryINSERTseason)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+addActor = function(actor, serieId) {
+  return new Promise(function(resolve, reject) {
+    SQLqueryINSERTactors = "INSERT into actors(actorId, actorName, actorCountryName, actorCountryCode, actorSexe, actorUrlMediumImage, actorUrlOriginalImage) VALUES("
+                            + actor.actorId + ", " + actor.actorName + ", " + actor.actorCountryName + ", " + actor.actorCountryCode + ", " + actor.actorSexe + ", "
+                            + actor.actorUrlMediumImage + ", " + actor.actorUrlOriginalImage + ")"
+    SQLqueryINSERTactors_serie = "INSERT into actors_serie(actorId, serieId, characterId, characterName, characterUrlMediumImage, characterUrlOriginalImage) VALUES("
+                                  + actor.actorId + ", " + serieId + ", " + actor.characterId + ", " + actor.characterName + ", " + actor.characterUrlMediumImage + ", "
+                                  + actor.characterUrlOriginalImage + ")"
+    
+    db.querySqlInsert(SQLqueryINSERTactors)
+    .then(() => {
+      
+      db.querySqlInsert(SQLqueryINSERTactors_serie)
+      .then(result => {
+        resolve(result)
+      }).catch(err => {
+        reject(err)
+      })
+    
+    }).catch(err => {
+      if(err.number !== 1062){
+        reject(err)
+      }
+    })
+  });
+}
+
+addSerie = function(serieId, information) {
+  return new Promise(function(resolve, reject) {
+    let genres = null
+    let begin = true
+    
+    for(let g of information.genre){
+      if(begin){
+        genres = g
+        begin = false
+      } else {
+        genres.concat("/", g)
+      }
+    }
+
+    SQLqueryINSERTserie = "INSERT into serie(id, name, type, genre, status, start, officialSite, urlMediumImage, urlOriginalImage, rate, summary, network, countryName, countryCode) VALUES(" + serieId + ", " + information.name + ", " + information.type + ", " + genres + ", " + information.status + ", "
+    + information.start + ", " + information.officialSite + ", " + information.urlMediumImage + ", " + information.urlOriginalImage + ", "
+    + information.rate + ", " + information.summary + ", " + information.countryName + ", " + information.countryCode + ")"
+
+    db.querySqlInsert(SQLqueryINSERTserie)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
 /**
  * Return the available episodes of a serie
  * Return the available episodes of a serie
@@ -34,7 +110,7 @@ exports.displaySerieEpisode = function(serieId,body) {
 
 exports.isFollowedSerie = function(serieId,userId) {
   return new Promise(function(resolve, reject) {
-    SQLquery = "SELECT IF (EXISTS(SELECT * FROM user_serie WHERE user_id = " + userId + " AND serie_id = " + serieId + "), true, false)"
+    SQLquery = "SELECT IF (EXISTS(SELECT * FROM user_serie WHERE userId = " + userId + " AND serieId = " + serieId + "), true, false)"
     db.querySqlSelect(SQLquery)
     .then(result => {
       resolve(result)
@@ -46,7 +122,7 @@ exports.isFollowedSerie = function(serieId,userId) {
 
 exports.countFollowersSerie = function(serieId) {
   return new Promise(function(resolve, reject) {
-    SQLquery = "SELECT COUNT(*) FROM user_serie WHERE serie_id = " + serieId
+    SQLquery = "SELECT COUNT(*) FROM user_serie WHERE serieId = " + serieId
     db.querySqlSelect(SQLquery)
     .then(result => {
       resolve(result)
@@ -65,17 +141,47 @@ exports.countFollowersSerie = function(serieId) {
  * userId Integer Id of the user who want to follow a serie
  * no response value expected for this operation
  **/
-exports.followSerie = function(serieId,userId) {
+exports.followSerie = function(/*showToFollow,*/ userId) {
   return new Promise(function(resolve, reject) {
-    SQLquery = "INSERT into user_serie(user_id, serie_id, current_saison, current_episode) VALUES("
+    const showToFollow = JSON.parse(JSON.stringify(test));
+    const information = showToFollow.information
+    const seasons = showToFollow.seasons
+    const cast = showToFollow.cast
+    const serieId = information.id
+    SQLqueryIF = "SELECT IF(EXISTS(SELECT * FROM serie WHERE id = " + serieId + "))"    
+    SQLqueryINSERTuser_serie = "INSERT into user_serie(userId, serieId, current_saison, current_episode) VALUES("
                       + userId + ", " + serieId + ", 1, -1)"
-    db.querySqlInsert(SQLquery)
-    .then(result => {
-      resolve(result);
-    }).catch(err => {
-      if (err.number !== 1062){
-        reject(err)
+    db.querySqlSelect(SQLqueryIF)
+    .then(resultIF => {
+      if(resultIF){
+        this.updateSerie()
+      } else {
+        this.addSerie(serieId, information)
+
+        for(let actor of cast){
+          this.addActor(actor, serieId)
+        }
+        for(let season of seasons){
+          this.addSeason(season, serieId)
+          if(season.episodes.length === 0){
+
+          } else {
+            for(let episode of season.episodes){
+              this.addEpisode(episode, season.id)
+            }
+          }
+        }
       }
+      db.querySqlInsert(SQLqueryINSERTuser_serie)
+      .then(resultINSERTuser_serie => {
+        resolve(resultINSERTuser_serie)
+      }).catch(err => {
+        if(err.number !== 1062){
+          reject(err)
+        }
+      })
+    }).catch(err => {
+      reject(err)
     })
   });
 }
@@ -91,7 +197,7 @@ exports.followSerie = function(serieId,userId) {
  **/
 exports.unfollowSerie = function(serieId,userId) {
   return new Promise(function(resolve, reject) {
-    SQLquery = "DELETE FROM user_serie WHERE user_id = " + userId + " AND serie_id = " + serieId
+    SQLquery = "DELETE FROM user_serie WHERE userId = " + userId + " AND serieId = " + serieId
     db.querySqlSelect(SQLquery)
     .then(result => {
       resolve(result)
