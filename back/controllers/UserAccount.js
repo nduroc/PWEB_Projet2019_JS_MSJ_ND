@@ -4,41 +4,50 @@ const utils = require('../utils/writer.js');
 const UserAccount = require('../service/UserAccountService');
 
 module.exports.createUserAccount = function createUserAccount (req, res) {
-  //const username = req.body.username;
-  //const email = req.body.email;
-  //const password = req.body.password;
-  UserAccount.createUserAccount(/*username*/"Robert", "Du-lac"/*email*/, "123456789"/*password*/)
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+  let tmp = "";
+  console.log(username + "/" + email + "/" + password)
+  UserAccount.createUserAccount(username, email, password)
     .then((userID) => {
-      return userID
+      tmp += userID;
     })
     .catch(err => {
-      throw err
-    });
+      console.log(err)
+      tmp += "-1";
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.deleteUserAccount = function deleteUserAccount (req, res, userId) {
-  UserAccount.deleteUserAccount("6"/*userId*/)
+  let tmp = "";
+  UserAccount.deleteUserAccount(userId)
     .then((deleted) => {
       return deleted
     })
     .catch(err => {
-      throw err
-    });
+      tmp += err;
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.loginUserAccount = function loginUserAccount (req, res) {
-  const usernameOrEmail = req.params.usernameOrEmail;
-  const password = req.params.password;
+  const usernameOrEmail = req.query.usernameOrEmail;
+  const password = req.query.password;
+  let tmp = "";
   UserAccount.loginUserAccount(usernameOrEmail, password)
-    .then((res) => {
-      if (res == 1)
-        return true
-      else
-        return false
+    .then((response) => {
+      console.log(response)
+      tmp += response;
     })
     .catch(err => {
-      return err
-    });
+      tmp += err;
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.logoutUserAccount = function logoutUserAccount (req, res) {

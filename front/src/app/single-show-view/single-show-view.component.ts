@@ -28,6 +28,7 @@ export class SingleShowViewComponent implements OnInit {
         (oneShow) => {
           this.actualShow = <OneShow>oneShow;
           this.seasonSlice = this.actualShow.seasons.slice(this.minSlice, this.maxSlice);
+          //console.log(this.actualShow);
         })
 
 
@@ -44,6 +45,7 @@ export class SingleShowViewComponent implements OnInit {
   }
 
   seasonClick(seasonId: number,indexOfSeason:number) {
+    console.log(JSON.stringify(this.actualShow));
     let episodesRdyPromise
     if (this.actualShow.seasons[indexOfSeason].episodes.length==0) {
       episodesRdyPromise=this.singleShowService.getEpisodeForASeason(seasonId)

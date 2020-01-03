@@ -4,6 +4,7 @@ import { LogInComponent } from './auth/log-in/log-in.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { SingleShowViewComponent } from './single-show-view/single-show-view.component';
+import { FollowedShowsComponent } from './followed-shows/followed-shows.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'homePage/:page', component: HomePageComponent },
   { path: 'oneShow/:showId', component: SingleShowViewComponent },
+  { path: 'myShow', component: FollowedShowsComponent},
   { path: '**', redirectTo: "/homePage/1" },
 ];
 

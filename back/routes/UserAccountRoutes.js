@@ -4,7 +4,7 @@ const UserController = require('../controllers/UserAccount')
 
 const basePath = '/user'
 
-router.get(basePath, function (req, res) {
+router.post(basePath, function (req, res) {
     UserController.createUserAccount(req, res)
 })
 
@@ -16,7 +16,7 @@ router.get(basePath + '/logout', function (req, res) {
     UserController.logoutUserAccount(req, res)
 })
 
-router.get(basePath + '/:userId', function (req, res) {
+router.put(basePath + '/:userId', function (req, res) {
     UserController.updateUserAccount(req, res, req.params.userId)
 })
 

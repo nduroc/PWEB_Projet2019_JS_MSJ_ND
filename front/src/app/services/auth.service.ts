@@ -1,22 +1,83 @@
-export class AuthService {
 
-    isAuth = false;
+import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
+import { Inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { resolve } from 'url';
+
+@Injectable()
+export class AuthService {
+  isAuth = false;
+  constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private storage: StorageService) {
+    console.log(this.storage.get("userName"));
+    if(this.storage.get("userName"))
+    {
+      this.isAuth=true
+    }
+
+  }
+    
   
     signIn(username:string, password:string) {
-      return new Promise(
-        (resolve, reject) => {
-          setTimeout(
-            () => {
-              this.isAuth = true;
-              console.log("username : " + username + " password : " + password)
-              resolve(true);
-            }, 2000
-          );
-        }
-      );
-    }
+
+    let promise = new Promise((resolve, reject) => {
+      this.httpClient.get<any[]>('http://localhost:8080/user/login?usernameOrEmail='+username+'&password='+password+'')
+      .toPromise()
+      .then(
+       
+          (result) => {
+            
+            if(result.toString()!="0")
+            {
+              this.isAuth=true;
+              this.storage.set("userName",username);
+              this.storage.set("userId",result);
+              resolve(result);
+            }
+            else{
+              reject(result)
+            }
+          },
+          (error) => {
+              console.log(error);
+              reject(error);
+          }
+      )
+
+
+});
+return promise;
+}
+
   
     signOut() {
       this.isAuth = false;
+      this.storage.remove("userName")
+      this.storage.remove("userId")
+    }
+
+    register(userName:string,passWord:string,eMail:string)
+    {
+      let params= {username:""+userName,password:""+passWord,email:""+eMail}
+      let promise = new Promise((resolve, reject) => {
+      
+      this.httpClient.post('http://localhost:8080/user',params)
+      .toPromise()
+      .then(
+       
+          (result) => {
+            console.log(result)
+            resolve(result)
+          },
+          (error) => {
+            console.log(error)
+            reject(error)
+          }
+      )
+
+
+});
+return promise;
+
+
     }
 }

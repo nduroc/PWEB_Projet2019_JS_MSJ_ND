@@ -33,9 +33,10 @@ export class SingleShow {
         .then(
             (data)=> {
                 this.actualShow.loadInformation(<TvShowInformation>(data[0]));
+                console.log(data[1]);
                 this.actualShow.addAllSeason(<Season[]>(data[1]));
                 this.actualShow.addCast(<ActorCharacter[]>(data[2]));
-                console.log(this.actualShow)
+                //console.log(this.actualShow)
                 resolve(this.actualShow)
             },
             (error) => {console.log(error)
@@ -53,7 +54,13 @@ export class SingleShow {
             .toPromise()
             .then(
                 (result) => {
-                    let cast:ActorCharacter[] = <ActorCharacter[]>(result.map(actorCharacter => {return new ActorCharacter(actorCharacter)}))
+                    let cast:ActorCharacter[] = <ActorCharacter[]>(result.map(actorCharacter => {
+                        
+                         let actor = new ActorCharacter();
+                         actor.setValue(actorCharacter);
+                         return actor
+                    
+                    }))
                     //console.log(csi);
                     resolve(cast);
                 },
@@ -75,8 +82,8 @@ export class SingleShow {
                 .toPromise()
                 .then(
                     (result) => {
-                        let csi:TvShowInformation =  new TvShowInformation(result);
-                        //console.log(csi);
+                        let csi:TvShowInformation =  new TvShowInformation();
+                        csi.setValue(result);
                         resolve(csi);
                     },
                     (error) => {
@@ -95,7 +102,10 @@ export class SingleShow {
             .toPromise()
             .then(
                 (result) => {
-                    let seasons:Season[] = <Season[]>(result.map(season => {return new Season(season)}))
+                    let seasons:Season[] = <Season[]>(result.map(season => 
+                        {   let oneSeason = new Season()
+                            oneSeason.setValue(season);
+                            return oneSeason;}))
                     //console.log(csi);
                     resolve(seasons);
                 },
@@ -117,7 +127,9 @@ export class SingleShow {
             .toPromise()
             .then(
                 (result) => {
-                    let episodes:Episode[] = <Episode[]>(result.map(episode => {return new Episode(episode)}))
+                    let episodes:Episode[] = <Episode[]>(result.map(episode => {let anEpisode= new Episode()
+                        anEpisode.setValue(episode)
+                return anEpisode}))
                     //console.log(csi);
                     resolve(episodes);
                 },
