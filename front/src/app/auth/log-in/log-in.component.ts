@@ -12,6 +12,7 @@ import { NgForm }   from '@angular/forms';
 export class LogInComponent implements OnInit {
   authStatus: boolean
   notValide:boolean=false;
+  load:boolean=false;
 
   constructor(private authService: AuthService,private router:Router) { }
 
@@ -20,13 +21,15 @@ export class LogInComponent implements OnInit {
   }
 
   onSubmitLogIn(form: NgForm) {
-    
+    this.load=true;
     this.authService.signIn(form.value["username"],form.value["password"]).then(
       () => {
+        this.load=false;
         this.authStatus = this.authService.isAuth;
         this.router.navigate(["homePage"]);
       },
-      (error) => {console.log(error),this.notValide=true} 
+      (error) => {
+        this.load=false;console.log(error),this.notValide=true} 
     )
   }
   close()

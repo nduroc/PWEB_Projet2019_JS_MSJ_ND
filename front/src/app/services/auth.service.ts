@@ -57,16 +57,23 @@ return promise;
 
     register(userName:string,passWord:string,eMail:string)
     {
-      let params= {username:""+userName,password:""+passWord,email:""+eMail}
+
       let promise = new Promise((resolve, reject) => {
       
-      this.httpClient.post('http://localhost:8080/user',params)
+      this.httpClient.post('http://localhost:8080/user',{username:""+userName,password:""+passWord,email:""+eMail})
       .toPromise()
       .then(
        
-          (result) => {
+          (result) => { 
             console.log(result)
-            resolve(result)
+            if(result.toString()=="-1")
+            {
+              reject(result);
+            }
+            else
+            {
+              resolve(result);
+            }
           },
           (error) => {
             console.log(error)
