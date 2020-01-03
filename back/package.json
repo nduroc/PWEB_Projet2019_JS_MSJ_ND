@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "js-yaml": "^3.3.0",
+    "node-fetch": "^2.6.0",
     "swagger-tools": "^0.10.4"
   }
 }
