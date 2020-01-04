@@ -33,8 +33,29 @@ exports.markEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
 exports.unmarkEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
   return new Promise(function(resolve, reject) {
     let newEpisodeToMark
-    if(episodeNumber<=1){
-      newEpisodeToMark = -1
+    if(episodeNumber <= 1){
+      if(seasonNumber <= 1){
+        newEpisodeToMark = -1
+      } else{
+        SQLquerySELECTnewEpisodeToMark = "SELECT nbEpisode FROM season WHERE serieId = " + serieId + " AND numberSeasonInshow	= " + seasonNumber
+        db.querySqlUpdate(SQLquery)
+        .then(result => {
+          newEpisodeToMark = result
+          
+          SQLquery = "UPDATE user_serie SET current_saison = " + seasonNumber + ", current_episode = "
+                      + newEpisodeToMark + " WHERE userId = " + userId + " AND serieId = " + serieId
+          
+          db.querySqlUpdate(SQLquery)
+          .then(result => {
+            resolve(result)
+          }).catch(err => {
+            reject(err)
+          })
+        
+        }).catch(err => {
+          reject(err)
+        })
+      }
     } else {
       newEpisodeToMark = episodeNumber - 1
     }

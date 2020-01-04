@@ -14,7 +14,10 @@ exports.displayFollowedSeries = function(userId,body) {
     SQLquery = "SELECT * FROM serie WHERE id IN (SELECT serieId FROM user_serie WHERE userId = " + userId + ") "
     db.querySqlSelect(SQLquery)
     .then(result => {
-      resolve(result)
+      this.searchOneSerie(result, 0)
+      .then(followedSeries => {
+        resolve(followedSerie)
+      })
     }).catch(err => {
       reject(err)
     })
@@ -37,3 +40,89 @@ exports.displayFollowedSeries = function(userId,body) {
   });
 } */
 
+searchOneSerie = function(res, indexRes){
+  return new Promise(function(resolve, reject) {
+    let series = []
+    let information = res[indexRes]
+    this.searchSeasons(res[indexRes]['id'])
+    .then(resultSeasons => {
+      this.searchCast(res[indexRes]['id'])
+      .then(resultCast => {
+        let seasons = resultSeasons
+        let cast = resultCast
+        let serie = {seasons, cast, information}
+
+        series.push(serie)
+        
+        if(indexRes >= (res.length - 1)){
+          resolve(series)
+        } else {
+          ++indexRes
+          series = series.concat(this.searchOneSerie(res, indexRes))
+          resolve(series)
+        }
+
+      }).catch(err => {
+        reject(err)
+      })
+
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+searchSeasons = function(serieId) {
+  return new Promise(function(resolve, reject) {
+    SQLquerySELECTseasons = "SELECT * FROM season WHERE serieId = " + serieId
+    db.querySqlSelect(SQLquerySELECTseasons)
+    .then(resultSELECTseasons => {
+      SQLquerySELECTepisodes = "SELECT * FROM episode WHERE seasonId IN (SELECT id FROM season WHERE serieId = " + serieId + ")"
+      db.querySqlSelect(SQLquerySELECTepisodes)
+      .then(resultSELECTepisodes => {
+        let seasons = []
+        for(let resSeason of resultSELECTseasons) {
+          let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resActor['id'])
+          for(let episodeInfo of episodesInfo) {
+            episodeInfo.splice('seasonId', 1)
+          }
+          resSeason.splice('serieId', 1)
+          let res = resSeason.concat(episodesInfo)
+          seasons.push(res)
+        }
+        resolve(seasons)
+      }).catch(err => {
+        reject(err)
+      })
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+searchCast = function(serieId) {
+  return new Promise(function(resolve, reject) {
+    SQLquerySELECTactors_serie = "SELECT * FROM actors_serie WHERE serieId = " + serieId
+    db.querySqlSelect(SQLquerySELECTactors_serie)
+    .then(resultSELECTactors_serie => {
+      SQLquerySELECTactors_serie = "SELECT * FROM actors WHERE actorId IN (SELECT actorId FROM actors_serie WHERE serieId = " + serieId + ")"
+      db.querySqlSelect(SQLquerySELECTactors)
+      .then(resultSELECTactors => {
+        let cast = []
+        for(let resActor of resultSELECTactors) {
+          let characterInfo = resultSELECTactors_serie.find(element => element['actorId'] === resActor['actorId'])
+          characterInfo.splice('id',1)
+          characterInfo.splice('actorId',1)
+          characterInfo.splice('serieId',1)
+          let res = resActor.concat(characterInfo)
+          cast.push(res)
+        }
+        resolve(cast)
+      }).catch(err => {
+        reject(err)
+      })
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}

@@ -4,7 +4,7 @@ module.exports.displayFollowedSeries = function displayFollowedSeries (req, res)
   const userId = req.query.userId;
   return Series.displayFollowedSeries(userId, req.body)
     .then(followedSeriesList => {
-      return followedSeriesList
+      return JSON.stringify(followedSeriesList)
     })
     .catch(err => {
       console.log(err)

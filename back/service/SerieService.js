@@ -15,102 +15,247 @@ updateSerie = function(serieId, seasons) {
           episodes = json
         }).catch(err=>reject(err));
 
-        for (let i = result; i < seasons.length; ++i) {
-          this.addSeasonFromTVMaze(seasons[i], serieId)
-          for(let episode of episodes){
-            if(episode.season === season[i].number){
-              this.addEpisodeFromTVMaze(episode, season[i].id)
+        this.addSeasonsFromTVMaze(seasons, episodes, result, serieId)
+        .then(resultAddSeasons => {
+          resolve(resultAddSeasons)
+        }).catch(err => {
+          reject(err)
+        })
+      }
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsIdListTVMaze) {
+  return new Promise(function(resolve, reject) {
+    let begin = true
+    SQLqueryINSERTepisode = "INSERT into episode(id, name, outDate, seasonNumber, episodeNumber, urlMediumImage, urlOriginalImage, summary, runtime, seasonId) VALUES"
+    for(let i=0; i<episodesList.length; ++i){
+      let episodes = episodesList[i]
+      let seasonId = seasonsIdList[i]
+      
+      for(let episode of episodes){
+        if(episode.episodeNumber!=null){
+          if(!begin){
+            SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(",")
+          } else {
+            begin = false
+          }
+          let stringEpisode = "(" + episode.id + ", " + episode.name + ", " + episode.outDate + ", " + episode.seasonNumber + ", " + episode.episodeNumber + ", "
+                          + episode.urlMediumImage + ", " + episode.urlOriginalImage + ", " + episode.summary + ", " + episode.runtime + ", " + seasonId + ")"
+          SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(stringEpisode)
+        }
+      }
+
+    }
+    for(let i=0; i<episodesListTVMaze.length; ++i){
+      let episodes = episodesListTVMaze[i]
+      let seasonId = seasonsIdListTVMaze[i]
+      
+      for(let episode of episodes){
+        if(episode.number!=null){
+          if(!begin){
+            SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(",")
+          } else {
+            begin = false
+          }
+          let stringEpisode = "(" + episode.id + ", " + episode.name + ", " + episode.airdate + ", " + episode.season + ", " + episode.number + ", "
+                               + episode.image.medium + ", " + episode.image.original + ", " + episode.summary + ", " + episode.runtime + ", " + seasonId + ")"
+          SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(stringEpisode)
+        }
+      }
+
+    }
+    db.querySqlInsert(SQLqueryINSERTepisode)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+addSeasons = function(seasons, serieId) {
+  return new Promise(function(resolve, reject) {
+    let begin = true
+    let episodesTVMaze = null
+    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlMediumImage, summary, serieId) VALUES"
+
+    let episodesList = []
+    let episodesListTVMaze = []
+    let seasonsIdList = []
+    let seasonsIdListTVMaze = []
+    let indexOfList = 0
+    let indexOfListTVMaze = 0
+    for(let season of seasons){
+      if(!begin){
+        SQLqueryINSERTseason = SQLqueryINSERTseason.concat(",")
+      } else {
+        begin = false
+      }
+      if(season.episodes.length === 0){
+        let episodesForSeason = []
+        if(episodes === null){
+          
+          const reqTvMazeEpisodes="http://api.tvmaze.com/shows/" + serieId + "/episodes";
+          fetch(reqTvMazeEpisodes).then((resp)=>resp.json()).then((json)=>{
+            episodesTVMaze = json
+
+            for(let episodeTVMaze of episodesTVMaze){
+              if(episodeTVMaze.season === season.numberSeasonInshow){
+                episodesForSeason.push(episodeTVMaze)
+              }
+            }
+          
+          }).catch(err=>reject(err));
+        
+        } else {
+          
+          for(let episodeTVMaze of episodesTVMaze){
+            if(episodeTVMaze.season === season.numberSeasonInshow){
+              episodesForSeason.push(episodeTVMaze)
             }
           }
         }
-        resolve(true)
+        episodesListTVMaze[indexOfListTVMaze] = episodesForSeason
+        seasonsIdListTVMaze[indexOfListTVMaze] = season.id
+        ++indexOfListTVMaze
+      } else {
+        episodesList[indexOfList] = season.episodes
+        seasonsIdList[indexOfList] = season.id
+        ++indexOfList
       }
-      resolve(false)
-    }).catch(err => {
-      reject(err)
-    })
-  });
-}
-
-addEpisode = function(episode, seasonId) {
-  return new Promise(function(resolve, reject) {
-    SQLqueryINSERTepisode = "INSERT into episode(id, name, outDate, seasonNumber, episodeNumber, urlMediumImage, urlOriginalImage, summary, runtime, seasonId) VALUES("
-                             + episode.id + ", " + episode.name + ", " + episode.outDate + ", " + episode.seasonNumber + ", " + episode.episodeNumber + ", "
-                             + episode.urlMediumImage + ", " + episode.urlOriginalImage + ", " + episode.summary + ", " + episode.runtime + ", " + seasonId + ")"
-    db.querySqlInsert(SQLqueryINSERTepisode)
-    .then(result => {
-      resolve(result)
-    }).catch(err => {
-      reject(err)
-    })
-  });
-}
-
-addEpisodeFromTVMaze = function(episode, seasonId) {
-  return new Promise(function(resolve, reject) {
-    SQLqueryINSERTepisode = "INSERT into episode(id, name, outDate, seasonNumber, episodeNumber, urlMediumImage, urlOriginalImage, summary, runtime, seasonId) VALUES("
-                             + episode.id + ", " + episode.name + ", " + episode.airdate + ", " + episode.season + ", " + episode.number + ", "
-                             + episode.image.medium + ", " + episode.image.original + ", " + episode.summary + ", " + episode.runtime + ", " + seasonId + ")"
-    db.querySqlInsert(SQLqueryINSERTepisode)
-    .then(result => {
-      resolve(result)
-    }).catch(err => {
-      reject(err)
-    })
-  });
-}
-
-addSeason = function(season, serieId) {
-  return new Promise(function(resolve, reject) {
-    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlMediumImage, summary, serieId) VALUES("
-                            + season.id + ", " + season.numberSeasonInshow + ", " + season.name + ", " + season.nbEpisode + ", " + season.urlMediumImage + ", "
-                            + season.urlOriginalImage + ", " + season.summary + ", " + serieId + ")"
+      let stringSeason = "(" + season.id + ", " + season.numberSeasonInshow + ", " + season.name + ", " + season.nbEpisode + ", "
+                       + season.urlMediumImage + ", "+ season.urlOriginalImage + ", " + season.summary + ", " + serieId + ")"
+      SQLqueryINSERTseason = SQLqueryINSERTseason.concat(stringSeason)
+    }
     db.querySqlInsert(SQLqueryINSERTseason)
     .then(result => {
-      resolve(result)
-    }).catch(err => {
-      reject(err)
-    })
-  });
-}
-
-addSeasonFromTVMaze = function(season, serieId) {
-  return new Promise(function(resolve, reject) {
-    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlMediumImage, summary, serieId) VALUES("
-                            + season.id + ", " + season.number + ", " + season.name + ", " + season.episodeOrder + ", " + season.image.medium + ", "
-                            + season.image.original + ", " + season.summary + ", " + serieId + ")"
-    db.querySqlInsert(SQLqueryINSERTseason)
-    .then(result => {
-      resolve(result)
-    }).catch(err => {
-      reject(err)
-    })
-  });
-}
-
-addActor = function(actor, serieId) {
-  return new Promise(function(resolve, reject) {
-    SQLqueryINSERTactors = "INSERT into actors(actorId, actorName, actorCountryName, actorCountryCode, actorSexe, actorUrlMediumImage, actorUrlOriginalImage) VALUES("
-                            + actor.actorId + ", " + actor.actorName + ", " + actor.actorCountryName + ", " + actor.actorCountryCode + ", " + actor.actorSexe + ", "
-                            + actor.actorUrlMediumImage + ", " + actor.actorUrlOriginalImage + ")"
-    SQLqueryINSERTactors_serie = "INSERT into actors_serie(actorId, serieId, characterId, characterName, characterUrlMediumImage, characterUrlOriginalImage) VALUES("
-                                  + actor.actorId + ", " + serieId + ", " + actor.characterId + ", " + actor.characterName + ", " + actor.characterUrlMediumImage + ", "
-                                  + actor.characterUrlOriginalImage + ")"
-    
-    db.querySqlInsert(SQLqueryINSERTactors)
-    .then(() => {
-      
-      db.querySqlInsert(SQLqueryINSERTactors_serie)
-      .then(result => {
+      this.addEpisodes(episodesList, seasonsIdList, episodesListTVMaze, seasonsIdListTVMaze)
+      .then(() => {
         resolve(result)
       }).catch(err => {
         reject(err)
       })
-    
     }).catch(err => {
-      if(err.number !== 1062){
+      reject(err)
+    })
+  });
+}
+
+addSeasonsFromTVMaze = function(seasons, episodes, indexForSeasons, serieId) {
+  return new Promise(function(resolve, reject) {
+    let begin = true
+    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlMediumImage, summary, serieId) VALUES"
+
+    let episodesListTVMaze = []
+    let seasonsIdListTVMaze = []
+    let indexOfListTVMaze = 0
+
+    for(let i=indexForSeasons; i<seasons.length; ++i){
+     let season = seasons[i]
+     if(!begin){
+        SQLqueryINSERTseason = SQLqueryINSERTseason.concat(",")
+    } else {
+      begin = false
+    }
+      let episodesForSeason = []
+        
+        for(let episodeTVMaze of episodes){
+          if(episodeTVMaze.season === season.number){
+            episodesForSeason.push(episodeTVMaze)
+          }
+        }
+
+      episodesListTVMaze[indexOfListTVMaze] = episodesForSeason
+      seasonsIdListTVMaze[indexOfListTVMaze] = season.id
+      ++indexOfListTVMaze
+
+      let stringSeason = "(" + season.id + ", " + season.number + ", " + season.name + ", " + season.episodeOrder + ", "
+                          + season.image.medium + ", " + season.image.original + ", " + season.summary + ", " + serieId + ")"
+      SQLqueryINSERTseason = SQLqueryINSERTseason.concat(stringSeason)
+    }
+    db.querySqlInsert(SQLqueryINSERTseason)
+    .then(result => {
+      this.addEpisodes([], [], episodesListTVMaze, seasonsIdListTVMaze)
+      .then(() => {
+        resolve(result)
+      }).catch(err => {
         reject(err)
+      })
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
+addActors = function(actors, serieId) {
+  return new Promise(function(resolve, reject) {
+    let stringActorsId = "("
+    let begin = true
+    for(let actor of actors) {
+      if(!begin){
+        stringActorsId = stringActorsId.concat(",")
+      } else {
+        begin = false
       }
+      stringActorsId = stringActorsId.concat(actor.actorId)
+    }
+    stringActorsId = stringActorsId.concat(")")
+    SQLquerySELECTpresentActors = "SELECT actorId FROM actors WHERE actorId IN " + stringActorsId
+
+    begin = true
+    let actorsAdded = false
+    SQLqueryINSERTactors = "INSERT into actors(actorId, actorName, actorCountryName, actorCountryCode, actorSexe, actorUrlMediumImage, actorUrlOriginalImage) VALUES"
+    SQLqueryINSERTactors_serie = "INSERT into actors_serie(actorId, serieId, characterId, characterName, characterUrlMediumImage, characterUrlOriginalImage) VALUES"
+
+    db.querySqlSelect(SQLquerySELECTpresentActors)
+    .then(result => {
+      
+      let presentActorsId = []
+      
+      for(let res of result) {
+        presentActorsId.push(res['actorId'])
+      }
+      
+      for(let actor of actors) {
+        if(!presentActorsId.includes(actor.actorId)){
+          if(actorsAdded){
+            SQLqueryINSERTactors = SQLqueryINSERTactors.concat(",")
+          } else {
+            actorsAdded = true
+          }
+          let stringActor = "("+ actor.actorId + ", " + actor.actorName + ", " + actor.actorCountryName + ", " + actor.actorCountryCode + ", "
+                            + actor.actorSexe + ", "+ actor.actorUrlMediumImage + ", " + actor.actorUrlOriginalImage + ")"
+          SQLqueryINSERTactors = SQLqueryINSERTactors.concat(stringActor)
+        }
+        if(!begin){
+          SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(",")
+        } else {
+          begin = false
+        }
+        let stringActor_serie = "(" + actor.actorId + ", " + serieId + ", " + actor.characterId + ", " + actor.characterName + ", "
+                                + actor.characterUrlMediumImage + ", " + actor.characterUrlOriginalImage + ")"
+        SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(stringActor_serie)
+      }
+    })
+    
+    db.querySqlInsert(SQLqueryINSERTactors_serie)
+    .then(result => {
+      if(actorsAdded){
+        db.querySqlInsert(SQLqueryINSERTactors)
+        .then(() => {
+          resolve(result)
+        }).catch(err => {
+          reject(err)
+        })
+      } else {
+        resolve(result)
+      }
+    }).catch(err => {
+      reject(err)
     })
   });
 }
@@ -125,7 +270,7 @@ addSerie = function(serieId, information) {
         genres = g
         begin = false
       } else {
-        genres.concat("/", g)
+        genres = genres.concat("/", g)
       }
     }
 
@@ -214,53 +359,23 @@ exports.followSerie = function(/*showToFollow,*/ userId) {
         }).catch(err=>reject(err));
       } else {
         this.addSerie(serieId, information)
-
-        for(let actor of cast){
-          this.addActor(actor, serieId)
-        }
-        for(let season of seasons){
-          let episodes = null
-          this.addSeason(season, serieId)
-          if(season.episodes.length === 0){
-            
-            if(episodes === null){
-              
-              const reqTvMazeEpisodes="http://api.tvmaze.com/shows/" + serieId + "/episodes";
-              fetch(reqTvMazeEpisodes).then((resp)=>resp.json()).then((json)=>{
-                episodes = json
-
-                for(let episode of episodes){
-                  if(episode.season === season.numberSeasonInshow){
-                    this.addEpisodeFromTVMaze(episode, season.id)
-                  }
+        .then(() => {
+          this.addActors(cast, serieId)
+          .then(() => {
+            this.addSeasons(seasons, serieId)
+            .then(() => {
+              db.querySqlInsert(SQLqueryINSERTuser_serie)
+              .then(resultINSERTuser_serie => {
+                resolve(resultINSERTuser_serie)
+              }).catch(err => {
+                if(err.number !== 1062){
+                  reject(err)
                 }
-              
-              }).catch(err=>reject(err));
-            
-            } else {
-              
-              for(let episode of episodes){
-                if(episode.season === season.numberSeasonInshow){
-                  this.addEpisodeFromTVMaze(episode, season.id)
-                }
-              }
-            
-            }
-          } else {
-            for(let episode of season.episodes){
-              this.addEpisode(episode, season.id)
-            }
-          }
-        }
+              })
+            })
+          })
+        })
       }
-      db.querySqlInsert(SQLqueryINSERTuser_serie)
-      .then(resultINSERTuser_serie => {
-        resolve(resultINSERTuser_serie)
-      }).catch(err => {
-        if(err.number !== 1062){
-          reject(err)
-        }
-      })
     }).catch(err => {
       reject(err)
     })
