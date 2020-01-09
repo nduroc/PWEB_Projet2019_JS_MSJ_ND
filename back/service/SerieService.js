@@ -339,9 +339,9 @@ exports.countFollowersSerie = function(serieId) {
  * userId Integer Id of the user who want to follow a serie
  * no response value expected for this operation
  **/
-exports.followSerie = function(/*showToFollow,*/ userId) {
+exports.followSerie = function(showToFollow, userId) {
   return new Promise(function(resolve, reject) {
-    const showToFollow = JSON.parse(JSON.stringify(test));
+    //const showToFollow = JSON.parse(JSON.stringify(test));
     const information = showToFollow.information
     const seasons = showToFollow.seasons
     const cast = showToFollow.cast
