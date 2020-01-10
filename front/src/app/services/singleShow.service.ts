@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class SingleShow {
+  
     actualShow: OneShow;
 
     constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private storage: StorageService) {
@@ -143,4 +144,27 @@ export class SingleShow {
     });
     return promise;
     }
+    followAShow(userId: number, actualShow: OneShow) {
+        let promise = new Promise((resolve, reject) => {
+
+            this.httpClient.post('localhost:8080/serie/follow?userId='+userId, { serieJson: JSON.stringify(actualShow) })
+              .toPromise()
+              .then(
+      
+                (result) => {
+                  console.log(result)
+                 
+                },
+                (error) => {
+                  console.log(error)
+                 
+                }
+              )
+      
+      
+          });
+          return promise;
+      
+      }
+    
 }

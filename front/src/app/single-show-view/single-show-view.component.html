@@ -10,12 +10,14 @@
             <div class="col-lg-5 text-white summary" [innerHTML]="actualShow.information.summary">
 
             </div>
+            <!-- Show information -->
             <div class="col-lg-4">
                 <div class="card bg-defaul showInfo text-white">
 
                     <div class="card-body">
                         <h5 class="card-header ">
                             Show Info
+                            <button class="follow-button text-white" *ngIf="authService.isAuth" (click)="followShow()">follow</button>
                         </h5>
                         <p class="card-text">
                             Network : {{actualShow.information.network}}
@@ -43,6 +45,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Show information -->
         </div>
         <hr class="mt-1 mb-5">
     </div>

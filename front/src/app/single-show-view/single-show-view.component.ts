@@ -3,7 +3,7 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { SingleShow } from '../services/singleShow.service';
 import { ActivatedRoute } from '@angular/router';
 import { OneShow, Season, ActorCharacter, Episode, TvShowInformation } from '../services/oneShow.service';
-import { promise } from 'protractor';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-single-show-view',
@@ -21,7 +21,7 @@ export class SingleShowViewComponent implements OnInit {
   public seasonClicked: Season = null;
 
 
-  constructor(private singleShowService: SingleShow, private activeRoute: ActivatedRoute) {
+  constructor(private singleShowService: SingleShow, private activeRoute: ActivatedRoute,private authService: AuthService) {
 
     this.singleShowService.getActualShow(this.activeRoute.snapshot.params["showId"])
       .then(
@@ -64,4 +64,8 @@ export class SingleShowViewComponent implements OnInit {
       );
   }
 
+followShow()
+{
+ this.singleShowService.followAShow(this.authService.getUserId(),this.actualShow)
+}
 }

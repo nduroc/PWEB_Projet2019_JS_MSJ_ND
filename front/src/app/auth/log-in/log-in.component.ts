@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { NgForm }   from '@angular/forms';
+import { NgForm } from '@angular/forms';
 
 
 @Component({
@@ -11,30 +11,42 @@ import { NgForm }   from '@angular/forms';
 })
 export class LogInComponent implements OnInit {
   authStatus: boolean
-  notValide:boolean=false;
-  load:boolean=false;
+  notValide: boolean = false;
+  load: boolean = false;
+  errorAllertMessage: string
 
-  constructor(private authService: AuthService,private router:Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.authStatus = this.authService.isAuth;
   }
 
   onSubmitLogIn(form: NgForm) {
-    this.load=true;
-    this.authService.signIn(form.value["username"],form.value["password"]).then(
-      () => {
-        this.load=false;
+    this.load = true;
+    this.authService.signIn(form.value["username"], form.value["password"]).then(
+      (result) => {
+        //console.log(result)
+        this.load = false;
         this.authStatus = this.authService.isAuth;
         this.router.navigate(["homePage"]);
       },
       (error) => {
-        this.load=false;console.log(error),this.notValide=true} 
+        this.notValide = true
+        this.load = false;
+       // console.log(error)
+        if (error.toString() == "0") {
+          //console.log("salutation");
+          this.errorAllertMessage = "login or password invalid"
+        }
+        else {
+          //console.log(error),
+            this.errorAllertMessage = "an error occurred please try again later"
+        }
+      }
     )
   }
-  close()
-  {
-    this.notValide=false;
+  close() {
+    this.notValide = false;
   }
 
 }

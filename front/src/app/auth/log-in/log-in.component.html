@@ -1,6 +1,6 @@
 
     <p *ngIf="notValide">
-        <ngb-alert  (close)="close()">an error occurred please try again later </ngb-alert>
+        <ngb-alert  (close)="close()"> {{ errorAllertMessage }}</ngb-alert>
       </p>
 
 <div class="login-form">
