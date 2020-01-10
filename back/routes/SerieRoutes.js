@@ -16,7 +16,7 @@ router.get(basePath + '/countFollowers', function (req, res) {
     SerieController.countFollowersSerie(req, res)
 })
 
-router.get(basePath + '/follow', function (req, res) {
+router.post(basePath + '/follow', function (req, res) {
     SerieController.followSerie(req, res)
 })
 
