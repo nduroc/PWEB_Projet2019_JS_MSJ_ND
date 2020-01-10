@@ -13,15 +13,15 @@ const db = mysql.createConnection({
  */
 function querySqlSelect(sqlQuery) {
   return new Promise(function(resolve, reject) {
-    db.connect(function(err) {
-      if (err) throw err;
+    //db.connect(function(err) {
+      //if (err) throw err;
       db.query(sqlQuery, function(err, result) {
         if (err) throw err;
         console.log(result)
         resolve(result);
       });
     });
-  });
+  //});
 }
 
 /**
@@ -30,28 +30,28 @@ function querySqlSelect(sqlQuery) {
  */
 function querySqlInsert(sqlQuery) {
   return new Promise(function(resolve, reject) {
-    db.connect(function(err) {
-      if (err) throw err;
+    //db.connect(function(err) {
+      //if (err) throw err;
       db.query(sqlQuery, function(err, result) {
         if (err) throw err;
         console.log(result)
         resolve(result.insertId);
       });
     });
-  });
+  //});
 }
 
 function querySqlUpdate(sqlQuery) {
   return new Promise(function(resolve, reject) {
-    db.connect(function(err) {
-      if (err) throw err;
+    //db.connect(function(err) {
+      //if (err) throw err;
       db.query(sqlQuery, function(err, result) {
         if (err) throw err;
         console.log(result)
         resolve(result.affectedRows);
       });
     });
-  });
+  //});
 }
 
 
