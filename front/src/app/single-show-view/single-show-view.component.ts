@@ -21,7 +21,7 @@ export class SingleShowViewComponent implements OnInit {
   public seasonClicked: Season = null;
 
 
-  constructor(private singleShowService: SingleShow, private activeRoute: ActivatedRoute,private authService: AuthService) {
+  constructor(private singleShowService: SingleShow, private activeRoute: ActivatedRoute, private authService: AuthService) {
 
     this.singleShowService.getActualShow(this.activeRoute.snapshot.params["showId"])
       .then(
@@ -44,28 +44,25 @@ export class SingleShowViewComponent implements OnInit {
     }
   }
 
-  seasonClick(seasonId: number,indexOfSeason:number) {
+  seasonClick(seasonId: number, indexOfSeason: number) {
     console.log(JSON.stringify(this.actualShow));
     let episodesRdyPromise
-    if (this.actualShow.seasons[indexOfSeason].episodes.length==0) {
-      episodesRdyPromise=this.singleShowService.getEpisodeForASeason(seasonId)
+    if (this.actualShow.seasons[indexOfSeason].episodes.length == 0) {
+      episodesRdyPromise = this.singleShowService.getEpisodeForASeason(seasonId)
     }
-    else
-    {
-      episodesRdyPromise=this.actualShow.seasons[indexOfSeason].episodes
+    else {
+      episodesRdyPromise = this.actualShow.seasons[indexOfSeason].episodes
     }
 
-    Promise.all([episodesRdyPromise]).then(episodes =>
-      {
-        this.actualShow.seasons[indexOfSeason].addEpisodes(<Episode[]>episodes[0])
-        this.seasonClicked= this.actualShow.seasons[indexOfSeason];
-      }
-      
-      );
+    Promise.all([episodesRdyPromise]).then(episodes => {
+      this.actualShow.seasons[indexOfSeason].addEpisodes(<Episode[]>episodes[0])
+      this.seasonClicked = this.actualShow.seasons[indexOfSeason];
+    }
+
+    );
   }
 
-followShow()
-{
- this.singleShowService.followAShow(this.authService.getUserId(),this.actualShow)
-}
+  followShow() {
+    this.singleShowService.followAShow(this.authService.getUserId(), this.actualShow)
+  }
 }
