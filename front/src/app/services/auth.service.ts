@@ -2,7 +2,6 @@
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { resolve } from 'url';
 
 @Injectable()
 export class AuthService {

@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { TvShowInformation, OneShow,Season,Episode,ActorCharacter } from './oneShow.service';
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
-import { promise } from 'protractor';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
@@ -156,6 +155,7 @@ export class SingleShow {
                  
                 },
                 (error) => {
+                    console.log("pasteque")
                   console.log(error)
                  
                 }
