@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { LoadingScreenComponent } from './loading-screen/loading-screen.component';
+import {MatCardModule} from '@angular/material/card'
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +44,8 @@ import { LoadingScreenComponent } from './loading-screen/loading-screen.componen
     NgbModule,
     BrowserAnimationsModule,
     MatExpansionModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatCardModule
   ],
   providers: [AuthService, HomeSeries, TvShowInformation,Season,OneShow,ActorCharacter,Episode,SingleShow],
   bootstrap: [AppComponent],

@@ -1,23 +1,40 @@
 <div class="container showFollow">
-  <div><h1 class="text-white">My shows</h1></div>
+  <div>
+    <h1 class="text-white">My shows</h1>
+  </div>
   <div class="mat-accordionDiv">
-  <mat-accordion >
-    <mat-expansion-panel>
-      <mat-expansion-panel-header class="disable_ripple">
-        <mat-panel-title>
-          This is the expansion title
-        </mat-panel-title>
-        <mat-panel-description>
-          This is a summary of the content
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <p>This is the primary content of the panel.</p>
-  
-      <mat-action-row>
-        <button mat-button>Click me</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  </mat-accordion>
-</div>
+
+
+    <mat-accordion class="accordion-show">
+      <mat-expansion-panel class="collapse-show">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            This is the expansion title
+          </mat-panel-title>
+          <mat-panel-description>
+            This is a summary of the content
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-accordion>
+          <mat-expansion-panel class="collapse-season">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                This is the expansion title
+              </mat-panel-title>
+              <mat-panel-description>
+                This is a summary of the content
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-card class="card-episode">Simple card</mat-card>
+          </mat-expansion-panel>
+          
+        </mat-accordion>
+        
+
+      </mat-expansion-panel>
+    </mat-accordion>
+
+
+  </div>
 </div>

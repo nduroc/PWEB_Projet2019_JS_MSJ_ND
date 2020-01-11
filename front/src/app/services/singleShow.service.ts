@@ -146,7 +146,7 @@ export class SingleShow {
     followAShow(userId: number, actualShow: OneShow) {
         let promise = new Promise((resolve, reject) => {
 
-            this.httpClient.post('localhost:8080/serie/follow?userId='+userId, { serieJson: JSON.stringify(actualShow) })
+            this.httpClient.post('clocalhost:8080/serie/follow?userId='+userId, { serieJson: JSON.stringify(actualShow) })
               .toPromise()
               .then(
       
