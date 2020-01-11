@@ -20,7 +20,7 @@ router.post(basePath + '/follow', function (req, res) {
     SerieController.followSerie(req, res)
 })
 
-router.delete(basePath + 'unfollow', function(req, res) {
+router.delete(basePath + '/unfollow', function(req, res) {
     SerieController.unfollowSerie(req, res)
 })
 
