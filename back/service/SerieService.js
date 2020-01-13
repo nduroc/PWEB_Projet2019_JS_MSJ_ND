@@ -42,7 +42,7 @@ addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsI
           } else {
             begin = false
           }
-          let stringEpisode = "('" + episode.id + "', '" + episode.name.replace(/'/g, "`") + "', '" + episode.outDate + "', '" + episode.seasonNumber + "', '" + episode.episodeNumber + "', '"
+          const stringEpisode = "('" + episode.id + "', '" + episode.name.replace(/'/g, "`") + "', '" + episode.outDate + "', '" + episode.seasonNumber + "', '" + episode.episodeNumber + "', '"
                           + episode.urlMediumImage + "', '" + episode.urlOriginalImage + "', '" + episode.summary.replace(/'/g, "`") + "', '" + episode.runtime + "', '" + seasonId + "')"
           SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(stringEpisode)
         }
@@ -60,13 +60,15 @@ addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsI
           } else {
             begin = false
           }
-          let stringEpisode = "('" + episode.id + "', '" + episode.name.replace(/'/g, "`") + "', '" + episode.airdate + "', '" + episode.season + "', '" + episode.number + "', '"
+          const stringEpisode = "('" + episode.id + "', '" + episode.name.replace(/'/g, "`") + "', '" + episode.airdate + "', '" + episode.season + "', '" + episode.number + "', '"
                                + episode.image.medium + "', '" + episode.image.original + "', '" + episode.summary.replace(/'/g, "`") + "', '" + episode.runtime + "', '" + seasonId + "')"
           SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(stringEpisode)
+          console.log(SQLqueryINSERTepisode)
         }
       }
 
     }
+    console.log(SQLqueryINSERTepisode)
     db.querySqlInsert(SQLqueryINSERTepisode)
     .then(result => {
       resolve(result)
