@@ -226,8 +226,8 @@ addActors = function(actors, serieId) {
           } else {
             actorsAdded = true
           }
-          const stringActor = '("'+ actor.actorId + '", "' + actor.actorName + '", "' + actor.actorCountryName + '", "' + actor.actorCountryCode + '", "'
-                            + actor.actorSexe + '", "'+ actor.actorUrlMediumImage + '", "' + actor.actorUrlOriginalImage + '")'
+          const stringActor = "('"+ actor.actorId + "', '" + actor.actorName.replace(/'/g, "`") + "', '" + actor.actorCountryName + "', '" + actor.actorCountryCode + "', '"
+                            + actor.actorSexe + "', '"+ actor.actorUrlMediumImage + "', '" + actor.actorUrlOriginalImage + "')"
           SQLqueryINSERTactors = SQLqueryINSERTactors.concat(stringActor)
         }
         if(!begin){
@@ -235,8 +235,8 @@ addActors = function(actors, serieId) {
         } else {
           begin = false
         }
-        const stringActor_serie = '("' + actor.actorId + '", "' + serieId + '", "' + actor.characterId + '", "' + actor.characterName + '", "'
-                                + actor.characterUrlMediumImage + '", "' + actor.characterUrlOriginalImage + '")'
+        const stringActor_serie = "('" + actor.actorId + "', '" + serieId + "', '" + actor.characterId + "', '" + actor.characterName.replace(/'/g, "`") + "', '"
+                                + actor.characterUrlMediumImage + "', '" + actor.characterUrlOriginalImage + "')"
         SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(stringActor_serie)
       }
 
