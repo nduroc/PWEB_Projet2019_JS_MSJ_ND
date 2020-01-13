@@ -80,7 +80,7 @@ addSeasons = function(seasons, serieId) {
   return new Promise(function(resolve, reject) {
     let begin = true
     let episodesTVMaze = null
-    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlMediumImage, summary, serieId) VALUES"
+    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlOriginalImage, summary, serieId) VALUES"
 
     let episodesList = []
     let episodesListTVMaze = []
