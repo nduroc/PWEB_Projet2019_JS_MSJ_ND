@@ -240,6 +240,9 @@ addActors = function(actors, serieId) {
         SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(stringActor_serie)
       }
     })
+
+    console.log(SQLqueryINSERTactors_serie)
+    console.log(SQLqueryINSERTactors)
     
     db.querySqlInsert(SQLqueryINSERTactors_serie)
     .then(result => {
