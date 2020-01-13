@@ -238,11 +238,9 @@ addActors = function(actors, serieId) {
         let stringActor_serie = '("' + actor.actorId + '", "' + serieId + '", "' + actor.characterId + '", "' + actor.characterName + '", "'
                                 + actor.characterUrlMediumImage + '", "' + actor.characterUrlOriginalImage + '")'
         SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(stringActor_serie)
+        console.log(SQLqueryINSERTactors_serie)
       }
     })
-
-    console.log(SQLqueryINSERTactors_serie)
-    console.log(SQLqueryINSERTactors)
     
     db.querySqlInsert(SQLqueryINSERTactors_serie)
     .then(result => {
