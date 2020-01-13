@@ -345,7 +345,7 @@ exports.followSerie = function(showToFollow, userId) {
     const cast = showToFollow.cast
     const serieId = information.id
     
-    SQLqueryCOUNTforIf = "SELECT COUNT * FROM serie WHERE id = " + serieId    
+    SQLqueryCOUNTforIf = "SELECT COUNT(*) FROM serie WHERE id = " + serieId    
     SQLqueryINSERTuser_serie = "INSERT into user_serie(userId, serieId, current_saison, current_episode) VALUES("
                       + userId + ", " + serieId + ", 1, -1)"
     db.querySqlSelect(SQLqueryCOUNTforIf)
