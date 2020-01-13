@@ -1,5 +1,5 @@
 const db = require('../utils/db_connect');
-const test = require('../../test.json')
+//const test = require('../../test.json')
 const fetch = require('node-fetch');
 
 updateSerie = function(serieId, seasons) {
@@ -276,7 +276,7 @@ addSerie = function(serieId, information) {
 
     SQLqueryINSERTserie = "INSERT into serie(id, name, type, genre, status, start, officialSite, urlMediumImage, urlOriginalImage, rate, summary, network, countryName, countryCode) VALUES(" + serieId + ", " + information.name + ", " + information.type + ", " + genres + ", " + information.status + ", "
     + information.start + ", " + information.officialSite + ", " + information.urlMediumImage + ", " + information.urlOriginalImage + ", "
-    + information.rate + ", " + information.summary + ", " + information.countryName + ", " + information.countryCode + ")"
+    + information.rate + ", " + information.summary + ", " + information.network + ", " + information.countryName + ", " + information.countryCode + ")"
 
     db.querySqlInsert(SQLqueryINSERTserie)
     .then(result => {
@@ -352,7 +352,8 @@ exports.followSerie = function(showToFollow, userId) {
                       + userId + ", " + serieId + ", 1, -1)"
     db.querySqlSelect(SQLqueryIF)
     .then(resultIF => {
-      if(resultIF){
+      if(!resultIF){
+        console.log("succés");
         const reqTvMazeSeasons="http://api.tvmaze.com/shows/" + serieId + "/seasons";
         fetch(reqTvMazeSeasons).then((resp)=>resp.json()).then((json)=>{
           this.updateSerie(serieId, json)
@@ -377,6 +378,7 @@ exports.followSerie = function(showToFollow, userId) {
         })
       }
     }).catch(err => {
+      console.log("error");
       reject(err)
     })
   });

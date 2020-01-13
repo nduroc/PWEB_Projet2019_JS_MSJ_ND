@@ -44,7 +44,7 @@ module.exports.countFollowersSerie = function countFollowersSerie (req, res) {
 module.exports.followSerie = function followSerie (req, res) {
   const showToFollow = JSON.parse(req.body.serieJson);
   const userId = req.query.userId;
-  Serie.followSerie(/*showToFollow,*/ userId)
+  Serie.followSerie(showToFollow, userId)
     .then(() => {
       console.log('Serie followed')
     })
