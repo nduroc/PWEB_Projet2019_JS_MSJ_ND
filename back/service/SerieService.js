@@ -96,7 +96,7 @@ addSeasons = function(seasons, serieId) {
       }
       if(season.episodes.length === 0){
         let episodesForSeason = []
-        if(episodes === null){
+        if(episodesTVMaze === null){
           
           const reqTvMazeEpisodes="http://api.tvmaze.com/shows/" + serieId + "/episodes";
           fetch(reqTvMazeEpisodes).then((resp)=>resp.json()).then((json)=>{
