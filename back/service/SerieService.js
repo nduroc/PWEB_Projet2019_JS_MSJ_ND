@@ -238,26 +238,23 @@ addActors = function(actors, serieId) {
         const stringActor_serie = '("' + actor.actorId + '", "' + serieId + '", "' + actor.characterId + '", "' + actor.characterName + '", "'
                                 + actor.characterUrlMediumImage + '", "' + actor.characterUrlOriginalImage + '")'
         SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(stringActor_serie)
-        console.log(SQLqueryINSERTactors_serie)
       }
-    })
 
-    console.log(SQLqueryINSERTactors_serie)
-    
-    db.querySqlInsert(SQLqueryINSERTactors_serie)
-    .then(result => {
-      if(actorsAdded){
-        db.querySqlInsert(SQLqueryINSERTactors)
-        .then(() => {
+      db.querySqlInsert(SQLqueryINSERTactors_serie)
+      .then(result => {
+        if(actorsAdded){
+          db.querySqlInsert(SQLqueryINSERTactors)
+          .then(() => {
+            resolve(result)
+          }).catch(err => {
+            reject(err)
+          })
+        } else {
           resolve(result)
-        }).catch(err => {
-          reject(err)
-        })
-      } else {
-        resolve(result)
-      }
-    }).catch(err => {
-      reject(err)
+        }
+      }).catch(err => {
+        reject(err)
+      })
     })
   });
 }
