@@ -15,6 +15,7 @@ module.exports.displaySerieEpisode = function displaySerieEpisode (req, res) {
 module.exports.isFollowedSerie = function isFollowedSerie (req, res) {
   const serieId = req.query.serieId;
   const userId = req.query.userId;
+  let tmp = "";
   Serie.isFollowedSerie(serieId,userId)
     .then(result => {
       if(result){
@@ -22,11 +23,14 @@ module.exports.isFollowedSerie = function isFollowedSerie (req, res) {
       } else {
         console.log('This users doesn\'t follow this serie')
       }
-      return result
+      tmp += result
     })
     .catch(err => {
+      tmp += err
       console.log(err)
-    });
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.countFollowersSerie = function countFollowersSerie (req, res) {
