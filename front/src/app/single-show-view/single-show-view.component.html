@@ -17,7 +17,9 @@
                     <div class="card-body">
                         <h5 class="card-header ">
                             Show Info
-                            <button class="follow-button text-white" *ngIf="authService.isAuth" (click)="followShow()">follow</button>
+
+                            <button #thenBlock class="follow-button text-white" *ngIf="(authService.isAuth && !heFollow)"  (click)="followShow()">follow</button>
+                            <button #elseBlock class="follow-button text-white" *ngIf="(authService.isAuth && heFollow)" (click)="unFollow()" >unfollow</button> <!-- (click)="unfollowShow()" -->
                         </h5>
                         <p class="card-text">
                             Network : {{actualShow.information.network}}
@@ -107,5 +109,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
+    </div>
+
 </div>

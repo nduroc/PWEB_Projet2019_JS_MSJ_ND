@@ -49,6 +49,26 @@ export class TvShowInformation {
             }
         }
     }
+    setValueTvShow( show: TvShowInformation) {
+        if (show) {
+            this.id = show.id
+            this.name = show.name
+            this.type = show.type
+            this.genre = show.genre
+            this.status = show.status
+            this.start = show.start
+            this.officialSite = show.officialSite
+                this.urlMediumImage = show.urlMediumImage
+                this.urlOriginalImage = show.urlOriginalImage
+
+            this.rate = show.rate
+            this.summary = show.summary
+                this.network = show.network
+
+                this.countryName = show.countryName
+                this.countryCode = show.countryCode
+        }
+    }
 }
 @Injectable()
 export class Episode {
@@ -98,6 +118,11 @@ export class Season {
     {
 
     }
+
+    addEpisodes(episodes:Episode[])
+    {
+        this.episodes=episodes;
+    }
     setValue( season: any[]) {
         this.id = season["id"];
         this.numberSeasonInshow = season["number"];
@@ -116,10 +141,7 @@ export class Season {
         }
     }
 
-    addEpisodes(episodes:Episode[])
-    {
-        this.episodes=episodes;
-    }
+
 
 }
 
@@ -180,6 +202,7 @@ export class ActorCharacter {
 
 @Injectable()
 export class OneShow {
+ 
     seasons: Season[]
     cast: ActorCharacter[];
     information: TvShowInformation;
@@ -207,6 +230,35 @@ export class OneShow {
     loadInformation(showInformation: TvShowInformation) {
         this.information = showInformation;
     }
+    getTest()
+    {
+        console.log("chibraxe")
+    }
+
+    build(actualShow: OneShow): OneShow {
+        actualShow.cast.forEach( actor =>
+        {
+            this.addAnActor(actor)
+        })
+
+        actualShow.seasons.forEach( season => {
+            let tmpSeason:Season = new Season();
+            let episodes:Episode[];
+            season.episodes.forEach(episode => {
+                episodes.push(episode);
+            });
+            tmpSeason.addEpisodes(episodes)
+            this.addASeason(tmpSeason);
+
+        })
+
+        let tmpInfo:TvShowInformation= new TvShowInformation()
+        tmpInfo.setValueTvShow(actualShow.information);
+        this.information= tmpInfo
+
+    
+        return this;
+      }
 
 
 }
