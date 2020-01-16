@@ -2,7 +2,7 @@
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class AuthService {
   isAuth = false;
@@ -18,7 +18,7 @@ export class AuthService {
   signIn(username: string, password: string) {
 
     let promise = new Promise((resolve, reject) => {
-      this.httpClient.get<any[]>('http://localhost:8080/user/login?usernameOrEmail=' + username + '&password=' + password + '')
+      this.httpClient.get<any[]>(environment.apiPath+'user/login?usernameOrEmail=' + username + '&password=' + password + '')
         .toPromise()
         .then(
 
@@ -57,7 +57,7 @@ export class AuthService {
 
     let promise = new Promise((resolve, reject) => {
 
-      this.httpClient.post('http://localhost:8080/user', { username: "" + userName, password: "" + passWord, email: "" + eMail })
+      this.httpClient.post(environment.apiPath+'user', { username: "" + userName, password: "" + passWord, email: "" + eMail })
         .toPromise()
         .then(
 

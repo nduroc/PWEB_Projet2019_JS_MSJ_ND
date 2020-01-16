@@ -79,8 +79,21 @@ export class SingleShowViewComponent implements OnInit {
 
   }
   followShow() {
-    this.singleShowService.followAShow(this.authService.getUserId(), this.actualShow)
-    this.heFollow = true;
+    this.singleShowService.followAShow(this.authService.getUserId(), this.actualShow).then( 
+      
+      (result) => {
+
+        console.log("chibre miel");
+        if (<boolean>result == true) {
+          console.log("ca a follow")
+          this.heFollow = true;
+        }
+        else {
+          console.log("y'a eu un probleme")
+        }
+      }
+      )
+   
   }
 
   unFollow() {
@@ -88,7 +101,7 @@ export class SingleShowViewComponent implements OnInit {
 
       (result) => {
 
-        console.log(result);
+        console.log("chibre miel");
         if (<boolean>result == true) {
           console.log("ca a unfollow")
           this.heFollow = false;
@@ -97,7 +110,7 @@ export class SingleShowViewComponent implements OnInit {
           console.log("y'a eu un probleme")
         }
 
-      })
+      }).catch( (result) => console.log("bite"))
 
   }
 

@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { TvShowInformation, OneShow, Season, Episode, ActorCharacter } from './oneShow.service';
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class SingleShow {
@@ -165,7 +166,7 @@ export class SingleShow {
     followAShow(userId: number, actualShow: OneShow) {
         let promise = new Promise((resolve, reject) => {
 
-            this.httpClient.post('http://localhost:8080/serie/follow?userId=' + userId, { serieJson: JSON.stringify(actualShow) })
+            this.httpClient.post(environment.apiPath+'serie/follow?userId=' + userId, { serieJson: JSON.stringify(actualShow) })
                 .toPromise()
                 .then(
 
@@ -189,7 +190,7 @@ export class SingleShow {
     checkFollow(userId: number, showId: number) {
         let promise = new Promise((resolve, reject) => {
 
-            this.httpClient.get('http://localhost:8080/serie/isFollowed?userId=' + userId + '&serieId=' + showId)
+            this.httpClient.get(environment.apiPath+'serie/isFollowed?userId=' + userId + '&serieId=' + showId)
                 .toPromise()
                 .then(
                     
@@ -216,7 +217,7 @@ export class SingleShow {
       unFollow(userId: number, showId: number) {
         let promise = new Promise((resolve, reject) => {
 
-            this.httpClient.delete('http://localhost:8080/serie/unfollow?userId=' + userId + '&serieId=' + showId)
+            this.httpClient.delete(environment.apiPath+'serie/unfollow?userId=' + userId + '&serieId=' + showId)
                 .toPromise()
                 .then(
                     

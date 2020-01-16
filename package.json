@@ -1,0 +1,20 @@
+{
+    "name": "omegaseries",
+    "version": "1.0.0",
+    "description": "Site de gestion de des séries",
+    "main": "app.js",
+    "scripts": {
+        "install": "npm install --prefix back && npm install --prefix front",
+        "preinstall": "npm install -g angular-cli",
+        "postinstall": "cd front && npm run build",
+        "start": "node back/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nduroc/PWEB_Projet2019_JS_MSJ_ND"
+    },
+    "author": "",
+    "license": "ISC",
+
+    "homepage": "https://github.com/nduroc/PWEB_Projet2019_JS_MSJ_ND#README.md"
+}
