@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0c375ba0ebca4b50842097e91def4531)](https://www.codacy.com/manual/nicolas.duroc/PWEB_Projet2019_JS_MSJ_ND?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nduroc/PWEB_Projet2019_JS_MSJ_ND&amp;utm_campaign=Badge_Grade)
 # Programmation Web 2019 
  
  Groupe composé de :
