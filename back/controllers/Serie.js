@@ -1,14 +1,14 @@
-const Serie = require('../service/SerieService');
+const Serie = require("../service/SerieService");
 
 module.exports.displaySerieEpisode = function displaySerieEpisode (req, res) {
   const serieId = req.query.serieId;
   Serie.displaySerieEpisode(serieId, req.body)
     .then(result => {
-      console.log('Episodes displayed')
-      return result
+      console.log("Episodes displayed");
+      return result;
     })
     .catch(err => {
-      console.log(err)
+      console.log(err);
     });
 };
 
@@ -19,15 +19,15 @@ module.exports.isFollowedSerie = function isFollowedSerie (req, res) {
   Serie.isFollowedSerie(serieId,userId)
     .then(result => {
       if(result){
-        console.log('This users follow this serie')
+        console.log("This users follow this serie");
       } else {
-        console.log('This users doesn\'t follow this serie')
+        console.log("This users doesn\'t follow this serie");
       }
-      tmp += result
+      tmp += result;
     })
     .catch(err => {
-      tmp += err
-      console.log(err)
+      tmp += err;
+      console.log(err);
     })
     .then(() => res.write(tmp))
     .then(() => res.send());
@@ -38,12 +38,12 @@ module.exports.countFollowersSerie = function countFollowersSerie (req, res) {
   let tmp = "";
   Serie.countFollowersSerie(serieId)
     .then(result => {
-      console.log(result + ' users follow this serie')
+      console.log(result + " users follow this serie");
       tmp += result;
     })
     .catch(err => {
-      tmp =+ "-1"
-      console.log(err)
+      tmp =+ "-1";
+      console.log(err);
     })
     .then(() => res.write(tmp))
     .then(() => res.send());
@@ -56,11 +56,11 @@ module.exports.followSerie = function followSerie (req, res) {
   Serie.followSerie(showToFollow, userId)
     .then(() => {
       tmp = "1";
-      console.log('Serie followed')
+      console.log("Serie followed");
     })
     .catch(err => {
-      tmp = "-1"
-      console.log(err)
+      tmp = "-1";
+      console.log(err);
     })
     .then(() => res.write(tmp))
     .then(() => res.send());
@@ -73,11 +73,11 @@ module.exports.unfollowSerie = function unfollowSerie (req, res) {
   Serie.unfollowSerie(serieId,userId)
     .then(() => {
       tmp = "1";
-      console.log('Serie unfollowed')
+      console.log("Serie unfollowed");
     })
     .catch(err => {
       tmp = "-1";
-      console.log(err)
+      console.log(err);
     })
     .then(() => res.write(tmp))
     .then(() => res.send());
