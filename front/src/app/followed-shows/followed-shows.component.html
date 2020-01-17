@@ -59,20 +59,24 @@
             <mat-card class="card-episode">
               
               <div class="row">
-                  <mat-card-header class="col-11">
+                  <mat-card-header class="col-10">
                     Simple card
                   </mat-card-header>
 
-
+                  <div>
                   <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="markEpisode(1)"> 
                       <fa-icon [icon]="faEye" [styles]="{ 'color': '#57A8EF'}"
                           data-toggle="tooltip" data-placement="top" title="mark this episode" size="lg">
                       </fa-icon>
                   </fa-layers>
+                </div>
+                <div class="ml-1">
+                    <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="markEpisode(1)"> 
                   <fa-icon [icon]="faEyeSlash" [styles]="{ 'color': '#FD7D7B'}"
-                    data-toggle="tooltip" data-placement="top" title="unfollow this show" size="small">
+                    data-toggle="tooltip" data-placement="top" title="unmark this episode" size="lg">
                 </fa-icon>
-
+              </fa-layers>
+              </div>
                 </div>
 
              
