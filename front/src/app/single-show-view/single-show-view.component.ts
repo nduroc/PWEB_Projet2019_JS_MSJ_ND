@@ -4,7 +4,7 @@ import { SingleShow } from '../services/singleShow.service';
 import { ActivatedRoute } from '@angular/router';
 import { OneShow, Season, ActorCharacter, Episode, TvShowInformation } from '../services/oneShow.service';
 import { AuthService } from '../services/auth.service';
-
+import { faUsers } from '@fortawesome/free-solid-svg-icons';// fafa icon
 @Component({
   selector: 'app-single-show-view',
   templateUrl: './single-show-view.component.html',
@@ -20,7 +20,8 @@ export class SingleShowViewComponent implements OnInit {
   public heFollow: boolean = null;
   public seasonClicked: Season = null;
   public load: boolean = false;
-  public howManyUsers:number;
+  public howManyUsers:number=0;
+  public faUsers=faUsers;
 
 
   constructor(private singleShowService: SingleShow, private activeRoute: ActivatedRoute, private authService: AuthService) {
@@ -123,7 +124,7 @@ export class SingleShowViewComponent implements OnInit {
   {
     this.singleShowService.howManyUserFollow(this.actualShow.information.id).then( (result)=>
       {
-      
+        console.log(result);
         this.howManyUsers=<number>result;
       
       },

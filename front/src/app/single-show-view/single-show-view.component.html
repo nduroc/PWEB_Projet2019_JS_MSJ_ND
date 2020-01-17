@@ -20,6 +20,12 @@
 
                             <button #thenBlock class="follow-button text-white" *ngIf="(authService.isAuth && !heFollow)"  (click)="followShow()">follow</button>
                             <button #elseBlock class="follow-button text-white" *ngIf="(authService.isAuth && heFollow)" (click)="unFollow()" >unfollow</button> <!-- (click)="unfollowShow()" -->
+                            {{howManyUsers}}
+                            <fa-layers [fixedWidth]="true">
+                                    <fa-icon [icon]="faUsers" [styles]="{ 'color': '#707070'}"
+                                        data-toggle="tooltip" data-placement="top" title="users follow this show" size="lg">
+                                    </fa-icon>
+                                </fa-layers>
                         </h5>
                         <p class="card-text">
                             Network : {{actualShow.information.network}}

@@ -40,6 +40,7 @@ export class FollowedShowsComponent implements OnInit {
 
       if (<boolean>result == true) {
         this.load=false;
+
       }
       else {
         this.load=false
@@ -47,9 +48,13 @@ export class FollowedShowsComponent implements OnInit {
     }
     )
   }
-  markEpisode(episodeId:number)
+  markEpisode(episodeId:number,showId:number)
   {
-    console.log(episodeId);
+    this.myShowService.markAnEpisode(episodeId,this.userId,showId);
+  }
+  unMarkEpisode(episodeId:number,showId:number)
+  {
+    this.myShowService.unMarkEpisode(episodeId,this.userId,showId);
   }
 
 }
