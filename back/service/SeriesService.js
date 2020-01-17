@@ -44,7 +44,7 @@ searchOneSerie = function(res, indexRes){
   return new Promise(function(resolve, reject) {
     let series = [];
     let objInformation = JSON.parse(JSON.stringify(res[indexRes]));
-    let information = []
+    let information = {}
     for(let o in objInformation){
       information[o] = objInformation[o]
     }
@@ -90,23 +90,27 @@ searchSeasons = function(serieId) {
       SQLquerySELECTepisodes = "SELECT * FROM episode WHERE seasonId IN (SELECT id FROM season WHERE serieId = " + serieId + ")"
       db.querySqlSelect(SQLquerySELECTepisodes)
       .then(resultSELECTepisodes => {
-        let seasons = []
+        let seasons = {}
+        let indexSeasons = 0
         for(let resSeason of resultSELECTseasons) {
-          let res =[]
+          let res ={}
           for(let o in resSeason){
             res[o] = resSeason[o]
           }
           let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resSeason['id'])
-          let episodesTab = []
+          let episodesTab = {}
+          let indexEpisodesTab = 0
           for(let episode of episodesInfo) {
             let episodeTab = []
             for(let o in episode){
               episodeTab[o] = episode[o]
             }
-            episodesTab.push(episodeTab)
+            episodesTab[indexEpisodesTab] = episodeTab
+            ++indexEpisodesTab
           }
           res["episodes"] = episodesTab
-          seasons.push(res)
+          seasons[indexSeasons] = res
+          ++indexSeasons
         }
         resolve(seasons)
       }).catch(err => {
@@ -126,12 +130,13 @@ searchCast = function(serieId) {
       SQLquerySELECTactors = "SELECT * FROM actors WHERE actorId IN (SELECT actorId FROM actors_serie WHERE serieId = " + serieId + ")"
       db.querySqlSelect(SQLquerySELECTactors)
       .then(resultSELECTactors => {
-        let cast = []
+        let cast = {}
+        let indexCast = 0
         for(let resActor of resultSELECTactors) {
           let characterInfo = resultSELECTactors_serie.find(element => element['actorId'] === resActor['actorId'])
           let objActor = JSON.parse(JSON.stringify(resActor));
           let objCharacter = JSON.parse(JSON.stringify(characterInfo));
-          let res = []
+          let res = {}
           for(let o in objActor){
             res[o] = objActor[o]
           }
@@ -140,7 +145,8 @@ searchCast = function(serieId) {
               res[o] = objCharacter[o]
             }
           }
-          cast.push(res)
+          cast[indexCast] = res
+          ++indexCast
         }
         resolve(cast)
       }).catch(err => {

@@ -6,6 +6,8 @@ module.exports.displayFollowedSeries = function displayFollowedSeries (req, res)
   return Series.displayFollowedSeries(userId, req.body)
     .then(followedSeriesList => {
       tmp = JSON.stringify(followedSeriesList);
+      //tmp = followedSeriesList.toString();
+      //console.log(tmp)
     })
     .catch(err => {
       tmp += "-1";
