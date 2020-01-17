@@ -1,49 +1,4 @@
-//const db = require('../utils/db_connect')
-const mysql = require('mysql');
-
-const db = mysql.createConnection({
-  //connectionLimit : 10,
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "pweb"
-});
-
-/**
- * Query a Select
- * Return the selected line(s)
- */
-function querySqlSelect(sqlQuery) {
-  return new Promise(function(resolve, reject) {
-    //db.connect(function(err) {
-      //if (err) throw err;
-      db.query(sqlQuery, function(err, result) {
-        if (err) throw err;
-        console.log("Select")
-        console.log(result)
-        resolve(result);
-      });
-    //});
-  });
-}
-
-/**
- * Query an Insert sql
- * return the ID of the new line
- */
-function querySqlInsert(sqlQuery) {
-  return new Promise(function(resolve, reject) {
-    //db.connect(function(err) {
-      //if (err) throw err;
-      db.query(sqlQuery, function(err, result) {
-        if (err) throw err;
-        console.log("Insert")
-        console.log(result)
-        resolve(result.insertId);
-      });
-    //});
-  });
-}
+const db = require('../utils/db_connect');
 
 /**
  * Create a user account
@@ -52,18 +7,19 @@ function querySqlInsert(sqlQuery) {
  * body User Created user account object
  * no response value expected for this operation
  **/
-exports.createUserAccount = function(username, email, password) {
-  return new Promise(function(resolve, reject) {
+exports.createUserAccount = function (username, email, password) {
+  return new Promise(function (resolve, reject) {
     SQLcheck = "SELECT * FROM `user` WHERE username = '" + username + "' or email = '" + email + "'";
     SQLquery = "INSERT INTO user (username, email, password) VALUES ('" + username + "' , '" + email + "', '" + password + "')";
-    querySqlSelect(SQLcheck).then((res) => {
+    db.querySqlSelect(SQLcheck).then((res) => {
       if (Array.isArray(res) && res.length != 0) {
         resolve(0);
       }
       else {
-        querySqlInsert(SQLquery).then((res) => {
+        db.querySqlInsert(SQLquery).then((res) => {
           resolve(res)
-        }).catch(err => reject(err))
+        })
+          .catch(err => reject(err))
       }
     })
   });
@@ -77,10 +33,10 @@ exports.createUserAccount = function(username, email, password) {
  * userId String userId of account to delete
  * no response value expected for this operation
  **/
-exports.deleteUserAccount = function(userId) {
-  return new Promise(function(resolve, reject) {
+exports.deleteUserAccount = function (userId) {
+  return new Promise(function (resolve, reject) {
     SQLquery = "DELETE FROM user WHERE (id='" + userId + "')";
-    querySqlSelect(SQLquery).then(() => {
+    db.querySqlSelect(SQLquery).then(() => {
       resolve(true)
     }).catch(err => reject(err));
   });
@@ -95,10 +51,10 @@ exports.deleteUserAccount = function(userId) {
  * password String The password for login in clear text
  * no response value expected for this operation
  **/
-exports.loginUserAccount = function(usernameOrEmail,password) {
-  return new Promise(function(resolve, reject) {
+exports.loginUserAccount = function (usernameOrEmail, password) {
+  return new Promise(function (resolve, reject) {
     let SQLqueryName = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')"
-    querySqlSelect(SQLqueryName).then((res) => {
+    db.querySqlSelect(SQLqueryName).then((res) => {
       if (Array.isArray(res) && res.length != 0) {
         resolve(res[0]['id']);
       } else {
@@ -115,8 +71,8 @@ exports.loginUserAccount = function(usernameOrEmail,password) {
  *
  * no response value expected for this operation
  **/
-exports.logoutUserAccount = function() {
-  return new Promise(function(resolve, reject) {
+exports.logoutUserAccount = function () {
+  return new Promise(function (resolve, reject) {
     resolve();
   });
 }
@@ -130,15 +86,14 @@ exports.logoutUserAccount = function() {
  * body User Updated user object
  * no response value expected for this operation
  **/
-exports.updateUserAccount = function(userId,username,email,password) {
-  return new Promise(function(resolve, reject) {
+exports.updateUserAccount = function (userId, username, email, password) {
+  return new Promise(function (resolve, reject) {
     // Add check for same username ?
-    let SQLquery = "UPDATE user SET username='" + username + "', email='" + email + "', password='" + password +"' WHERE id ='" + userId + "'"
-    querySqlSelect(SQLquery).then((res) => {
+    let SQLquery = "UPDATE user SET username='" + username + "', email='" + email + "', password='" + password + "' WHERE id ='" + userId + "'"
+    db.querySqlSelect(SQLquery).then((res) => {
       console.log("update")
       console.log(res)
       resolve(res)
     }).catch(err => reject(err));
   });
 }
-
