@@ -105,7 +105,7 @@ searchSeasons = function(serieId) {
           let episodesTab = {}
           let indexEpisodesTab = 0
           for(let episode of episodesInfo) {
-            let episodeTab = []
+            let episodeTab = {}
             for(let o in episode){
               episodeTab[o] = episode[o]
             }
