@@ -16,10 +16,10 @@ exports.displayFollowedSeries = function(userId,body) {
     .then(result => {
       this.searchOneSerie(result, 0)
       .then(followedSeries => {
-        resolve(followedSerie)
+        resolve(followedSeries);
       })
     }).catch(err => {
-      reject(err)
+      reject(err);
     })
   });
 }
@@ -42,32 +42,32 @@ exports.displayFollowedSeries = function(userId,body) {
 
 searchOneSerie = function(res, indexRes){
   return new Promise(function(resolve, reject) {
-    let series = []
-    let information = res[indexRes]
+    let series = [];
+    let information = res[indexRes];
     this.searchSeasons(res[indexRes]['id'])
     .then(resultSeasons => {
       this.searchCast(res[indexRes]['id'])
       .then(resultCast => {
-        let seasons = resultSeasons
-        let cast = resultCast
-        let serie = {seasons, cast, information}
+        let seasons = resultSeasons;
+        let cast = resultCast;
+        let serie = {seasons, cast, information};
 
-        series.push(serie)
+        series.push(serie);
         
         if(indexRes >= (res.length - 1)){
-          resolve(series)
+          resolve(series);
         } else {
-          ++indexRes
+          ++indexRes;
           series = series.concat(this.searchOneSerie(res, indexRes))
-          resolve(series)
+          resolve(series);
         }
 
       }).catch(err => {
-        reject(err)
+        reject(err);
       })
 
     }).catch(err => {
-      reject(err)
+      reject(err);
     })
   });
 }
@@ -82,7 +82,7 @@ searchSeasons = function(serieId) {
       .then(resultSELECTepisodes => {
         let seasons = []
         for(let resSeason of resultSELECTseasons) {
-          let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resActor['id'])
+          let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resSeason['id'])
           for(let episodeInfo of episodesInfo) {
             episodeInfo.splice('seasonId', 1)
           }

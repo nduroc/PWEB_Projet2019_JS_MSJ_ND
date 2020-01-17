@@ -8,16 +8,27 @@ const db = require('../utils/db_connect')
  * userId Integer Id of the user who want to mark an episode
  * no response value expected for this operation
  **/
-exports.markEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
+exports.markEpisode = function(userId, episodeId, serieId/*serieId, userId, seasonNumber, episodeNumber*/) {
   return new Promise(function(resolve, reject) {
+    /*
     SQLquery = "UPDATE user_serie SET current_saison = "+ seasonNumber + ", current_episode = "
-                      + episodeNumber + " WHERE userId = " + userId + " AND serieId = " + serieId
-    db.querySqlUpdate(SQLquery)
+                      + episodeNumber + " WHERE userId = " + userId + " AND serieId = " + serieId*/
+    SQLqueryForUserSerieId = "SELECT id FROM user_serie WHERE userId='" + userId + "' and serieId='" + serieId + "'";
+    db.querySqlSelect(SQLqueryForUserSerieId)
     .then(result => {
-      resolve(result)
-    }).catch(err => {
-      reject(err)
-    })
+      console.log(result);
+      console.log(Array.isArray(result))
+      console.log(result.length != 0)
+      if (!Array.isArray(result) && result.length == 0) {
+        resolve(-1);
+      }
+      else {
+        SQLqueryInsert = "INSERT INTO user_serie_episode (user_serie_id, episode_id) VALUES ('" + result[0]['id'] + "', '" + episodeId + "') ";
+        db.querySqlInsert(SQLqueryInsert).then((res) => {
+          resolve(res);
+        }).catch(err => reject(err));
+      }
+    }).catch(err => reject(err));
   });
 }
 
@@ -30,8 +41,26 @@ exports.markEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
  * userId Integer Id of the user who want to unmark an episode
  * no response value expected for this operation
  **/
-exports.unmarkEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
+exports.unmarkEpisode = function(userId, episodeId, serieId/*serieId, userId, seasonNumber, episodeNumber*/) {
   return new Promise(function(resolve, reject) {
+    SQLqueryForUserSerieId = "SELECT id FROM user_serie WHERE userId='" + userId + "' and serieId='" + serieId + "'";
+    db.querySqlSelect(SQLqueryForUserSerieId)
+    .then(result => {
+      if (!Array.isArray(result) && result.length == 0) {
+        resolve(-1);
+      }
+      else {
+        SQLqueryDelete = "DELETE FROM user_serie_episode WHERE user_serie_id='" + result[0]['id'] + "' and episode_id='" + episodeId + "'";
+        db.querySqlDelete(SQLqueryDelete).then((res) => {
+          resolve(res);
+        }).catch(err => reject(err));
+      }
+    }).catch(err => reject(err));
+  });
+}
+
+
+/*
     let newEpisodeToMark
     if(episodeNumber <= 1){
       if(seasonNumber <= 1){
@@ -66,7 +95,4 @@ exports.unmarkEpisode = function(serieId, userId, seasonNumber, episodeNumber) {
       resolve(result)
     }).catch(err => {
       reject(err)
-    })
-  });
-}
-
+    })*/

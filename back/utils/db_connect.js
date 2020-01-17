@@ -45,10 +45,21 @@ function querySqlUpdate(sqlQuery) {
   });
 }
 
+function querySqlDelete(sqlQuery) {
+  return new Promise(function (resolve, reject) {
+    db.query(sqlQuery, function (err, result) {
+      if (err) throw err;
+      console.log(result)
+      resolve(result);
+    });
+  });
+}
+
 
 
 module.exports = {
   querySqlSelect,
   querySqlInsert,
-  querySqlUpdate
+  querySqlUpdate,
+  querySqlDelete
 }

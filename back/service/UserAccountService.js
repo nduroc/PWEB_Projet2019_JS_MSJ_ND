@@ -17,9 +17,8 @@ exports.createUserAccount = function (username, email, password) {
       }
       else {
         db.querySqlInsert(SQLquery).then((res) => {
-          resolve(res)
-        })
-          .catch(err => reject(err))
+          resolve(res);
+        }).catch(err => reject(err))
       }
     })
   });
