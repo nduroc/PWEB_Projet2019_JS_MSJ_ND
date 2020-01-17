@@ -12,6 +12,7 @@ const db = require('../utils/db_connect')
 exports.displayFollowedSeries = function(userId,body) {
   return new Promise(function(resolve, reject) {
     SQLquery = "SELECT * FROM serie WHERE id IN (SELECT serieId FROM user_serie WHERE userId = " + userId + ") "
+    SQLqueryEpisodeSeen = "SELECT * FROM user_serie_episode WHERE user_serie_id IN (SELECT id FROM user_serie WHERE userId = " + userId + ") "
     db.querySqlSelect(SQLquery)
     .then(result => {
       this.searchOneSerie(result, 0)
@@ -105,7 +106,7 @@ searchSeasons = function(serieId) {
           let episodesTab = {}
           let indexEpisodesTab = 0
           for(let episode of episodesInfo) {
-            let episodeTab = []
+            let episodeTab = {}
             for(let o in episode){
               episodeTab[o] = episode[o]
             }
