@@ -15,7 +15,11 @@ exports.displayFollowedSeries = function(userId,body) {
     db.querySqlSelect(SQLquery)
     .then(result => {
       this.searchOneSerie(result, 0)
-      .then(followedSeries => {
+      .then(followedSeriesTab => {
+        let followedSeries = {}
+        for(let i=0; i<followedSeriesTab.length; ++i){
+          followedSeries[i] = followedSeriesTab[i]
+        }
         resolve(followedSeries);
       })
     }).catch(err => {
