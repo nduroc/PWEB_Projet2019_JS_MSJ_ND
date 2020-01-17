@@ -43,7 +43,12 @@ exports.displayFollowedSeries = function(userId,body) {
 searchOneSerie = function(res, indexRes){
   return new Promise(function(resolve, reject) {
     let series = [];
-    let information = res[indexRes];
+    let objInformation = JSON.parse(JSON.stringify(res[indexRes]));
+    let information = []
+    for(let o in objInformation){
+      information[o] = objInformation[o]
+    }
+    //let information = res[indexRes];
     this.searchSeasons(res[indexRes]['id'])
     .then(resultSeasons => {
       this.searchCast(res[indexRes]['id'])
@@ -58,8 +63,13 @@ searchOneSerie = function(res, indexRes){
           resolve(series);
         } else {
           ++indexRes;
-          series = series.concat(this.searchOneSerie(res, indexRes))
-          resolve(series);
+          this.searchOneSerie(res, indexRes)
+          .then(resultSerie => {
+            series = series.concat(resultSerie);
+            resolve(series);
+          }).catch(err => {
+            reject(err);
+          })
         }
 
       }).catch(err => {
@@ -82,12 +92,20 @@ searchSeasons = function(serieId) {
       .then(resultSELECTepisodes => {
         let seasons = []
         for(let resSeason of resultSELECTseasons) {
-          let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resSeason['id'])
-          for(let episodeInfo of episodesInfo) {
-            episodeInfo.splice('seasonId', 1)
+          let res =[]
+          for(let o in resSeason){
+            res[o] = resSeason[o]
           }
-          resSeason.splice('serieId', 1)
-          let res = resSeason.concat(episodesInfo)
+          let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resSeason['id'])
+          let episodesTab = []
+          for(let episode of episodesInfo) {
+            let episodeTab = []
+            for(let o in episode){
+              episodeTab[o] = episode[o]
+            }
+            episodesTab.push(episodeTab)
+          }
+          res["episodes"] = episodesTab
           seasons.push(res)
         }
         resolve(seasons)
@@ -102,19 +120,26 @@ searchSeasons = function(serieId) {
 
 searchCast = function(serieId) {
   return new Promise(function(resolve, reject) {
-    SQLquerySELECTactors_serie = "SELECT * FROM actors_serie WHERE serieId = " + serieId
+    SQLquerySELECTactors_serie = "SELECT actorId, characterId, characterName, characterUrlMediumImage, characterUrlOriginalImage FROM actors_serie WHERE serieId = " + serieId
     db.querySqlSelect(SQLquerySELECTactors_serie)
     .then(resultSELECTactors_serie => {
-      SQLquerySELECTactors_serie = "SELECT * FROM actors WHERE actorId IN (SELECT actorId FROM actors_serie WHERE serieId = " + serieId + ")"
+      SQLquerySELECTactors = "SELECT * FROM actors WHERE actorId IN (SELECT actorId FROM actors_serie WHERE serieId = " + serieId + ")"
       db.querySqlSelect(SQLquerySELECTactors)
       .then(resultSELECTactors => {
         let cast = []
         for(let resActor of resultSELECTactors) {
           let characterInfo = resultSELECTactors_serie.find(element => element['actorId'] === resActor['actorId'])
-          characterInfo.splice('id',1)
-          characterInfo.splice('actorId',1)
-          characterInfo.splice('serieId',1)
-          let res = resActor.concat(characterInfo)
+          let objActor = JSON.parse(JSON.stringify(resActor));
+          let objCharacter = JSON.parse(JSON.stringify(characterInfo));
+          let res = []
+          for(let o in objActor){
+            res[o] = objActor[o]
+          }
+          for(let o in objCharacter){
+            if(o !== "actorId" && o !== "serieId"){
+              res[o] = objCharacter[o]
+            }
+          }
           cast.push(res)
         }
         resolve(cast)
