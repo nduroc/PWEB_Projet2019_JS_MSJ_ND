@@ -38,7 +38,7 @@ module.exports.countFollowersSerie = function countFollowersSerie (req, res) {
   let tmp = "";
   Serie.countFollowersSerie(serieId)
     .then(result => {
-      console.log(result + 'users follow this serie')
+      console.log(result + ' users follow this serie')
       tmp += result;
     })
     .catch(err => {

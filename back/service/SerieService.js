@@ -366,10 +366,10 @@ exports.isFollowedSerie = function(serieId,userId) {
 
 exports.countFollowersSerie = function(serieId) {
   return new Promise(function(resolve, reject) {
-    SQLquery = "SELECT COUNT(*) FROM user_serie WHERE serieId = " + serieId
+    SQLquery = "SELECT COUNT(*) as count FROM user_serie WHERE serieId = " + serieId
     db.querySqlSelect(SQLquery)
     .then(result => {
-      resolve(result)
+      resolve(result[0]['count'])
     }).catch(err => {
       reject(err)
     })
