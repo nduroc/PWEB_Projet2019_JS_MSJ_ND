@@ -13,18 +13,18 @@ export class FollowedShowsService {
 
   getFollowedShows(userId: number) {
 
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise<any[]>((resolve, reject) => {
 
-      this.httpClient.get(environment.apiPath + 'series/followedSeries?userId=' + userId)
+      this.httpClient.get<any[]>(environment.apiPath + 'series/followedSeries?userId=' + userId)
         .toPromise()
         .then(
           (result) => {
-            console.log(result)
-            resolve()
+          
+            resolve(result)
           },
           (error) => {
             console.log(error)
-            reject()
+            reject(error)
           }
         )
 
@@ -62,7 +62,7 @@ export class FollowedShowsService {
         .then(
           (result) => {
             console.log(result)
-            resolve()
+            resolve(result)
           },
           (error) => {
             console.log(error)

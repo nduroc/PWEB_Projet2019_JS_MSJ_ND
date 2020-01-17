@@ -18,12 +18,14 @@ export class FollowedShowsComponent implements OnInit {
   public faEyeSlash = faEyeSlash;
   public faTrash = faTrash;
   public load=false;
+  public followedShow
   constructor(private myShowService: FollowedShowsService, private activeRoute: ActivatedRoute, private authService: AuthService,private singleShow: SingleShow) {
     this.load=true;
     this.userId = this.authService.getUserId()
 
     this.myShowService.getFollowedShows(this.userId).then((result) => {
-      console.log("yolo");
+     this.followedShow=result
+     console.log(this.followedShow);
       this.load=false;
 
 
