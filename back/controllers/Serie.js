@@ -3,11 +3,11 @@ const Serie = require("../service/SerieService");
 module.exports.displaySerieEpisode = function displaySerieEpisode (req, res) {
   const serieId = req.query.serieId;
   Serie.displaySerieEpisode(serieId, req.body)
-    .then(result => {
+    .then((result) => {
       console.log("Episodes displayed");
       return result;
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 };
@@ -17,7 +17,7 @@ module.exports.isFollowedSerie = function isFollowedSerie (req, res) {
   const userId = req.query.userId;
   let tmp = "";
   Serie.isFollowedSerie(serieId,userId)
-    .then(result => {
+    .then((result) => {
       if(result){
         console.log("This users follow this serie");
       } else {
@@ -25,7 +25,7 @@ module.exports.isFollowedSerie = function isFollowedSerie (req, res) {
       }
       tmp += result;
     })
-    .catch(err => {
+    .catch((err) => {
       tmp += err;
       console.log(err);
     })
@@ -37,11 +37,11 @@ module.exports.countFollowersSerie = function countFollowersSerie (req, res) {
   const serieId = req.query.serieId;
   let tmp = "";
   Serie.countFollowersSerie(serieId)
-    .then(result => {
+    .then((result) => {
       console.log(result + " users follow this serie");
       tmp += result;
     })
-    .catch(err => {
+    .catch((err) => {
       tmp =+ "-1";
       console.log(err);
     })
@@ -58,7 +58,7 @@ module.exports.followSerie = function followSerie (req, res) {
       tmp = "1";
       console.log("Serie followed");
     })
-    .catch(err => {
+    .catch((err) => {
       tmp = "-1";
       console.log(err);
     })
@@ -75,7 +75,7 @@ module.exports.unfollowSerie = function unfollowSerie (req, res) {
       tmp = "1";
       console.log("Serie unfollowed");
     })
-    .catch(err => {
+    .catch((err) => {
       tmp = "-1";
       console.log(err);
     })
