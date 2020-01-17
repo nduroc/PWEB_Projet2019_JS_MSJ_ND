@@ -9,10 +9,10 @@
       <mat-expansion-panel class="collapse-show">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            This is the expansion title
+            ShowName
           </mat-panel-title>
           <mat-panel-description>
-            This is a summary of the content
+            x Season
           </mat-panel-description>
         </mat-expansion-panel-header>
 
@@ -28,10 +28,64 @@
             </mat-expansion-panel-header>
             <mat-card class="card-episode">Simple card</mat-card>
           </mat-expansion-panel>
-          
-        </mat-accordion>
-        
 
+        </mat-accordion>
+
+
+      </mat-expansion-panel>
+
+
+      <mat-expansion-panel class="collapse-show">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            ShowName
+          </mat-panel-title>
+          <mat-panel-description>
+            x Season
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-accordion>
+          <mat-expansion-panel class="collapse-season">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                This is the expansion title
+              </mat-panel-title>
+              <mat-panel-description>
+                This is a summary of the content
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-card class="card-episode">
+              
+              <div class="row">
+                  <mat-card-header class="col-11">
+                    Simple card
+                  </mat-card-header>
+
+
+                  <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="markEpisode(1)"> 
+                      <fa-icon [icon]="faEye" [styles]="{ 'color': '#57A8EF'}"
+                          data-toggle="tooltip" data-placement="top" title="mark this episode" size="lg">
+                      </fa-icon>
+                  </fa-layers>
+
+                </div>
+
+             
+            </mat-card>
+
+          </mat-expansion-panel>
+
+        </mat-accordion>
+
+        <mat-action-row>
+            <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="unFollowShow(1)"> 
+                <fa-icon [icon]="faTrash" [styles]="{ 'color': '#FD7D7B'}"
+                    data-toggle="tooltip" data-placement="top" title="mark this episode" size="lg">
+                </fa-icon>
+            </fa-layers>
+          </mat-action-row>
       </mat-expansion-panel>
     </mat-accordion>
 

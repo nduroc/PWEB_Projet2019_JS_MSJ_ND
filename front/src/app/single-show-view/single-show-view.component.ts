@@ -20,6 +20,7 @@ export class SingleShowViewComponent implements OnInit {
   public heFollow: boolean = null;
   public seasonClicked: Season = null;
   public load: boolean = false;
+  public howManyUsers:number;
 
 
   constructor(private singleShowService: SingleShow, private activeRoute: ActivatedRoute, private authService: AuthService) {
@@ -31,7 +32,7 @@ export class SingleShowViewComponent implements OnInit {
           this.actualShow = <OneShow>oneShow;
           this.seasonSlice = this.actualShow.seasons.slice(this.minSlice, this.maxSlice);
           this.isFollowed();
-          //console.log(this.actualShow);
+          this.howMany();
         })
 
 
@@ -79,17 +80,19 @@ export class SingleShowViewComponent implements OnInit {
 
   }
   followShow() {
+    this.load=true;
     this.singleShowService.followAShow(this.authService.getUserId(), this.actualShow).then( 
       
       (result) => {
 
-        console.log("chibre miel");
         if (<boolean>result == true) {
           console.log("ca a follow")
           this.heFollow = true;
+          this.load=false
         }
         else {
           console.log("y'a eu un probleme")
+          this.load=false
         }
       }
       )
@@ -97,6 +100,7 @@ export class SingleShowViewComponent implements OnInit {
   }
 
   unFollow() {
+    this.load=true;
     this.singleShowService.unFollow(this.authService.getUserId(), this.actualShow.information.id).then(
 
       (result) => {
@@ -105,13 +109,27 @@ export class SingleShowViewComponent implements OnInit {
         if (<boolean>result == true) {
           console.log("ca a unfollow")
           this.heFollow = false;
+          this.load=false;
         }
         else {
           console.log("y'a eu un probleme")
+          this.load=false
         }
 
-      }).catch( (result) => console.log("bite"))
+      })
 
+  }
+  howMany()
+  {
+    this.singleShowService.howManyUserFollow(this.actualShow.information.id).then( (result)=>
+      {
+      
+        this.howManyUsers=<number>result;
+      
+      },
+      error => console.log(error)
+    )
+    
   }
 
 }

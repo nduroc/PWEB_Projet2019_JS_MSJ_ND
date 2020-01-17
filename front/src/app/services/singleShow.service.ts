@@ -129,6 +129,7 @@ export class SingleShow {
                         resolve(seasons);
                     },
                     (error) => {
+                        console.log("chibre miel");
                         console.log(error);
                         reject();
                     }
@@ -171,12 +172,18 @@ export class SingleShow {
                 .then(
 
                     (result) => {
-                        console.log(result)
+                        if(result=="1")
+                        {
+                        resolve(true);
+                        }
+                        else
+                        {
+                            resolve(false);
+                        }
 
                     },
                     (error) => {
-                        console.log("pasteque")
-                        console.log(error)
+                        reject(error);
 
                     }
                 )
@@ -226,6 +233,36 @@ export class SingleShow {
                         resolve(true);
                         else
                         resolve(false);
+
+                    },
+                    (error) => {
+                        
+                        console.log(error)
+                        reject(false)
+                    }
+                )
+
+
+        });
+        return promise;
+
+      }
+
+      howManyUserFollow(showId: number) {
+        let promise = new Promise((resolve, reject) => {
+
+            this.httpClient.get(environment.apiPath+'serie/countFollowers?serieId=' + showId)
+                .toPromise()
+                .then(
+                    
+                    (result) => {
+                        if(<string>result>="0")
+                        {
+                            console.log(result)
+                        resolve(<number>result);
+                        }
+                        else
+                        resolve(0);
 
                     },
                     (error) => {

@@ -14,6 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StorageServiceModule } from 'angular-webstorage-service';
 import { SingleShowViewComponent } from './single-show-view/single-show-view.component';
 import { SingleShow } from './services/singleShow.service';
+import { FollowedShowsService} from './services/followedShows.service';
 import { SeasonViewComponent } from './season-view/season-view.component'
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FollowedShowsComponent } from './followed-shows/followed-shows.component';
@@ -47,7 +48,7 @@ import {MatCardModule} from '@angular/material/card'
     MatFormFieldModule,
     MatCardModule
   ],
-  providers: [AuthService, HomeSeries, TvShowInformation,Season,OneShow,ActorCharacter,Episode,SingleShow],
+  providers: [AuthService, HomeSeries, TvShowInformation,Season,OneShow,ActorCharacter,Episode,SingleShow,FollowedShowsService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
