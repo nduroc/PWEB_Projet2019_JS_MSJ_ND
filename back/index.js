@@ -28,7 +28,7 @@ app.use(session({
 /* const app = require('connect')();
 const swaggerTools = require('swagger-tools');
 const jsyaml = require('js-yaml'); */
-const serverPort = localhost;
+//const serverPort = localhost;
 
 // swaggerRouter configuration
 /* const options = {
@@ -70,6 +70,6 @@ app.use('/', Series)
 app.use('/', Serie)
 
 
-app.listen(serverPort, () => {
+app.listen((process.env.PORT || 5000), () => {
   console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort)
 })
