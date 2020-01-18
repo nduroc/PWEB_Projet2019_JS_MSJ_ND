@@ -28,7 +28,7 @@ app.use(session({
 /* const app = require('connect')();
 const swaggerTools = require('swagger-tools');
 const jsyaml = require('js-yaml'); */
-const serverPort = 8080;
+const serverPort = localhost;
 
 // swaggerRouter configuration
 /* const options = {
