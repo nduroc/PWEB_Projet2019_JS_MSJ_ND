@@ -4,15 +4,13 @@ const db = require('../utils/db_connect')
  * Mark an episode
  * Mark an episode of a serie followed by a user as seen
  *
- * episodeId Integer Id of the episode the user want to mark
+ * serieId Integer Id of the serie the user want to mark an episode of
  * userId Integer Id of the user who want to mark an episode
+ * episodeId Integer Id of the episode the user want to mark
  * no response value expected for this operation
  **/
-exports.markEpisode = function(userId, episodeId, serieId/*serieId, userId, seasonNumber, episodeNumber*/) {
+exports.markEpisode = function(userId, episodeId, serieId) {
   return new Promise(function(resolve, reject) {
-    /*
-    SQLquery = "UPDATE user_serie SET current_saison = "+ seasonNumber + ", current_episode = "
-                      + episodeNumber + " WHERE userId = " + userId + " AND serieId = " + serieId*/
     SQLqueryForUserSerieId = "SELECT id FROM user_serie WHERE userId='" + userId + "' and serieId='" + serieId + "'";
     db.querySqlSelect(SQLqueryForUserSerieId)
     .then(result => {
@@ -37,11 +35,12 @@ exports.markEpisode = function(userId, episodeId, serieId/*serieId, userId, seas
  * Unmark an episode
  * Unmark an episode of a serie followed by a user
  *
- * episodeId Integer Id of the episode the user want to unmark
+ * serieId Integer Id of the serie the user want to unmark an episode of
  * userId Integer Id of the user who want to unmark an episode
+ * episodeId Integer Id of the episode the user want to unmark
  * no response value expected for this operation
  **/
-exports.unmarkEpisode = function(userId, episodeId, serieId/*serieId, userId, seasonNumber, episodeNumber*/) {
+exports.unmarkEpisode = function(userId, episodeId, serieId) {
   return new Promise(function(resolve, reject) {
     SQLqueryForUserSerieId = "SELECT id FROM user_serie WHERE userId='" + userId + "' and serieId='" + serieId + "'";
     db.querySqlSelect(SQLqueryForUserSerieId)
@@ -58,41 +57,3 @@ exports.unmarkEpisode = function(userId, episodeId, serieId/*serieId, userId, se
     }).catch(err => reject(err));
   });
 }
-
-
-/*
-    let newEpisodeToMark
-    if(episodeNumber <= 1){
-      if(seasonNumber <= 1){
-        newEpisodeToMark = -1
-      } else{
-        SQLquerySELECTnewEpisodeToMark = "SELECT nbEpisode FROM season WHERE serieId = " + serieId + " AND numberSeasonInshow	= " + seasonNumber
-        db.querySqlUpdate(SQLquery)
-        .then(result => {
-          newEpisodeToMark = result
-          
-          SQLquery = "UPDATE user_serie SET current_saison = " + seasonNumber + ", current_episode = "
-                      + newEpisodeToMark + " WHERE userId = " + userId + " AND serieId = " + serieId
-          
-          db.querySqlUpdate(SQLquery)
-          .then(result => {
-            resolve(result)
-          }).catch(err => {
-            reject(err)
-          })
-        
-        }).catch(err => {
-          reject(err)
-        })
-      }
-    } else {
-      newEpisodeToMark = episodeNumber - 1
-    }
-    SQLquery = "UPDATE user_serie SET current_saison = " + seasonNumber + ", current_episode = "
-                + newEpisodeToMark + " WHERE userId = " + userId + " AND serieId = " + serieId
-    db.querySqlUpdate(SQLquery)
-    .then(result => {
-      resolve(result)
-    }).catch(err => {
-      reject(err)
-    })*/

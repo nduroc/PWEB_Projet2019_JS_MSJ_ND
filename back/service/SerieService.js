@@ -338,12 +338,12 @@ addSerie = function(serieId, information) {
     })
   });
 }
+
 /**
  * Return the available episodes of a serie
  * Return the available episodes of a serie
  *
  * serieId Integer Id of the serie we want to return a list of episode
- * body Serie Created serie object
  * no response value expected for this operation
  **/
 exports.displaySerieEpisode = function(serieId) {
@@ -358,6 +358,14 @@ exports.displaySerieEpisode = function(serieId) {
   });
 }
 
+/**
+ * Verify if a user follow a serie
+ * Verify if the user, corresponding to the user id given in parameter, follow the serie, corresponding to the serie id given in parameter.
+ *
+ * serieId Integer Id of the serie
+ * userId Integer Id of the user
+ * no response value expected for this operation
+ **/
 exports.isFollowedSerie = function(serieId,userId) {
   return new Promise(function(resolve, reject) {
     SQLquery = "SELECT IF (EXISTS(SELECT * FROM user_serie WHERE userId = '" + userId + "' AND serieId = '" + serieId + "'), true, false) as exist";
@@ -370,6 +378,13 @@ exports.isFollowedSerie = function(serieId,userId) {
   });
 }
 
+/**
+ * Return the number of user who follow a serie
+ * Return the number of user who follow the serie, corresponding to the serie id given in parameter.
+ *
+ * serieId Integer Id of the serie
+ * no response value expected for this operation
+ **/
 exports.countFollowersSerie = function(serieId) {
   return new Promise(function(resolve, reject) {
     SQLquery = "SELECT COUNT(*) as count FROM user_serie WHERE serieId = " + serieId;
@@ -389,6 +404,7 @@ exports.countFollowersSerie = function(serieId) {
  *
  * serieId Integer Id of the serie the user want to follow
  * userId Integer Id of the user who want to follow a serie
+ * body Serie Created user account object
  * no response value expected for this operation
  **/
 exports.followSerie = function(showToFollow, userId) {
