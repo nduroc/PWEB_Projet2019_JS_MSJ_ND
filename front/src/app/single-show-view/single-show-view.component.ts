@@ -90,6 +90,7 @@ export class SingleShowViewComponent implements OnInit {
           console.log("ca a follow")
           this.heFollow = true;
           this.load=false
+          this.howManyUsers+=1;
         }
         else {
           console.log("y'a eu un probleme")
@@ -111,6 +112,7 @@ export class SingleShowViewComponent implements OnInit {
           console.log("ca a unfollow")
           this.heFollow = false;
           this.load=false;
+          this.howManyUsers-=1;
         }
         else {
           console.log("y'a eu un probleme")
