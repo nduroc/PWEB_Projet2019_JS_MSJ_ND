@@ -52,12 +52,6 @@ exports.displayEpisodesSeen = function(userId) {
  * search String The name (or part of the name) of a serie searched by a user (optional)
  * no response value expected for this operation
  **/
-/* exports.displaySeries = function(pageNumber,body,search) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-} */
-
 searchOneSerie = function(res, indexRes){
   return new Promise(function(resolve, reject) {
     let series = [];

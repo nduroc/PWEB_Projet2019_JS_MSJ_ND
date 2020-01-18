@@ -50,21 +50,11 @@ module.exports.loginUserAccount = function loginUserAccount (req, res) {
     .then(() => res.send());
 };
 
-module.exports.logoutUserAccount = function logoutUserAccount (req, res) {
-  UserAccount.logoutUserAccount()
-    .then(() => {
-      console.log('Logout user')
-    })
-    .catch(err => {
-      throw err
-    });
-};
-
 module.exports.updateUserAccount = function updateUserAccount (req, res, userId) {
-  //const username = req.body.username;
-  //const email = req.body.email;
-  //const password = req.body.password;
-  UserAccount.updateUserAccount("7"/*userId*/,"Robi"/*username*/,"mail"/*email*/,"azerty"/*password*/)
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+  UserAccount.updateUserAccount(userId, username, email, password)
     .then(() => {
       console.log('Update user')
     })

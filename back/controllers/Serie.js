@@ -2,7 +2,7 @@ const Serie = require("../service/SerieService");
 
 module.exports.displaySerieEpisode = function displaySerieEpisode (req, res) {
   const serieId = req.query.serieId;
-  Serie.displaySerieEpisode(serieId, req.body)
+  Serie.displaySerieEpisode(serieId)
     .then((result) => {
       console.log("Episodes displayed");
       return result;

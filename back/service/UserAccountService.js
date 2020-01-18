@@ -63,20 +63,6 @@ exports.loginUserAccount = function (usernameOrEmail, password) {
   });
 }
 
-
-/**
- * Logs out current logged in user account session
- * Function to log out current logged in user account session
- *
- * no response value expected for this operation
- **/
-exports.logoutUserAccount = function () {
-  return new Promise(function (resolve, reject) {
-    resolve();
-  });
-}
-
-
 /**
  * Update user account
  * Permit to the logged in user to modify his/her account

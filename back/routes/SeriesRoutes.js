@@ -4,10 +4,6 @@ const SeriesController = require('../controllers/Series')
 
 const basePath = '/series'
 
-/* router.get(basePath, function (req, res) {
-    SeriesController.displaySeries(req, res)
-}) */
-
 router.get(basePath + '/followedSeries', function (req, res) {
     SeriesController.displayFollowedSeries(req, res)
 })

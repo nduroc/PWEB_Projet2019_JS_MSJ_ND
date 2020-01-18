@@ -346,7 +346,7 @@ addSerie = function(serieId, information) {
  * body Serie Created serie object
  * no response value expected for this operation
  **/
-exports.displaySerieEpisode = function(serieId,body) {
+exports.displaySerieEpisode = function(serieId) {
   return new Promise(function(resolve, reject) {
     SQLquery = "SELECT episodes FROM serie WHERE id = " + serieId;
     db.querySqlSelect(SQLquery)

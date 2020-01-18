@@ -65,17 +65,6 @@ paths:
           description: "User login successfully"
         400:
           description: "Invalid username/password supplied"
-  /user/logout:
-    get:
-      tags:
-      - "user account"
-      summary: "Logs out current logged in user account session"
-      description: "Function to log out current logged in user account session"
-      operationId: "logoutUserAccount"
-      parameters: []
-      responses:
-        default:
-          description: "User logout successfully"
   /user/{userId}:
     put:
       tags:
@@ -119,34 +108,23 @@ paths:
           description: "Invalid user id supplied"
         404:
           description: "User not found"
-  /series:
+  /series/episodesSeen:
     get:
       tags:
       - "series"
-      summary: "Return the available series"
-      description: "Return the available series to permit users to select series they want to follow (X series displayed per page)"
-      operationId: "displaySeries"
+      summary: "Return the id of episodes marked as seen by the user"
+      description: "Return the id of episodes marked as seen by the user corresponding to the user id given in parameter"
+      operationId: "displayEpisodesSeen"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: "pageNumber"
+      - name: "userId"
         in: "query"
-        description: "The number of the page we want to return"
-        required: true
-        type: "integer"
-      - name: "search"
-        in: "query"
-        description: "The name (or part of the name) of a serie searched by a user"
+        description: "Id of the user"
         required: false
         type: "string"
-      - in: "body"
-        name: "body"
-        description: "Created series object"
-        required: true
-        schema:
-          $ref: "#/definitions/Series"
       responses:
         404:
           description: "Page not found bro, try again"
@@ -168,12 +146,6 @@ paths:
         description: "Id of the user who want to see th series that he/she follow"
         required: true
         type: "integer"
-      - in: "body"
-        name: "body"
-        description: "Created series object"
-        required: true
-        schema:
-          $ref: "#/definitions/Series"
       responses:
         400:
           description: "Invalid user id supplied"
@@ -195,12 +167,6 @@ paths:
         description: "Id of the serie we want to return a list of episode"
         required: true
         type: "integer"
-      - in: "body"
-        name: "body"
-        description: "Created serie object"
-        required: true
-        schema:
-          $ref: "#/definitions/Serie"
       responses:
         400: 
           description: "Invalid serie Id supplied"
@@ -251,9 +217,62 @@ paths:
         description: "Id of the user who want to follow a serie"
         required: true
         type: "integer"
+      - in: "body"
+        name: "body"
+        description: "Created user account object"
+        required: true
+        schema:
+          $ref: "#/definitions/Serie"
       responses:
         default:
           description: "Serie followed successfully"
+          
+  /serie/isFollowed:
+    post:
+      tags:
+      - "serie"
+      summary: "Verify if a user follow a serie"
+      description: "Verify if the user, corresponding to the user id given in parameter, follow the serie, corresponding to the serie id given in parameter."
+      operationId: "isFollowedSerie"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "serieId"
+        in: "query"
+        description: "Id of the serie"
+        required: true
+        type: "integer"
+      - name: "userId"
+        in: "query"
+        description: "Id of the user"
+        required: true
+        type: "integer"
+      responses:
+        default:
+          description: "Serie is/isn't followed"
+          
+  /serie/countFollowers:
+    post:
+      tags:
+      - "serie"
+      summary: "Return the number of user who follow a serie"
+      description: "Return the number of user who follow the serie, corresponding to the serie id given in parameter."
+      operationId: "countFollowersSerie"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "serieId"
+        in: "query"
+        description: "Id of the serie"
+        required: true
+        type: "integer"
+      responses:
+        default:
+          description: "Number of user who follow the serie"
     
   /episode/mark:
     put:
@@ -275,14 +294,9 @@ paths:
         description: "Id of the user who want to mark an episode"
         required: true
         type: "integer"
-      - name: "seasonNumber"
+      - name: "episodeId"
         in: "query"
-        description: "Number of the season containing the episode the user want to mark"
-        required: true
-        type: "integer"
-      - name: "episodeNumber"
-        in: "query"
-        description: "Number of the episode the user want to mark"
+        description: "Id of the episode the user want to mark"
         required: true
         type: "integer"
       responses:
@@ -311,14 +325,9 @@ paths:
         description: "Id of the user who want to unmark an episode"
         required: true
         type: "integer"
-      - name: "seasonNumber"
+      - name: "episodeId"
         in: "query"
-        description: "Number of the season containing the episode the user want to unmark"
-        required: true
-        type: "integer"
-      - name: "episodeNumber"
-        in: "query"
-        description: "Number of the episode the user want to unmark"
+        description: "Id of the episode the user want to unmark"
         required: true
         type: "integer"
       responses:
@@ -332,9 +341,6 @@ definitions:
     User:
       type: "object"
       properties:
-        id:
-          type: "integer"
-          format: "int64"
         username:
           type: "string"
         email:
@@ -345,21 +351,71 @@ definitions:
       xml:
         name: "User"
         
+    Information:
+      type: "object"
+      properties:
+        id: 
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        type: 
+          type: "string"
+        genre: 
+          type: "array"
+          items:
+            type: "string"
+        status: 
+          type: "string"
+        start: 
+          type: "string"
+        officialSite: 
+          type: "string"
+        urlMediumImage: 
+          type: "string"
+        urlOriginalImage: 
+          type: "string"
+        rate:           
+          type: "integer"
+          format: "int64"
+        summary: 
+          type: "string"
+        network: 
+          type: "string"
+        countryName: 
+          type: "string"
+        countryCode: 
+          type: "string"
+      
+      xml:
+        name: "Information"
+    
     Episode:
       type: "object"
       properties:
         id:
           type: "integer"
           format: "int64"
-        seasonId:
-          type: "integer"
-          format: "int64"
         name:
           type: "string"
-        number:
+        outDate:
+          type: "string"
+        seasonNumber:
           type: "integer"
           format: "int64"
-      
+        episodeNumber:
+          type: "integer"
+          format: "int64"
+        urlMediumImage:
+          type: "string"
+        urlOriginalImage:
+          type: "string"
+        summary:
+          type: "string"
+        runtime:
+          type: "integer"
+          format: "int64"
+          
       xml:
         name: "Episode"
           
@@ -370,46 +426,77 @@ definitions:
         id:
           type: "integer"
           format: "int64"
-        serieId:
+        numberSeasonInshow:
           type: "integer"
           format: "int64"
-        number:
+        name:
+          type: "string"
+        nbEpisode:
           type: "integer"
           format: "int64"
         episodes:
           type: "array"
           items:
             $ref: "#/definitions/Episode"
+        urlMediumImage:
+          type: "string"
+        urlOriginalImage:
+          type: "string"
+        summary:
+          type: "string"
             
       xml:
         name: "Season"
         
+    ActorCharacter:
+      type: "object"
+      properties:
+        actorId:
+          type: "integer"
+          format: "int64"
+        actorName:
+          type: "string"
+        actorCountryName:
+          type: "string"
+        actorCountryCode:
+          type: "string"
+        actorSexe:
+          type: "string"
+        actorUrlMediumImage:
+          type: "string"
+        actorUrlOriginalImage:
+          type: "string"
+        characterId:
+          type: "integer"
+          format: "int64"
+        characterName:
+          type: "string"
+        characterUrlMediumImage:
+          type: "string"
+        characterUrlOriginalImage:
+          type: "string"
+      
+      xml:
+        name: "ActorCharacter"
+        
+        
     Serie:
       type: "object"
       properties:
-        id:
-          type: "integer"
-          format: "int64"
-        name:
-          type: "string"
+        information:
+          type: "array"
+          items:
+            $ref: "#/definitions/Information"
         seasons:
           type: "array"
           items:
             $ref: "#/definitions/Season"
-        
-      xml:
-        name: "Serie"
-        
-    Series:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-        series:
+        cast:
           type: "array"
           items:
-            $ref: "#/definitions/Serie"
-        
+            $ref: "#/definitions/ActorCharacter"
+
       xml:
-        name: "Series"
+        name: "Serie"
+
+        

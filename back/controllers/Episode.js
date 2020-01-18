@@ -10,7 +10,7 @@ module.exports.markEpisode = function markEpisode (req, res) {
   Episode.markEpisode(userId, episodeId, serieId/*serieId, userId, seasonNumber, episodeNumber*/)
     .then(result => {
       console.log(result);
-      if (result == -1) {
+      if (result === -1) {
         tmp += "-1";
       } else {
         tmp += result;
@@ -35,7 +35,7 @@ module.exports.unmarkEpisode = function unmarkEpisode (req, res) {
   Episode.unmarkEpisode(userId, episodeId, serieId/*serieId, userId, seasonNumber, episodeNumber*/)
     .then(result => {
       console.log(result);
-      if (result == -1) {
+      if (result === -1) {
         tmp += "-1";
       } else {
         tmp += "1";

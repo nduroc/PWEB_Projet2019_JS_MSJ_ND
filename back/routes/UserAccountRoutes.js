@@ -12,10 +12,6 @@ router.get(basePath + '/login', function (req, res) {
     UserController.loginUserAccount(req, res)
 })
 
-router.get(basePath + '/logout', function (req, res) {
-    UserController.logoutUserAccount(req, res)
-})
-
 router.put(basePath + '/:userId', function (req, res) {
     UserController.updateUserAccount(req, res, req.params.userId)
 })
