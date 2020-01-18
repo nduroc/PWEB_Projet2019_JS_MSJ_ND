@@ -4,6 +4,7 @@ import { FollowedShowsService } from '../services/followedShows.service';
 import { ActivatedRoute } from '@angular/router';
 import { faEye, faEyeSlash, faTrash, } from '@fortawesome/free-solid-svg-icons';// fafa icon
 import { SingleShow } from '../services/singleShow.service';
+import { KeyValue } from '@angular/common';
 
 
 @Component({
@@ -55,6 +56,9 @@ export class FollowedShowsComponent implements OnInit {
   }
   unMarkEpisode(episodeId: number, showId: number) {
     this.myShowService.unMarkEpisode(episodeId, this.userId, showId);
+  }
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
   }
 
 }

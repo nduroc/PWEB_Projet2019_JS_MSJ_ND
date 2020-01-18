@@ -7,7 +7,7 @@
 
     <mat-accordion class="accordion-show">
 
-      <mat-expansion-panel class="collapse-show" *ngFor="let show of followedShow | keyvalue">
+      <mat-expansion-panel class="collapse-show" *ngFor="let show of (followedShow | keyvalue : originalOrder)">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{show.value.information.name}}
@@ -19,22 +19,22 @@
         <!--seasons-->
         <mat-accordion>
           <!--one season-->
-          <mat-expansion-panel class="collapse-season" *ngFor="let season of show.value.seasons | keyvalue">
+          <mat-expansion-panel class="collapse-season" *ngFor="let season of (show.value.seasons | keyvalue : originalOrder)">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <ng-template *ngIf="season.value.name != '' else elseBlock">{{season.value.name}}</ng-template>
+                <div *ngIf="season.value.name != '' else elseBlock">Season number {{season.value.numberSeasonInshow}}:{{season.value.name}}</div>
 
-                <ng-template #elseBlock>season number {{season.value.numberSeasonInshow}}</ng-template>
+                <ng-template #elseBlock>Season number {{season.value.numberSeasonInshow}}</ng-template>
               </mat-panel-title>
               <mat-panel-description>
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-card class="card-episode" *ngFor="let episode of season.value.episodes | keyvalue">
+            <mat-card class="card-episode" *ngFor="let episode of (season.value.episodes | keyvalue : originalOrder)">
 
               <div class="row">
                 <mat-card-header class="col-5">
-                  {{episode.value.runtime}} min | {{episode.value.episodeNumber}}x{{season.value.numberSeasonInshow}}
+                  {{season.value.numberSeasonInshow}}x{{episode.value.episodeNumber}}
                   {{episode.value.name}}
 
                 </mat-card-header>
