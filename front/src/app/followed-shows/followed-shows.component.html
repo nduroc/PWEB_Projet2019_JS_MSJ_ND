@@ -1,13 +1,13 @@
-<div class="container showFollow">
+<div class="container showFollow ">
   <div>
     <h1 class="text-white">My shows</h1>
   </div>
   <div class="mat-accordionDiv">
 
 
-    <mat-accordion class="accordion-show">
+    <mat-accordion class="accordion-show ">
 
-      <mat-expansion-panel class="collapse-show" *ngFor="let show of (followedShow | keyvalue : originalOrder)">
+      <mat-expansion-panel id="show{{show.value.information.id}}" class="collapse-show" *ngFor="let show of (followedShow | keyvalue : originalOrder)">
         <mat-expansion-panel-header>
           <mat-panel-title>
             {{show.value.information.name}}
@@ -30,11 +30,11 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <mat-card class="card-episode" *ngFor="let episode of (season.value.episodes | keyvalue : originalOrder)">
+            <mat-card class="mt-1" [ngClass]="{'card-episode-seen': isSeen(episode.value.id),'card-episode-unseen': !isSeen(episode.value.id)}" id="card{{episode.value.id}}"  *ngFor="let episode of (season.value.episodes | keyvalue : originalOrder)">
 
               <div class="row">
                 <mat-card-header class="col-5">
-                  {{season.value.numberSeasonInshow}}x{{episode.value.episodeNumber}}
+                  S{{season.value.numberSeasonInshow}}:E{{episode.value.episodeNumber}}
                   {{episode.value.name}}
 
                 </mat-card-header>
@@ -55,28 +55,32 @@
                     </div>
                   </ng-template>
                   <ng-template #popTitle>
-                    <p class="text-black">{{episode.value.name}}</p>
+                    <p class="text-black">{{episode.value.name}}  </p>
                   </ng-template>
-                  <button type="button" class="btn btn-outline-info" [ngbPopover]="popContent" [popoverTitle]="popTitle"
+                  <button type="button" class="btn summary-button" [ngbPopover]="popContent" [popoverTitle]="popTitle"
                     triggers="mouseenter:mouseleave">
                     summary
                   </button>
                 </mat-card-content>
-
-                <div>
-                  <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="markEpisode(1)">
-                    <fa-icon [icon]="faEye" [styles]="{ 'color': '#57A8EF'}" data-toggle="tooltip" data-placement="top"
+                <div id="episode{{episode.value.id}}">
+                <div [hidden]="isSeen(episode.value.id)" id="mark{{episode.value.id}}">
+                  <fa-layers   [fixedWidth]="true" style="cursor:pointer" (click)="markEpisode(episode.value.id,show.value.information.id)">
+                    <fa-icon [icon]="faEye" [styles]="{ 'color': 'rgba(34, 114, 219, 0.801)'}" data-toggle="tooltip" data-placement="top"
                       title="mark this episode" size="lg">
                     </fa-icon>
                   </fa-layers>
                 </div>
-                <div class="ml-1">
-                  <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="unMarkEpisode(1)">
-                    <fa-icon [icon]="faEyeSlash" [styles]="{ 'color': '#FD7D7B'}" data-toggle="tooltip"
+
+                
+                <div [hidden]="!isSeen(episode.value.id)" id="unmark{{episode.value.id}}">
+                  <fa-layers  [fixedWidth]="true" style="cursor:pointer" (click)="unMarkEpisode(episode.value.id,show.value.information.id)">
+                    <fa-icon [icon]="faEyeSlash" [styles]="{ 'color': 'rgba(196, 41, 41, 0.644)'}" data-toggle="tooltip"
                       data-placement="top" title="unmark this episode" size="lg">
                     </fa-icon>
                   </fa-layers>
                 </div>
+
+            </div>
               </div>
 
 
@@ -87,7 +91,7 @@
         </mat-accordion>
 
         <mat-action-row>
-          <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="unFollowShow(1)">
+          <fa-layers [fixedWidth]="true" style="cursor:pointer" (click)="unFollowShow(show.value.information.id)">
             <fa-icon [icon]="faTrash" [styles]="{ 'color': '#FD7D7B'}" data-toggle="tooltip" data-placement="top"
               title="unfollow this show" size="small">
             </fa-icon>
@@ -100,3 +104,4 @@
 
   </div>
 </div>
+<app-loading-screen *ngIf="load"></app-loading-screen>

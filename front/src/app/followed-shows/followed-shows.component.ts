@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faEye, faEyeSlash, faTrash, } from '@fortawesome/free-solid-svg-icons';// fafa icon
 import { SingleShow } from '../services/singleShow.service';
 import { KeyValue } from '@angular/common';
+import { promise } from 'protractor';
 
 
 @Component({
@@ -19,15 +20,22 @@ export class FollowedShowsComponent implements OnInit {
   public faEyeSlash = faEyeSlash;
   public faTrash = faTrash;
   public load = false;
-  public followedShow
+  public followedShow;
+  public showEpisode:Set<string>;
   constructor(private myShowService: FollowedShowsService, private activeRoute: ActivatedRoute, private authService: AuthService, private singleShow: SingleShow) {
-    this.load = true;
-    this.userId = this.authService.getUserId()
+  this.load = true;
+  this.userId = this.authService.getUserId()
 
-    this.myShowService.getFollowedShows(this.userId).then((result) => {
-      this.followedShow = result
+   let allFollowedShow=this.myShowService.getFollowedShows(this.userId)
+    let allSeenEpisodes=this.myShowService.getShowedEpisode(this.userId)
+
+    Promise.all([allFollowedShow,allSeenEpisodes]).then((result) => {
+      this.followedShow = result[0]
+      this.showEpisode=<Set<string>>result[1];
       console.log(this.followedShow);
+      console.log(this.showEpisode)
       this.load = false;
+
 
 
     });
@@ -38,12 +46,13 @@ export class FollowedShowsComponent implements OnInit {
   ngOnInit() {
   }
   unFollowShow(showId: number) {
-    this.singleShow.unFollow(this.userId, showId).then((result) =>
-      (result) => {
-
+    this.load=true;
+    console.log(showId)
+    this.singleShow.unFollow(this.userId, showId).then((result) => {
+      
         if (<boolean>result == true) {
           this.load = false;
-
+          document.getElementById("show"+showId).remove();
         }
         else {
           this.load = false
@@ -52,13 +61,59 @@ export class FollowedShowsComponent implements OnInit {
     )
   }
   markEpisode(episodeId: number, showId: number) {
-    this.myShowService.markAnEpisode(episodeId, this.userId, showId);
+    this.load=true;
+    this.myShowService.markAnEpisode(episodeId, this.userId, showId).then( result => {
+      if(<number>result>0)
+      {
+        this.load=false;
+        this.showEpisode.add(episodeId.toString())
+        console.log(this.showEpisode);
+        let card=document.getElementById("card"+episodeId)
+        card.classList.remove("card-episode-unseen")
+        card.classList.add("card-episode-seen")
+        let unmark = document.getElementById("unmark"+episodeId);
+        unmark.hidden=false;
+        let mark=document.getElementById("mark"+episodeId);
+        mark.hidden=true;
+      }
+      else
+      {
+        this.load=false;
+        console.log(result);
+      }
+    });
   }
   unMarkEpisode(episodeId: number, showId: number) {
-    this.myShowService.unMarkEpisode(episodeId, this.userId, showId);
+    this.load=true
+    this.myShowService.unMarkEpisode(episodeId, this.userId, showId).then( result => {
+      if(result=="1")
+      {
+        this.load=false;
+        this.showEpisode.delete((episodeId.toString()))
+        console.log(this.showEpisode);
+        let card=document.getElementById("card"+episodeId)
+        card.classList.remove("card-episode-seen")
+        card.classList.add("card-episode-unseen")
+        let unmark = document.getElementById("unmark"+episodeId);
+        unmark.hidden=true;
+        let mark=document.getElementById("mark"+episodeId);
+        mark.hidden=false;
+
+
+      }
+      else
+      {
+        this.load=false;
+        console.log(result);
+      };
+    })
   }
   originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
     return 0;
+  }
+  isSeen(id:string)
+  {
+    return this.showEpisode.has(id);
   }
 
 }

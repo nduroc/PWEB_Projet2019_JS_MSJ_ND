@@ -7,6 +7,16 @@
 .collapse-season {
   background-color: rgba(128, 128, 128, 0.596) !important;
 }
-.card-episode {
-    background-color: rgba(128, 128, 128, 0.596) !important;
+.card-episode-seen {
+    background-color: rgba(110, 138, 92, 0.493) !important;
   }
+
+.card-episode-unseen {
+  background-color: rgba(165, 103, 103, 0.596) !important;
+ }
+
+ .summary-button
+ {
+   background-color: rgba(44, 42, 42, 0.493) !important;
+   color: rgba(231, 226, 226, 0.719)
+ }
