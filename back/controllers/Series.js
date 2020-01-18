@@ -3,11 +3,9 @@ const Series = require('../service/SeriesService');
 module.exports.displayFollowedSeries = function displayFollowedSeries (req, res) {
   const userId = req.query.userId;
   tmp = "";
-  return Series.displayFollowedSeries(userId, req.body)
+  return Series.displayFollowedSeries(userId)
     .then(followedSeriesList => {
       tmp = JSON.stringify(followedSeriesList);
-      //tmp = followedSeriesList.toString();
-      //console.log(tmp)
     })
     .catch(err => {
       tmp += "-1";
@@ -17,13 +15,18 @@ module.exports.displayFollowedSeries = function displayFollowedSeries (req, res)
     .then(() => res.send());
 };
 
-/* module.exports.displaySeries = function displaySeries (req, res) {
-  return Series.displaySeries(req.query.pageNumber, req.body, req.query.search)
-    .then(seriesList => {
-      return seriesList
+module.exports.displayEpisodesSeen = function displayEpisodesSeen (req, res) {
+  const userId = req.query.userId;
+  tmp = "";
+  return Series.displayEpisodesSeen(userId)
+    .then(episodesSeenList => {
+      tmp = JSON.stringify(episodesSeenList);
+      console.log(tmp);
     })
     .catch(err => {
-      console.log(err)
-    });
+      tmp += "-1";
+      console.log(err);
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
- */

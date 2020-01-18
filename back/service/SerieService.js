@@ -398,15 +398,15 @@ exports.followSerie = function(showToFollow, userId) {
     db.querySqlSelect(SQLqueryIF)
     .then(resultIF => {
       if(resultIF[0].exist){
-        console.log("succés");
-/*         const reqTvMazeSeasons="http://api.tvmaze.com/shows/" + serieId + "/seasons";
-        fetch(reqTvMazeSeasons).then((resp)=>resp.json()).then((json)=>{
-          this.updateSerie(serieId, json)
-          .then(() => {
-            resolve(true)
-          })
-        }).catch(err=>reject(err)); */
-        resolve(true)
+        db.querySqlInsert(SQLqueryINSERTuser_serie)
+        .then(resultINSERTuser_serie => {
+          resolve(resultINSERTuser_serie)
+        }).catch(err => {
+          if(err.number !== 1062){
+            reject(err)
+          }
+          resolve(true)
+        })
       } else {
         this.addSerie(serieId, information)
         .then(() => {
@@ -421,6 +421,7 @@ exports.followSerie = function(showToFollow, userId) {
                 if(err.number !== 1062){
                   reject(err)
                 }
+                resolve(true)
               })
             }).catch(err => reject(err))
           }).catch(err => reject(err))

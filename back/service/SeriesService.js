@@ -9,7 +9,7 @@ const db = require('../utils/db_connect')
  * body Series Created series object
  * no response value expected for this operation
  **/
-exports.displayFollowedSeries = function(userId,body) {
+exports.displayFollowedSeries = function(userId) {
   return new Promise(function(resolve, reject) {
     SQLquery = "SELECT * FROM serie WHERE id IN (SELECT serieId FROM user_serie WHERE userId = " + userId + ") "
     SQLqueryEpisodeSeen = "SELECT * FROM user_serie_episode WHERE user_serie_id IN (SELECT id FROM user_serie WHERE userId = " + userId + ") "
@@ -22,6 +22,8 @@ exports.displayFollowedSeries = function(userId,body) {
           followedSeries[i] = followedSeriesTab[i]
         }
         resolve(followedSeries);
+      }).catch(err => {
+        reject(err);
       })
     }).catch(err => {
       reject(err);
@@ -29,6 +31,17 @@ exports.displayFollowedSeries = function(userId,body) {
   });
 }
 
+exports.displayEpisodesSeen = function(userId) {
+  return new Promise(function(resolve, reject) {
+    SQLquery = "SELECT id,seasonId FROM episode WHERE id IN (SELECT episode_id FROM user_serie_episode WHERE user_serie_id IN (SELECT id FROM user_serie WHERE userId = " + userId + ")) "
+    db.querySqlSelect(SQLquery)
+    .then(result => {
+      resolve(result)
+    }).catch(err => {
+      reject(err);
+    })
+  });
+}
 
 /**
  * Return the available series
@@ -53,7 +66,6 @@ searchOneSerie = function(res, indexRes){
     for(let o in objInformation){
       information[o] = objInformation[o]
     }
-    //let information = res[indexRes];
     this.searchSeasons(res[indexRes]['id'])
     .then(resultSeasons => {
       this.searchCast(res[indexRes]['id'])
@@ -92,7 +104,7 @@ searchSeasons = function(serieId) {
     SQLquerySELECTseasons = "SELECT * FROM season WHERE serieId = " + serieId
     db.querySqlSelect(SQLquerySELECTseasons)
     .then(resultSELECTseasons => {
-      SQLquerySELECTepisodes = "SELECT * FROM episode WHERE seasonId IN (SELECT id FROM season WHERE serieId = " + serieId + ")"
+      SQLquerySELECTepisodes = "SELECT * FROM episode WHERE seasonId IN (SELECT id FROM season WHERE serieId = " + serieId + ") ORDER BY id ASC"
       db.querySqlSelect(SQLquerySELECTepisodes)
       .then(resultSELECTepisodes => {
         let seasons = {}
