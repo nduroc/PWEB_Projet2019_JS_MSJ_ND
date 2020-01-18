@@ -61,10 +61,9 @@ exports.displayEpisodesSeen = function(userId) {
 searchOneSerie = function(res, indexRes){
   return new Promise(function(resolve, reject) {
     let series = [];
-    let objInformation = JSON.parse(JSON.stringify(res[indexRes]));
     let information = {}
-    for(let o in objInformation){
-      information[o] = objInformation[o]
+    for(let obj in res[indexRes]){
+      information[obj] = res[indexRes][obj]
     }
     this.searchSeasons(res[indexRes]['id'])
     .then(resultSeasons => {
@@ -111,16 +110,16 @@ searchSeasons = function(serieId) {
         let indexSeasons = 0
         for(let resSeason of resultSELECTseasons) {
           let res ={}
-          for(let o in resSeason){
-            res[o] = resSeason[o]
+          for(let obj in resSeason){
+            res[obj] = resSeason[obj]
           }
           let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resSeason['id'])
           let episodesTab = {}
           let indexEpisodesTab = 0
           for(let episode of episodesInfo) {
             let episodeTab = {}
-            for(let o in episode){
-              episodeTab[o] = episode[o]
+            for(let obj in episode){
+              episodeTab[obj] = episode[obj]
             }
             episodesTab[indexEpisodesTab] = episodeTab
             ++indexEpisodesTab
@@ -151,15 +150,13 @@ searchCast = function(serieId) {
         let indexCast = 0
         for(let resActor of resultSELECTactors) {
           let characterInfo = resultSELECTactors_serie.find(element => element['actorId'] === resActor['actorId'])
-          let objActor = JSON.parse(JSON.stringify(resActor));
-          let objCharacter = JSON.parse(JSON.stringify(characterInfo));
           let res = {}
-          for(let o in objActor){
-            res[o] = objActor[o]
+          for(let obj in resActor) {
+            res[obj] = resActor[obj]
           }
-          for(let o in objCharacter){
-            if(o !== "actorId" && o !== "serieId"){
-              res[o] = objCharacter[o]
+          for(let obj in characterInfo) {
+            if(obj !== "actorId" && obj !== "serieId"){
+              res[obj] = characterInfo[obj]
             }
           }
           cast[indexCast] = res
