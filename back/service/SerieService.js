@@ -1,32 +1,6 @@
 const db = require('../utils/db_connect');
 const fetch = require('node-fetch');
 
-updateSerie = function(serieId, seasons) {
-  return new Promise(function(resolve, reject) {
-    SQLqueryCOUNT = "SELECT COUNT(*) FROM season WHERE serieId = " + serieId
-    db.querySqlSelect(SQLqueryCOUNT)
-    .then(result => {
-      if(result<seasons.length){
-        let episodes = null;
-        
-        const reqTvMazeEpisodes="http://api.tvmaze.com/shows/" + serieId + "/episodes";
-        fetch(reqTvMazeEpisodes).then((resp)=>resp.json()).then((json)=>{
-          episodes = json
-        }).catch(err=>reject(err));
-
-        this.addSeasonsFromTVMaze(seasons, episodes, result, serieId)
-        .then(resultAddSeasons => {
-          resolve(resultAddSeasons)
-        }).catch(err => {
-          reject(err);
-        })
-      }
-    }).catch(err => {
-      reject(err);
-    })
-  });
-}
-
 addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsIdListTVMaze) {
   return new Promise(function(resolve, reject) {
     let begin = true
@@ -191,52 +165,6 @@ addSeasons = function(seasons, serieId) {
   });
 }
 
-addSeasonsFromTVMaze = function(seasons, episodes, indexForSeasons, serieId) {
-  return new Promise(function(resolve, reject) {
-    let begin = true;
-    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlMediumImage, summary, serieId) VALUES"
-
-    let episodesListTVMaze = [];
-    let seasonsIdListTVMaze = [];
-    let indexOfListTVMaze = 0;
-
-    for(let i=indexForSeasons; i<seasons.length; ++i){
-     let season = seasons[i];
-     if(!begin){
-        SQLqueryINSERTseason = SQLqueryINSERTseason.concat(",");
-    } else {
-      begin = false;
-    }
-      let episodesForSeason = [];
-        
-        for(let episodeTVMaze of episodes){
-          if(episodeTVMaze.season === season.number){
-            episodesForSeason.push(episodeTVMaze);
-          }
-        }
-
-      episodesListTVMaze[indexOfListTVMaze] = episodesForSeason;
-      seasonsIdListTVMaze[indexOfListTVMaze] = season.id;
-      ++indexOfListTVMaze;
-
-      let stringSeason = "('" + season.id + "', '" + season.number + "', '" + season.name.replace(/'/g, "`") + "', '" + season.episodeOrder + "', '"
-                          + season.image.medium + "', '" + season.image.original + "', '" + season.summary.replace(/'/g, "`") + "', '" + serieId + "')";
-      SQLqueryINSERTseason = SQLqueryINSERTseason.concat(stringSeason);
-    }
-    db.querySqlInsert(SQLqueryINSERTseason)
-    .then(result => {
-      this.addEpisodes([], [], episodesListTVMaze, seasonsIdListTVMaze)
-      .then(() => {
-        resolve(result);
-      }).catch(err => {
-        reject(err);
-      })
-    }).catch(err => {
-      reject(err);
-    })
-  });
-}
-
 addActors = function(actors, serieId) {
   return new Promise(function(resolve, reject) {
     let stringActorsId = "(";
@@ -339,6 +267,120 @@ addSerie = function(serieId, information) {
   });
 }
 
+updateSerie = function(serieId, information, seasons, cast) {
+  return new Promise(function(resolve, reject) {
+    SQLquerySeasons = "SELECT id FROM season WHERE serieId = " + serieId
+    SQLqueryCast = "SELECT characterId FROM actors_serie WHERE serieId = " + serieId
+    SQLquerySerie = "SELECT * FROM serie WHERE id = " + serieId
+    let newSeasons = [];
+    let newCharacter = [];
+    db.querySqlSelect(SQLquerySeasons)
+    .then(resultSeasons => {
+      for(let season of seasons) {
+        let seasonIsNew = true;
+        for(let seasonsId of resultSeasons) {
+          if(season.id === seasonsId['id']) {
+            seasonIsNew = false;
+          }
+        }
+        if(seasonIsNew) {
+          newSeasons.push(season);
+        }
+      }
+
+      db.querySqlSelect(SQLqueryCast)
+      .then(resultCast => {
+        for(let character of cast) {
+          let characterIsNew = true;
+          for(let charactersId of resultCast) {
+            if(character.characterId === charactersId['characterId']) {
+              characterIsNew = false;
+            }
+          }
+          if(characterIsNew) {
+            newCharacter.push(character);
+          }
+        }
+
+        let promises = []
+        let indexPromises = 0;
+
+        if(newSeasons.length>0) {
+          promises[indexPromises] = this.addSeasons(newSeasons, serieId);
+          ++indexPromises
+        }
+
+        if(newCharacter.length>0) {
+          promises[indexPromises] = this.addActors(newCharacter, serieId);
+          ++indexPromises
+        }
+
+        promises[indexPromises] = db.querySqlSelect(SQLquerySerie)
+        let indexResultSerie = indexPromises;
+        ++indexPromises
+
+        Promise.all(promises).then(results => {
+          let result = results[indexResultSerie];
+          let genres = null;
+          let replacedSummary = null;
+          let haveChanged = false;
+
+          for(let obj in result[0]) {
+            if(obj!=='id' && obj!=='name') {
+              if(obj === 'summary') {
+                replacedSummary = information[obj].replace(/'/g, "`")
+                if(result[0][obj] != replacedSummary && information[obj]!==null) {
+                  haveChanged = true;
+                }
+              } else if(obj === 'genre') {
+                let begin = true;
+                for(let g of information[obj]){
+                  if(begin){
+                    genres = g;
+                    begin = false;
+                  } else {
+                    genres = genres.concat("/", g);
+                  }
+                }
+                if(result[0][obj] != genres && information[obj]!==null) {
+                  haveChanged = true;
+                }
+              } else if(obj === 'rate' && information[obj] !== parseFloat(result[0][obj])){
+                haveChanged = true;
+              } else if(information[obj] !== result[0][obj] && information[obj]!==null) {
+                haveChanged = true;
+              }
+            }
+          }
+          if(haveChanged){
+            SQLqueryUPDATEserie = "UPDATE serie SET type = '" + information.type + "', genre = '" + genres + "', status = '" + information.status + "', start = '" + information.start + "', officialSite = '" + information.officialSite + "', urlMediumImage = '" + information.urlMediumImage + "', urlOriginalImage = '"
+                                   + information.urlOriginalImage + "', rate = '" + information.rate + "', summary = '" + replacedSummary + "', network = '" + information.network + "', countryName = '" + information.countryName + "', countryCode = '" + information.countryCode + "'";
+            
+            db.querySqlDelete(SQLqueryUPDATEserie)
+            .then(() => {
+              resolve(true)
+            }).catch(err => {
+              reject(err);
+            })
+
+          } else {
+            resolve(true);
+          }
+
+        }).catch(err => {
+          reject(err);
+        })
+
+      }).catch(err => {
+        reject(err);
+      })
+       
+    }).catch(err => {
+      reject(err);
+    })    
+  });
+}
+
 /**
  * Return the available episodes of a serie
  * Return the available episodes of a serie
@@ -420,14 +462,19 @@ exports.followSerie = function(showToFollow, userId) {
     db.querySqlSelect(SQLqueryIF)
     .then(resultIF => {
       if(resultIF[0].exist){
-        db.querySqlInsert(SQLqueryINSERTuser_serie)
-        .then(resultINSERTuser_serie => {
-          resolve(resultINSERTuser_serie);
+        this.updateSerie(serieId, information, seasons, cast)
+        .then(() => {
+          db.querySqlInsert(SQLqueryINSERTuser_serie)
+          .then(resultINSERTuser_serie => {
+            resolve(resultINSERTuser_serie);
+          }).catch(err => {
+            if(err.number !== 1062){
+              reject(err);
+            }
+            resolve(true);
+          })
         }).catch(err => {
-          if(err.number !== 1062){
-            reject(err);
-          }
-          resolve(true);
+          reject(err);
         })
       } else {
         this.addSerie(serieId, information)
