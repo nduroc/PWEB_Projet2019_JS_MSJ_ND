@@ -7,20 +7,9 @@ const UserAccount = require('./routes/UserAccountRoutes')
 const Episode = require('./routes/EpisodeRoutes')
 const Series = require('./routes/SeriesRoutes')
 const Serie = require('./routes/SerieRoutes')
-const csp = require('content-security-policy');
-
- 
-const cspPolicy = {
-  'report-uri': '/reporting',
-  'default-src': csp.SRC_NONE,
-  'script-src': [ csp.SRC_SELF, csp.SRC_DATA ]
-};
- 
-const localCSP = csp.getCSP(cspPolicy);
 
 const app = express()
 
-app.use(localCSP);
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
