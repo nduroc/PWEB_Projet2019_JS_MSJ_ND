@@ -68,7 +68,7 @@ export class SingleShow {
     }
     requestShowCast(id: number) {
         let promise = new Promise((resolve, reject) => {
-            this.httpClient.get<any[]>('http://api.tvmaze.com/shows/' + id + "/cast")
+            this.httpClient.get<any[]>('https://api.tvmaze.com/shows/' + id + "/cast")
                 .toPromise()
                 .then(
                     (result) => {
@@ -96,7 +96,7 @@ export class SingleShow {
     requestAcutalShowInformation(id: number) {
         let promise = new Promise((resolve, reject) => {
             this.httpClient
-                .get<any[]>('http://api.tvmaze.com/shows/' + id)
+                .get<any[]>('https://api.tvmaze.com/shows/' + id)
                 .toPromise()
                 .then(
                     (result) => {
@@ -116,7 +116,7 @@ export class SingleShow {
     }
     requestShowSeason(id: number) {
         let promise = new Promise((resolve, reject) => {
-            this.httpClient.get<any[]>('http://api.tvmaze.com/shows/' + id + "/seasons")
+            this.httpClient.get<any[]>('https://api.tvmaze.com/shows/' + id + "/seasons")
                 .toPromise()
                 .then(
                     (result) => {
@@ -142,7 +142,7 @@ export class SingleShow {
 
     getEpisodeForASeason(seasonId: number) {
         let promise = new Promise((resolve, reject) => {
-            this.httpClient.get<any[]>('http://api.tvmaze.com/seasons/' + seasonId + "/episodes")
+            this.httpClient.get<any[]>('https://api.tvmaze.com/seasons/' + seasonId + "/episodes")
                 .toPromise()
                 .then(
                     (result) => {
