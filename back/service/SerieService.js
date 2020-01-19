@@ -97,7 +97,7 @@ addSeasons = function(seasons, serieId) {
           let episodesForSeason = [];
           let promiseFetch = new Promise(function(resolve, reject) {
             if(episodesTVMaze === null){
-              const reqTvMazeEpisodes="http://api.tvmaze.com/shows/" + serieId + "/episodes";
+              const reqTvMazeEpisodes="https://api.tvmaze.com/shows/" + serieId + "/episodes";
               fetch(reqTvMazeEpisodes).then((resp)=>resp.json()).then((json)=>{
                 episodesTVMaze = JSON.parse(JSON.stringify(json));
                 for(let episodeTVMaze of episodesTVMaze){
