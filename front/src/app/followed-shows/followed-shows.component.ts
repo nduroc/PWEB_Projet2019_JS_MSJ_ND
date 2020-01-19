@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { faEye, faEyeSlash, faTrash, } from '@fortawesome/free-solid-svg-icons';// fafa icon
 import { SingleShow } from '../services/singleShow.service';
 import { KeyValue } from '@angular/common';
-import { promise } from 'protractor';
 
 
 @Component({
