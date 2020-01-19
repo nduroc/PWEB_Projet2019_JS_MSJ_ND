@@ -70,7 +70,7 @@ export class HomeSeries {
       if (!this.showsMap.has(page)) {
          promise = new Promise((resolve, reject) => {
             this.httpClient
-               .get<any[]>('http://api.tvmaze.com/shows?page=' + page)
+               .get<any[]>('https://api.tvmaze.com/shows?page=' + page)
                .toPromise()
                .then((res) => {
                   let oldSize = this.shows.length;
