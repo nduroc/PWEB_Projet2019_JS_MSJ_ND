@@ -1,6 +1,3 @@
-'use strict';
-
-const utils = require('../utils/writer.js');
 const UserAccount = require('../service/UserAccountService');
 
 module.exports.createUserAccount = function createUserAccount (req, res) {
