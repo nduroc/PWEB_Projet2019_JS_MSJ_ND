@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   isAuth = false;
   constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private storage: StorageService) {
-    console.log(this.storage.get("userName"));
     if (this.storage.get("userName")) {
       this.isAuth = true
     }
@@ -31,7 +30,6 @@ export class AuthService {
               resolve(result);
             }
             else {
-              //console.log(result)
               reject(result)
             }
           },
@@ -62,7 +60,6 @@ export class AuthService {
         .then(
 
           (result) => {
-            console.log(result)
             if (result.toString() == "-1") {
               reject(result);
             }
@@ -71,8 +68,7 @@ export class AuthService {
             }
           },
           (error) => {
-            console.log(error)
-            reject(error)
+            reject(error);
           }
         )
 

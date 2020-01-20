@@ -50,7 +50,6 @@ export class SingleShowViewComponent implements OnInit {
   }
 
   seasonClick(seasonId: number, indexOfSeason: number) {
-    //console.log(JSON.stringify(this.actualShow));
     this.load == true;
     let episodesRdyPromise
     if (this.actualShow.seasons[indexOfSeason].episodes.length == 0) {
@@ -61,7 +60,6 @@ export class SingleShowViewComponent implements OnInit {
     }
     
     Promise.all([episodesRdyPromise]).then(episodes => {
-      console.log(this.actualShow);
       this.actualShow.seasons[indexOfSeason].episodes=(<Episode[]>episodes[0]);;
       this.seasonClicked = this.actualShow.seasons[indexOfSeason];
       this.load = false;
@@ -73,7 +71,6 @@ export class SingleShowViewComponent implements OnInit {
     this.singleShowService.checkFollow(this.authService.getUserId(), this.actualShow.information.id)
       .then(
         (result) => {
-          console.log(result);
           this.heFollow = <boolean>result
         }
 
@@ -87,14 +84,12 @@ export class SingleShowViewComponent implements OnInit {
       (result) => {
 
         if (<boolean>result == true) {
-          console.log("ca a follow")
           this.heFollow = true;
-          this.load=false
+          this.load=false;
           this.howManyUsers+=1;
         }
         else {
-          console.log("y'a eu un probleme")
-          this.load=false
+          this.load=false;
         }
       }
       )
@@ -107,15 +102,12 @@ export class SingleShowViewComponent implements OnInit {
 
       (result) => {
 
-        console.log("chibre miel");
         if (<boolean>result == true) {
-          console.log("ca a unfollow")
           this.heFollow = false;
           this.load=false;
           this.howManyUsers-=1;
         }
         else {
-          console.log("y'a eu un probleme")
           this.load=false
         }
 
@@ -126,7 +118,6 @@ export class SingleShowViewComponent implements OnInit {
   {
     this.singleShowService.howManyUserFollow(this.actualShow.information.id).then( (result)=>
       {
-        console.log(result);
         this.howManyUsers=<number>result;
       
       },

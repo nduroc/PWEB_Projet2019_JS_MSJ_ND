@@ -19,12 +19,10 @@ export class FollowedShowsService {
         .toPromise()
         .then(
           (result) => {
-
-            resolve(result)
+            resolve(result);
           },
           (error) => {
-            console.log(error)
-            reject(error)
+            reject(error);
           }
         )
 

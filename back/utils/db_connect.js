@@ -1,5 +1,10 @@
 const mysql = require('mysql');
 
+/**
+ * If you want to make a connection to another dataBase,
+ * it is needed to change 'host', 'user', 'password' and 'database'
+ * to the new dataBase configuration
+ */
 const db = mysql.createConnection({
   host: "dbserver",
   user: "nduroc",

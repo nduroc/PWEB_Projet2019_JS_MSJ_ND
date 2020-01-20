@@ -147,10 +147,10 @@ export class Season {
 
 @Injectable()
 export class ActorCharacter {
-    actorId: number
-    actorName: string
-    actorCountryName: string
-    actorCountryCode: string
+    actorId: number;
+    actorName: string;
+    actorCountryName: string;
+    actorCountryCode: string;
     actorSexe: string;
     actorUrlMediumImage: string;
     actorUrlOriginalImage: string;
@@ -166,31 +166,31 @@ export class ActorCharacter {
     }
     setValue( actorCharacter: any[]) {
         //actor
-        this.actorId = actorCharacter["person"]["id"]
-        this.actorName = actorCharacter["person"]["name"]
+        this.actorId = actorCharacter["person"]["id"];
+        this.actorName = actorCharacter["person"]["name"];
         if (actorCharacter["person"]["country"] != null) {
-            this.actorCountryName = actorCharacter["person"]["country"]["name"]
-            this.actorCountryCode = actorCharacter["person"]["country"]["code"]
+            this.actorCountryName = actorCharacter["person"]["country"]["name"];
+            this.actorCountryCode = actorCharacter["person"]["country"]["code"];
         }
-        this.actorSexe = actorCharacter["person"]["gender"]
+        this.actorSexe = actorCharacter["person"]["gender"];
         if (actorCharacter["person"]["image"] != null) {
-            this.actorUrlMediumImage = actorCharacter["person"]["image"]["medium"]
-            this.actorUrlOriginalImage = actorCharacter["person"]["image"]["original"]
+            this.actorUrlMediumImage = actorCharacter["person"]["image"]["medium"];
+            this.actorUrlOriginalImage = actorCharacter["person"]["image"]["original"];
         }
         else {
-            this.actorUrlMediumImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png"
-            this.actorUrlOriginalImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png"
+            this.actorUrlMediumImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
+            this.actorUrlOriginalImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
         }
         //character
-        this.characterId = actorCharacter["character"]["id"]
-        this.characterName = actorCharacter["character"]["name"]
+        this.characterId = actorCharacter["character"]["id"];
+        this.characterName = actorCharacter["character"]["name"];
         if (actorCharacter["character"]["image"] != null) {
-            this.characterUrlMediumImage = actorCharacter["character"]["image"]["medium"]
-            this.characterUrlOriginalImage = actorCharacter["character"]["image"]["original"]
+            this.characterUrlMediumImage = actorCharacter["character"]["image"]["medium"];
+            this.characterUrlOriginalImage = actorCharacter["character"]["image"]["original"];
         }
         else {
-            this.characterUrlMediumImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png"
-            this.characterUrlOriginalImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png"
+            this.characterUrlMediumImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
+            this.characterUrlOriginalImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
         }
 
 
@@ -209,8 +209,8 @@ export class OneShow {
 
     constructor() {
 
-        this.seasons = new Array<Season>()
-        this.cast = new Array<ActorCharacter>()
+        this.seasons = new Array<Season>();
+        this.cast = new Array<ActorCharacter>();
         this.information = new TvShowInformation();
     }
 
@@ -219,7 +219,7 @@ export class OneShow {
     }
 
     addAnActor(a: ActorCharacter) {
-        this.cast.push(a)
+        this.cast.push(a);
     }
     addAllSeason(s: Season[]) {
         this.seasons = s;
@@ -232,13 +232,12 @@ export class OneShow {
     }
     getTest()
     {
-        console.log("chibraxe")
     }
 
     build(actualShow: OneShow): OneShow {
         actualShow.cast.forEach( actor =>
         {
-            this.addAnActor(actor)
+            this.addAnActor(actor);
         })
 
         actualShow.seasons.forEach( season => {
@@ -254,7 +253,7 @@ export class OneShow {
 
         let tmpInfo:TvShowInformation= new TvShowInformation()
         tmpInfo.setValueTvShow(actualShow.information);
-        this.information= tmpInfo
+        this.information= tmpInfo;
 
     
         return this;

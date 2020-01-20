@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class SingleShow {
 
-
     actualShow: OneShow;
 
     constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private storage: StorageService) {
@@ -16,12 +15,10 @@ export class SingleShow {
 
     loadCurrentLocalshowInformation(): TvShowInformation {
         let currentShowInformation: TvShowInformation = <TvShowInformation>JSON.parse(this.storage.get("actualShow"));
-        //console.log(currentShowInformation);
         return currentShowInformation;
     }
     getActualShow(id: number) {
         let show;
-       // console.log(this.storage.get("show" + id));
         if ((show = <OneShow>this.storage.get("show" + id)) == null) {
             let currentShowInformation: TvShowInformation = this.loadCurrentLocalshowInformation();
             this.actualShow = new OneShow()
@@ -38,27 +35,23 @@ export class SingleShow {
                     .then(
                         (data) => {
                             this.actualShow.loadInformation(<TvShowInformation>(data[0]));
-                            console.log(data[1]);
                             this.actualShow.addAllSeason(<Season[]>(data[1]));
                             this.actualShow.addCast(<ActorCharacter[]>(data[2]));
-                            this.storage.set("show"+this.actualShow.information.id,JSON.stringify(this.actualShow))
-                            resolve(this.actualShow)
+                            this.storage.set("show" + this.actualShow.information.id, JSON.stringify(this.actualShow));
+                            resolve(this.actualShow);
                         },
                         (error) => {
-                            console.log(error)
-                            reject()
+                            reject();
                         }
                     );
 
             })
-
-
             return promise;
         }
         else {
             let promise = new Promise((resolve, reject) => {
-                
-                let showObject : OneShow;
+
+                let showObject: OneShow;
                 showObject = <OneShow>(JSON.parse(show))
                 resolve(showObject)
             })
@@ -79,7 +72,6 @@ export class SingleShow {
                             return actor
 
                         }))
-                        //console.log(csi);
                         resolve(cast);
                     },
                     (error) => {
@@ -125,11 +117,9 @@ export class SingleShow {
                             oneSeason.setValue(season);
                             return oneSeason;
                         }))
-                        //console.log(csi);
                         resolve(seasons);
                     },
                     (error) => {
-                        console.log("chibre miel");
                         console.log(error);
                         reject();
                     }
@@ -151,7 +141,6 @@ export class SingleShow {
                             anEpisode.setValue(episode)
                             return anEpisode
                         }))
-                        //console.log(csi);
                         resolve(episodes);
                     },
                     (error) => {
@@ -167,24 +156,43 @@ export class SingleShow {
     followAShow(userId: number, actualShow: OneShow) {
         let promise = new Promise((resolve, reject) => {
 
-            this.httpClient.post(environment.apiPath+'serie/follow?userId=' + userId, { serieJson: JSON.stringify(actualShow) })
+            this.httpClient.post(environment.apiPath + 'serie/follow?userId=' + userId, { serieJson: JSON.stringify(actualShow) })
                 .toPromise()
                 .then(
 
                     (result) => {
-                        if(result=="1")
-                        {
-                        resolve(true);
+                        if (result == "1") {
+                            resolve(true);
                         }
-                        else
-                        {
+                        else {
                             resolve(false);
                         }
-
                     },
                     (error) => {
                         reject(error);
+                    }
+                )
+        });
+        return promise;
 
+    }
+
+    checkFollow(userId: number, showId: number) {
+        let promise = new Promise((resolve, reject) => {
+            this.httpClient.get(environment.apiPath + 'serie/isFollowed?userId=' + userId + '&serieId=' + showId)
+                .toPromise()
+                .then(
+
+                    (result) => {
+                        if (<string>result == "1")
+                            resolve(true);
+                        else
+                            resolve(false);
+
+                    },
+                    (error) => {
+                        console.log(error);
+                        reject(false);
                     }
                 )
 
@@ -194,24 +202,21 @@ export class SingleShow {
 
     }
 
-    checkFollow(userId: number, showId: number) {
+    unFollow(userId: number, showId: number) {
         let promise = new Promise((resolve, reject) => {
-
-            this.httpClient.get(environment.apiPath+'serie/isFollowed?userId=' + userId + '&serieId=' + showId)
+            this.httpClient.delete(environment.apiPath + 'serie/unfollow?userId=' + userId + '&serieId=' + showId)
                 .toPromise()
                 .then(
-                    
-                    (result) => {
-                        if(<string>result=="1")
-                        resolve(true);
-                        else
-                        resolve(false);
 
+                    (result) => {
+                        if (<string>result == "1")
+                            resolve(true);
+                        else
+                            resolve(false);
                     },
                     (error) => {
-                        
-                        console.log(error)
-                        reject(false)
+                        console.log(error);
+                        reject(false);
                     }
                 )
 
@@ -219,56 +224,25 @@ export class SingleShow {
         });
         return promise;
 
-      }
+    }
 
-      unFollow(userId: number, showId: number) {
+    howManyUserFollow(showId: number) {
         let promise = new Promise((resolve, reject) => {
 
-            this.httpClient.delete(environment.apiPath+'serie/unfollow?userId=' + userId + '&serieId=' + showId)
+            this.httpClient.get(environment.apiPath + 'serie/countFollowers?serieId=' + showId)
                 .toPromise()
                 .then(
-                    
+
                     (result) => {
-                        if(<string>result=="1")
-                        resolve(true);
-                        else
-                        resolve(false);
-
-                    },
-                    (error) => {
-                        
-                        console.log(error)
-                        reject(false)
-                    }
-                )
-
-
-        });
-        return promise;
-
-      }
-
-      howManyUserFollow(showId: number) {
-        let promise = new Promise((resolve, reject) => {
-
-            this.httpClient.get(environment.apiPath+'serie/countFollowers?serieId=' + showId)
-                .toPromise()
-                .then(
-                    
-                    (result) => {
-                        if(<string>result>="0")
-                        {
-                            console.log(result)
-                        resolve(<number>result);
+                        if (<string>result >= "0") {
+                            resolve(<number>result);
                         }
                         else
-                        resolve(0);
-
+                            resolve(0);
                     },
                     (error) => {
-                        
-                        console.log(error)
-                        reject(false)
+                        console.log(error);
+                        reject(false);
                     }
                 )
 
@@ -276,6 +250,6 @@ export class SingleShow {
         });
         return promise;
 
-      }
+    }
 
 }

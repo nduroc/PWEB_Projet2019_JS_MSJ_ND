@@ -79,12 +79,10 @@ export class HomeSeries {
                   return tvShowInf }));
                   let size = this.shows.length - oldSize;
                   this.showsMap.set(page, size);
-                  // console.log(this.showsMap);
                   resolve();
                },
                   (error) => {
                      this.lastPage = true;
-                     console.log("plus rien a recuperer")
                      this.store();
                      reject();
                   }

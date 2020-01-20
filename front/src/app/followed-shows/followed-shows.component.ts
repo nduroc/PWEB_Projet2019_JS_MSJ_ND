@@ -31,8 +31,6 @@ export class FollowedShowsComponent implements OnInit {
     Promise.all([allFollowedShow,allSeenEpisodes]).then((result) => {
       this.followedShow = result[0]
       this.showEpisode=<Set<string>>result[1];
-      console.log(this.followedShow);
-      console.log(this.showEpisode)
       this.load = false;
 
 
@@ -46,7 +44,6 @@ export class FollowedShowsComponent implements OnInit {
   }
   unFollowShow(showId: number) {
     this.load=true;
-    console.log(showId)
     this.singleShow.unFollow(this.userId, showId).then((result) => {
       
         if (<boolean>result == true) {
@@ -66,7 +63,6 @@ export class FollowedShowsComponent implements OnInit {
       {
         this.load=false;
         this.showEpisode.add(episodeId.toString())
-        console.log(this.showEpisode);
         let card=document.getElementById("card"+episodeId)
         card.classList.remove("card-episode-unseen")
         card.classList.add("card-episode-seen")
@@ -78,7 +74,6 @@ export class FollowedShowsComponent implements OnInit {
       else
       {
         this.load=false;
-        console.log(result);
       }
     });
   }
@@ -89,7 +84,6 @@ export class FollowedShowsComponent implements OnInit {
       {
         this.load=false;
         this.showEpisode.delete((episodeId.toString()))
-        console.log(this.showEpisode);
         let card=document.getElementById("card"+episodeId)
         card.classList.remove("card-episode-seen")
         card.classList.add("card-episode-unseen")
@@ -103,7 +97,6 @@ export class FollowedShowsComponent implements OnInit {
       else
       {
         this.load=false;
-        console.log(result);
       };
     })
   }

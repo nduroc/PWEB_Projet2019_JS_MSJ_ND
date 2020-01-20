@@ -25,7 +25,6 @@ export class LogInComponent implements OnInit {
     this.load = true;
     this.authService.signIn(form.value["username"], form.value["password"]).then(
       (result) => {
-        //console.log(result)
         this.load = false;
         this.authStatus = this.authService.isAuth;
         this.router.navigate(["homePage"]);
@@ -33,13 +32,10 @@ export class LogInComponent implements OnInit {
       (error) => {
         this.notValide = true
         this.load = false;
-       // console.log(error)
         if (error.toString() == "0") {
-          //console.log("salutation");
           this.errorAllertMessage = "login or password invalid"
         }
         else {
-          //console.log(error),
             this.errorAllertMessage = "an error occurred please try again later"
         }
       }

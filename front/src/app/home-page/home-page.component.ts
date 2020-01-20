@@ -59,7 +59,6 @@ export class HomePageComponent implements OnInit {
     this.load=true;
     let maxToDisplay = page * 25;
     let temp = this.allGetShows.filter(show => this.filterPrepare(show)).slice(maxToDisplay - 25, maxToDisplay)
-    //console.log(maxToDisplay);
     if ((25 > temp.length || this.allGetShows.length < maxToDisplay) && this.homeSeries.lastPage!=true) {
       this.getAnotherWebApiPage("if de preparePageToDisplay").then(() => this.preparePageToDisplay(page));
     } else {
@@ -75,11 +74,9 @@ export class HomePageComponent implements OnInit {
         res => {
 
           this.allGetShows = this.homeSeries.shows;
-          console.log(this.allGetShows.length);
           resolve();
         },
         error => {
-          //console.log("error");
           reject();
         }
       );

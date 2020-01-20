@@ -167,76 +167,80 @@ addSeasons = function(seasons, serieId) {
 
 addActors = function(actors, serieId) {
   return new Promise(function(resolve, reject) {
-    let stringActorsId = "(";
-    let begin = true;
-    for(let actor of actors) {
-      if(!begin){
-        stringActorsId = stringActorsId.concat(",");
-      } else {
-        begin = false;
-      }
-      stringActorsId = stringActorsId.concat(actor.actorId);
-    }
-    stringActorsId = stringActorsId.concat(")");
-    SQLquerySELECTpresentActors = "SELECT actorId FROM actors WHERE actorId IN " + stringActorsId;
-
-    begin = true;
-    let actorsAdded = false;
-    SQLqueryINSERTactors = "INSERT into actors(actorId, actorName, actorCountryName, actorCountryCode, actorSexe, actorUrlMediumImage, actorUrlOriginalImage) VALUES";
-    SQLqueryINSERTactors_serie = "INSERT into actors_serie(actorId, serieId, characterId, characterName, characterUrlMediumImage, characterUrlOriginalImage) VALUES";
-
-    db.querySqlSelect(SQLquerySELECTpresentActors)
-    .then(result => {
-      
-      let presentActorsId = [];
-      
-      for(let res of result) {
-        presentActorsId.push(res['actorId']);
-      }
-      
+    if(actors.length>0) {
+      let stringActorsId = "(";
+      let begin = true;
       for(let actor of actors) {
-        if(!presentActorsId.includes(actor.actorId)){
-          if(actorsAdded){
-            SQLqueryINSERTactors = SQLqueryINSERTactors.concat(",");
-          } else {
-            actorsAdded = true;
-          }
-          const stringActor = "('"+ actor.actorId + "', '" + actor.actorName.replace(/'/g, "`") + "', '" + actor.actorCountryName + "', '" + actor.actorCountryCode + "', '"
-                            + actor.actorSexe + "', '"+ actor.actorUrlMediumImage + "', '" + actor.actorUrlOriginalImage + "')";
-          SQLqueryINSERTactors = SQLqueryINSERTactors.concat(stringActor);
-          presentActorsId.push(actor.actorId);
-        }
         if(!begin){
-          SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(",");
+          stringActorsId = stringActorsId.concat(",");
         } else {
           begin = false;
         }
-        const stringActor_serie = "('" + actor.actorId + "', '" + serieId + "', '" + actor.characterId + "', '" + actor.characterName.replace(/'/g, "`") + "', '"
-                                + actor.characterUrlMediumImage + "', '" + actor.characterUrlOriginalImage + "')";
-        SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(stringActor_serie);
+        stringActorsId = stringActorsId.concat(actor.actorId);
       }
+      stringActorsId = stringActorsId.concat(")");
+      SQLquerySELECTpresentActors = "SELECT actorId FROM actors WHERE actorId IN " + stringActorsId;
 
-      if(actorsAdded) {
-        db.querySqlInsert(SQLqueryINSERTactors)
-        .then(() => {
+      begin = true;
+      let actorsAdded = false;
+      SQLqueryINSERTactors = "INSERT into actors(actorId, actorName, actorCountryName, actorCountryCode, actorSexe, actorUrlMediumImage, actorUrlOriginalImage) VALUES";
+      SQLqueryINSERTactors_serie = "INSERT into actors_serie(actorId, serieId, characterId, characterName, characterUrlMediumImage, characterUrlOriginalImage) VALUES";
+
+      db.querySqlSelect(SQLquerySELECTpresentActors)
+      .then(result => {
+        
+        let presentActorsId = [];
+        
+        for(let res of result) {
+          presentActorsId.push(res['actorId']);
+        }
+        
+        for(let actor of actors) {
+          if(!presentActorsId.includes(actor.actorId)){
+            if(actorsAdded){
+              SQLqueryINSERTactors = SQLqueryINSERTactors.concat(",");
+            } else {
+              actorsAdded = true;
+            }
+            const stringActor = "('"+ actor.actorId + "', '" + actor.actorName.replace(/'/g, "`") + "', '" + actor.actorCountryName + "', '" + actor.actorCountryCode + "', '"
+                              + actor.actorSexe + "', '"+ actor.actorUrlMediumImage + "', '" + actor.actorUrlOriginalImage + "')";
+            SQLqueryINSERTactors = SQLqueryINSERTactors.concat(stringActor);
+            presentActorsId.push(actor.actorId);
+          }
+          if(!begin){
+            SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(",");
+          } else {
+            begin = false;
+          }
+          const stringActor_serie = "('" + actor.actorId + "', '" + serieId + "', '" + actor.characterId + "', '" + actor.characterName.replace(/'/g, "`") + "', '"
+                                  + actor.characterUrlMediumImage + "', '" + actor.characterUrlOriginalImage + "')";
+          SQLqueryINSERTactors_serie = SQLqueryINSERTactors_serie.concat(stringActor_serie);
+        }
+
+        if(actorsAdded) {
+          db.querySqlInsert(SQLqueryINSERTactors)
+          .then(() => {
+            db.querySqlInsert(SQLqueryINSERTactors_serie)
+            .then(() => {
+              resolve(result);
+            }).catch(err => {
+              reject(err);
+            })
+          }).catch(err => {
+            reject(err);
+          })
+        } else {
           db.querySqlInsert(SQLqueryINSERTactors_serie)
           .then(() => {
             resolve(result);
           }).catch(err => {
             reject(err);
           })
-        }).catch(err => {
-          reject(err);
-        })
-      } else {
-        db.querySqlInsert(SQLqueryINSERTactors_serie)
-        .then(() => {
-          resolve(result);
-        }).catch(err => {
-          reject(err);
-        })
-      }
-    })
+        }
+      })
+    } else  {
+      resolve(true);
+    }
   });
 }
 
