@@ -48,7 +48,7 @@ Dans la page myshow vous pouvez alors gerer vos séries :
  <li>Vous pouvez marquer un épisode comme vue (en cliquant sur l'icône en forme d'oeil) ou le démarquer (en cliquant sur l'icône en forme d'oeil barré)</li>
  <li>Vous pouvez voir quels épisodes vous avez vue à l'aide du code couleur (les épisodes vue sont verts et ceux non-vue sont rouges)</li>
  <li>Vous pouvez voir le résumer d'un épisode en passant la souris sur 'summary'.</li>
-<ul>
+</ul>
 
 <p>Le site utilise une API pour récupérer la liste des séries et des épisodes (API <I>http://www.tvmaze.com/api#show-episode-list</I>)</p>
 <p> Notre back utilise NodeJs </p>
