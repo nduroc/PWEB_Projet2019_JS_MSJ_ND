@@ -1,23 +1,23 @@
-const express = require('express')
-const router = express.Router()
-const UserController = require('../controllers/UserAccount')
+const express = require('express');
+const router = express.Router();
+const UserController = require('../controllers/UserAccount');
 
-const basePath = '/user'
+const basePath = '/user';
 
 router.post(basePath, function (req, res) {
-    UserController.createUserAccount(req, res)
+    UserController.createUserAccount(req, res);
 })
 
 router.get(basePath + '/login', function (req, res) {
-    UserController.loginUserAccount(req, res)
+    UserController.loginUserAccount(req, res);
 })
 
 router.put(basePath + '/:userId', function (req, res) {
-    UserController.updateUserAccount(req, res, req.params.userId)
+    UserController.updateUserAccount(req, res, req.params.userId);
 })
 
 router.delete(basePath + '/:userId', function (req, res) {
-    UserController.deleteUserAccount(req, res, req.params.userId)
+    UserController.deleteUserAccount(req, res, req.params.userId);
 })
 
-module.exports = router
+module.exports = router;

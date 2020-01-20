@@ -18,7 +18,7 @@ exports.createUserAccount = function (username, email, password) {
       else {
         db.querySqlInsert(SQLquery).then((res) => {
           resolve(res);
-        }).catch(err => reject(err))
+        }).catch(err => reject(err));
       }
     })
   });
@@ -36,7 +36,7 @@ exports.deleteUserAccount = function (userId) {
   return new Promise(function (resolve, reject) {
     SQLquery = "DELETE FROM user WHERE (id='" + userId + "')";
     db.querySqlSelect(SQLquery).then(() => {
-      resolve(true)
+      resolve(true);
     }).catch(err => reject(err));
   });
 }
@@ -52,7 +52,7 @@ exports.deleteUserAccount = function (userId) {
  **/
 exports.loginUserAccount = function (usernameOrEmail, password) {
   return new Promise(function (resolve, reject) {
-    let SQLqueryName = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')"
+    let SQLqueryName = "SELECT * FROM user WHERE (username='" + usernameOrEmail + "' and password='" + password + "')";
     db.querySqlSelect(SQLqueryName).then((res) => {
       if (Array.isArray(res) && res.length != 0) {
         resolve(res[0]['id']);
@@ -73,12 +73,9 @@ exports.loginUserAccount = function (usernameOrEmail, password) {
  **/
 exports.updateUserAccount = function (userId, username, email, password) {
   return new Promise(function (resolve, reject) {
-    // Add check for same username ?
-    let SQLquery = "UPDATE user SET username='" + username + "', email='" + email + "', password='" + password + "' WHERE id ='" + userId + "'"
+    let SQLquery = "UPDATE user SET username='" + username + "', email='" + email + "', password='" + password + "' WHERE id ='" + userId + "'";
     db.querySqlSelect(SQLquery).then((res) => {
-      console.log("update")
-      console.log(res)
-      resolve(res)
+      resolve(res);
     }).catch(err => reject(err));
   });
 }

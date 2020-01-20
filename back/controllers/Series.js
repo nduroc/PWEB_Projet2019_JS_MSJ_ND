@@ -3,7 +3,7 @@ const Series = require('../service/SeriesService');
 module.exports.displayFollowedSeries = function displayFollowedSeries (req, res) {
   const userId = req.query.userId;
   tmp = "";
-  return Series.displayFollowedSeries(userId)
+  Series.displayFollowedSeries(userId)
     .then(followedSeriesList => {
       tmp = JSON.stringify(followedSeriesList);
     })
@@ -18,10 +18,9 @@ module.exports.displayFollowedSeries = function displayFollowedSeries (req, res)
 module.exports.displayEpisodesSeen = function displayEpisodesSeen (req, res) {
   const userId = req.query.userId;
   tmp = "";
-  return Series.displayEpisodesSeen(userId)
+  Series.displayEpisodesSeen(userId)
     .then(episodesSeenList => {
       tmp = JSON.stringify(episodesSeenList);
-      console.log(tmp);
     })
     .catch(err => {
       tmp += "-1";

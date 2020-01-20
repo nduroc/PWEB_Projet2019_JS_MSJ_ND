@@ -2,14 +2,17 @@ const Serie = require("../service/SerieService");
 
 module.exports.displaySerieEpisode = function displaySerieEpisode (req, res) {
   const serieId = req.query.serieId;
+  let tmp = "";
   Serie.displaySerieEpisode(serieId)
     .then((result) => {
-      console.log("Episodes displayed");
-      return result;
+      tmp = JSON.stringify(result);
     })
     .catch((err) => {
+      tmp += err;
       console.log(err);
-    });
+    })
+    .then(() => res.write(tmp))
+    .then(() => res.send());
 };
 
 module.exports.isFollowedSerie = function isFollowedSerie (req, res) {

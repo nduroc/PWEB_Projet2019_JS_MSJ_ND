@@ -1,15 +1,15 @@
-const express = require('express')
-const router = express.Router()
-const SeriesController = require('../controllers/Series')
+const express = require('express');
+const router = express.Router();
+const SeriesController = require('../controllers/Series');
 
-const basePath = '/series'
+const basePath = '/series';
 
 router.get(basePath + '/followedSeries', function (req, res) {
-    SeriesController.displayFollowedSeries(req, res)
+    SeriesController.displayFollowedSeries(req, res);
 })
 
 router.get(basePath + '/episodesSeen', function (req, res) {
-    SeriesController.displayEpisodesSeen(req, res)
+    SeriesController.displayEpisodesSeen(req, res);
 })
 
-module.exports = router
+module.exports = router;

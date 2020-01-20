@@ -1,4 +1,4 @@
-const db = require('../utils/db_connect')
+const db = require('../utils/db_connect');
 
 
 /**
@@ -10,15 +10,15 @@ const db = require('../utils/db_connect')
  **/
 exports.displayFollowedSeries = function(userId) {
   return new Promise(function(resolve, reject) {
-    SQLquery = "SELECT * FROM serie WHERE id IN (SELECT serieId FROM user_serie WHERE userId = " + userId + ") "
-    SQLqueryEpisodeSeen = "SELECT * FROM user_serie_episode WHERE user_serie_id IN (SELECT id FROM user_serie WHERE userId = " + userId + ") "
+    SQLquery = "SELECT * FROM serie WHERE id IN (SELECT serieId FROM user_serie WHERE userId = " + userId + ") ";
+    SQLqueryEpisodeSeen = "SELECT * FROM user_serie_episode WHERE user_serie_id IN (SELECT id FROM user_serie WHERE userId = " + userId + ") ";
     db.querySqlSelect(SQLquery)
     .then(result => {
       this.searchOneSerie(result, 0)
       .then(followedSeriesTab => {
-        let followedSeries = {}
+        let followedSeries = {};
         for(let i=0; i<followedSeriesTab.length; ++i){
-          followedSeries[i] = followedSeriesTab[i]
+          followedSeries[i] = followedSeriesTab[i];
         }
         resolve(followedSeries);
       }).catch(err => {
@@ -42,7 +42,7 @@ exports.displayEpisodesSeen = function(userId) {
     SQLquery = "SELECT id,seasonId FROM episode WHERE id IN (SELECT episode_id FROM user_serie_episode WHERE user_serie_id IN (SELECT id FROM user_serie WHERE userId = " + userId + ")) "
     db.querySqlSelect(SQLquery)
     .then(result => {
-      resolve(result)
+      resolve(result);
     }).catch(err => {
       reject(err);
     })
@@ -52,9 +52,9 @@ exports.displayEpisodesSeen = function(userId) {
 searchOneSerie = function(res, indexRes){
   return new Promise(function(resolve, reject) {
     let series = [];
-    let information = {}
+    let information = {};
     for(let obj in res[indexRes]){
-      information[obj] = res[indexRes][obj]
+      information[obj] = res[indexRes][obj];
     }
     this.searchSeasons(res[indexRes]['id'])
     .then(resultSeasons => {
@@ -91,40 +91,40 @@ searchOneSerie = function(res, indexRes){
 
 searchSeasons = function(serieId) {
   return new Promise(function(resolve, reject) {
-    SQLquerySELECTseasons = "SELECT * FROM season WHERE serieId = " + serieId
+    SQLquerySELECTseasons = "SELECT * FROM season WHERE serieId = " + serieId;
     db.querySqlSelect(SQLquerySELECTseasons)
     .then(resultSELECTseasons => {
-      SQLquerySELECTepisodes = "SELECT * FROM episode WHERE seasonId IN (SELECT id FROM season WHERE serieId = " + serieId + ") ORDER BY id ASC"
+      SQLquerySELECTepisodes = "SELECT * FROM episode WHERE seasonId IN (SELECT id FROM season WHERE serieId = " + serieId + ") ORDER BY id ASC";
       db.querySqlSelect(SQLquerySELECTepisodes)
       .then(resultSELECTepisodes => {
-        let seasons = {}
-        let indexSeasons = 0
+        let seasons = {};
+        let indexSeasons = 0;
         for(let resSeason of resultSELECTseasons) {
-          let res ={}
+          let res ={};
           for(let obj in resSeason){
-            res[obj] = resSeason[obj]
+            res[obj] = resSeason[obj];
           }
-          let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resSeason['id'])
-          let episodesTab = {}
-          let indexEpisodesTab = 0
+          let episodesInfo = resultSELECTepisodes.filter(element => element['seasonId'] === resSeason['id']);
+          let episodesTab = {};
+          let indexEpisodesTab = 0;
           for(let episode of episodesInfo) {
-            let episodeTab = {}
+            let episodeTab = {};
             for(let obj in episode){
-              episodeTab[obj] = episode[obj]
+              episodeTab[obj] = episode[obj];
             }
-            episodesTab[indexEpisodesTab] = episodeTab
-            ++indexEpisodesTab
+            episodesTab[indexEpisodesTab] = episodeTab;
+            ++indexEpisodesTab;
           }
-          res["episodes"] = episodesTab
-          seasons[indexSeasons] = res
-          ++indexSeasons
+          res["episodes"] = episodesTab;
+          seasons[indexSeasons] = res;
+          ++indexSeasons;
         }
-        resolve(seasons)
+        resolve(seasons);
       }).catch(err => {
-        reject(err)
+        reject(err);
       })
     }).catch(err => {
-      reject(err)
+      reject(err);
     })
   });
 }

@@ -1,4 +1,4 @@
-const db = require('../utils/db_connect')
+const db = require('../utils/db_connect');
 
 /**
  * Mark an episode
@@ -14,9 +14,6 @@ exports.markEpisode = function(userId, episodeId, serieId) {
     SQLqueryForUserSerieId = "SELECT id FROM user_serie WHERE userId='" + userId + "' and serieId='" + serieId + "'";
     db.querySqlSelect(SQLqueryForUserSerieId)
     .then(result => {
-      console.log(result);
-      console.log(Array.isArray(result))
-      console.log(result.length != 0)
       if (!Array.isArray(result) && result.length == 0) {
         resolve(-1);
       }

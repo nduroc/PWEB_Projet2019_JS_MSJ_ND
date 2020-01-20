@@ -12,7 +12,7 @@ addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsI
       for(let episode of episodes){
         if(episode.episodeNumber!=null){
           if(!begin){
-            SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(",")
+            SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(",");
           } else {
             begin = false;
           }
@@ -34,8 +34,8 @@ addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsI
           } else {
             begin = false;
           }
-          let mediumImage
-          let originalImage
+          let mediumImage;
+          let originalImage;
           if (episode.image === null) {
             mediumImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
             originalImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
@@ -48,7 +48,7 @@ addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsI
             if (episode.image.original === null) {
               originalImage = "https://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
             } else {
-              originalImage = episode.image.original
+              originalImage = episode.image.original;
             }
           }
           if (episode.name === null) {
@@ -59,7 +59,7 @@ addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsI
           }
           const stringEpisode = "('" + episode.id + "', '" + episode.name.replace(/'/g, "`") + "', '" + episode.airdate + "', '" + episode.season + "', '" + episode.number + "', '"
                                + mediumImage + "', '" + originalImage + "', '" + episode.summary.replace(/'/g, "`") + "', '" + episode.runtime + "', '" + seasonId + "')"
-          SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(stringEpisode)
+          SQLqueryINSERTepisode = SQLqueryINSERTepisode.concat(stringEpisode);
         }
       }
 
@@ -75,9 +75,9 @@ addEpisodes = function(episodesList, seasonsIdList, episodesListTVMaze, seasonsI
 
 addSeasons = function(seasons, serieId) {
   return new Promise(function(resolve, reject) {
-    let begin = true
-    let episodesTVMaze = null
-    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlOriginalImage, summary, serieId) VALUES"
+    let begin = true;
+    let episodesTVMaze = null;
+    SQLqueryINSERTseason = "INSERT into season(id, numberSeasonInshow, name, nbEpisode, urlMediumImage, urlOriginalImage, summary, serieId) VALUES";
 
     let episodesList = [];
     let episodesListTVMaze = [];
@@ -147,7 +147,7 @@ addSeasons = function(seasons, serieId) {
 
       let stringSeason = "('" + season.id + "', '" + season.numberSeasonInshow + "', '" + name.replace(/'/g, "`") + "', '" + season.nbEpisode + "', '"
                        + season.urlMediumImage + "', '" + season.urlOriginalImage + "', '" + summary.replace(/'/g, "`") + "', '" + serieId + "')";
-      SQLqueryINSERTseason = SQLqueryINSERTseason.concat(stringSeason)
+      SQLqueryINSERTseason = SQLqueryINSERTseason.concat(stringSeason);
     }
     Promise.all(episodesPromises).then(() => {
       db.querySqlInsert(SQLqueryINSERTseason)
@@ -269,9 +269,9 @@ addSerie = function(serieId, information) {
 
 updateSerie = function(serieId, information, seasons, cast) {
   return new Promise(function(resolve, reject) {
-    SQLquerySeasons = "SELECT id FROM season WHERE serieId = " + serieId
-    SQLqueryCast = "SELECT characterId FROM actors_serie WHERE serieId = " + serieId
-    SQLquerySerie = "SELECT * FROM serie WHERE id = " + serieId
+    SQLquerySeasons = "SELECT id FROM season WHERE serieId = " + serieId;
+    SQLqueryCast = "SELECT characterId FROM actors_serie WHERE serieId = " + serieId;
+    SQLquerySerie = "SELECT * FROM serie WHERE id = " + serieId;
     let newSeasons = [];
     let newCharacter = [];
     db.querySqlSelect(SQLquerySeasons)
@@ -302,22 +302,22 @@ updateSerie = function(serieId, information, seasons, cast) {
           }
         }
 
-        let promises = []
+        let promises = [];
         let indexPromises = 0;
 
         if(newSeasons.length>0) {
           promises[indexPromises] = this.addSeasons(newSeasons, serieId);
-          ++indexPromises
+          ++indexPromises;
         }
 
         if(newCharacter.length>0) {
           promises[indexPromises] = this.addActors(newCharacter, serieId);
-          ++indexPromises
+          ++indexPromises;
         }
 
         promises[indexPromises] = db.querySqlSelect(SQLquerySerie)
         let indexResultSerie = indexPromises;
-        ++indexPromises
+        ++indexPromises;
 
         Promise.all(promises).then(results => {
           let result = results[indexResultSerie];
@@ -358,7 +358,7 @@ updateSerie = function(serieId, information, seasons, cast) {
             
             db.querySqlDelete(SQLqueryUPDATEserie)
             .then(() => {
-              resolve(true)
+              resolve(true);
             }).catch(err => {
               reject(err);
             })
@@ -390,7 +390,7 @@ updateSerie = function(serieId, information, seasons, cast) {
  **/
 exports.displaySerieEpisode = function(serieId) {
   return new Promise(function(resolve, reject) {
-    SQLquery = "SELECT episodes FROM serie WHERE id = " + serieId;
+    SQLquery = "SELECT * FROM episode WHERE seasonId IN (SELECT id FROM season WHERE serieId = '" + serieId + "')";
     db.querySqlSelect(SQLquery)
     .then(result => {
       resolve(result);
@@ -497,7 +497,6 @@ exports.followSerie = function(showToFollow, userId) {
         }).catch(err => reject(err));
       }
     }).catch(err => {
-      console.log("error");
       reject(err);
     })
   });
